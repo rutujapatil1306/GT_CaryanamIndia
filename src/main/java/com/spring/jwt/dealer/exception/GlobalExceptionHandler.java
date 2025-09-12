@@ -1,4 +1,4 @@
-package com.spring.jwt.dealer;
+package com.spring.jwt.dealer.exception;
 
 import com.spring.jwt.dealer.DTO.DealerResponseDto;
 import org.springframework.http.HttpStatus;
@@ -31,3 +31,4 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
+

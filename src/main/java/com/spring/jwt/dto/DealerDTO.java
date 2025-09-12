@@ -7,6 +7,8 @@ import lombok.Data;
 @Data
 public class DealerDTO {
 
+    private Integer id; // Add this field
+
     @NotBlank(message = "Address cannot be blank")
     private String address;
 

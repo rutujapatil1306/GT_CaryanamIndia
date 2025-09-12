@@ -8,31 +8,23 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class DealerMapper {
 
-    public static Dealer toEntity(DealerDTO dto) {
-        Dealer dealer = new Dealer();
-        dealer.setAddress(dto.getAddress());
-        dealer.setArea(dto.getArea());
-        dealer.setCity(dto.getCity());
-        dealer.setFirstname(dto.getFirstname());
-        dealer.setLastName(dto.getLastName());
-        dealer.setSalesPersonId(dto.getSalesPersonId());
-        dealer.setMobileNo(dto.getMobileNo());
-        dealer.setShopName(dto.getShopName());
-        dealer.setEmail(dto.getEmail());
-        dealer.setDealerDocumentPhoto(dto.getDealerDocumentPhoto());
-        dealer.setStatus(dto.getStatus());
 
+    public static DealerDTO toDTO(Dealer dealer) {
+        DealerDTO dto = new DealerDTO();
+        dto.setId(dealer.getId());
+        dto.setAddress(dealer.getAddress());
+        dto.setArea(dealer.getArea());
+        dto.setCity(dealer.getCity());
+        dto.setFirstname(dealer.getFirstname());
+        dto.setLastName(dealer.getLastName());
+        dto.setSalesPersonId(dealer.getSalesPersonId());
+        dto.setMobileNo(dealer.getMobileNo());
+        dto.setShopName(dealer.getShopName());
+        dto.setEmail(dealer.getEmail());
+        dto.setDealerDocumentPhoto(dealer.getDealerDocumentPhoto());
+        dto.setStatus(dealer.getStatus());
 
-        // Create User and set it
-        User user = new User();
-        user.setEmail(dto.getUserEmail());
-        user.setPassword(new BCryptPasswordEncoder().encode(dto.getUserPassword()));
-        user.setFirstName(dto.getUserFirstName());
-        user.setLastName(dto.getUserLastName());
-
-        dealer.setUser(user);
-
-        return dealer;
+        return dto;
     }
 
     public static void updateEntityFromDTO(DealerDTO dto, Dealer dealer) {
