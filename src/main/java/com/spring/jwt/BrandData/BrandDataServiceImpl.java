@@ -81,6 +81,10 @@ public class BrandDataServiceImpl implements BrandDataService {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("brandDataId").descending());
         Page<BrandData> brandDataPage = brandDataRepository.findAll(pageable);
+
+        if (page >= brandDataPage.getTotalPages()) {
+            throw new PageNotFoundException("Page " + page + " not found. Total pages: " + brandDataPage.getTotalPages());
+        }
         return brandDataPage.getContent().stream()
                 .map(brandData -> brandMapper.toDto(brandData)).toList();
 

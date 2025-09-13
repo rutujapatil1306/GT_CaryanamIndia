@@ -7,6 +7,9 @@ import com.spring.jwt.BrandData.Exception.SubVariantNotFoundException;
 import com.spring.jwt.BrandData.Exception.VariantNotFoundException;
 import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
 import com.spring.jwt.Car.Exception.CarNotFoundException;
+import com.spring.jwt.Car.Exception.DealerNotFoundExceptions;
+import com.spring.jwt.Car.Exception.StatusNotFoundException;
+import com.spring.jwt.dealer.DealerNotFoundException;
 import com.spring.jwt.utils.BaseResponseDTO;
 import com.spring.jwt.utils.ErrorResponseDto;
 import jakarta.validation.ConstraintViolationException;
@@ -279,6 +282,37 @@ public class GlobalException extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(CarNotFoundException.class)
+    public ResponseEntity<Object> handleCarNotFound(CarNotFoundException ex){
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("error", "Car Not Found");
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(StatusNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleStatusNotFound(StatusNotFoundException ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("timestamp", LocalDateTime.now());
+        error.put("status", HttpStatus.BAD_REQUEST.value());
+        error.put("error", "Invalid Car Status");
+        error.put("message", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DealerNotFoundExceptions.class)
+    public ResponseEntity<Map<String, Object>> handleDealerNotFound(DealerNotFoundExceptions  ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("timestamp", LocalDateTime.now());
+        error.put("status", HttpStatus.NOT_FOUND.value());
+        error.put("error", "Dealer Not Found");
+        error.put("message", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleAllUncaughtException(Exception exception, WebRequest webRequest) {
@@ -350,16 +384,6 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(CarNotFoundException.class)
-    public ResponseEntity<Object> handleCarNotFound(CarNotFoundException ex){
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.NOT_FOUND.value());
-        body.put("error", "Car Not Found");
-        body.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
 
 
 
