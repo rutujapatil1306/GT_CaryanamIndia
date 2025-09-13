@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalException.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JWT-with-Spring-Security</a> &gt; <a href="index.source.html" class="el_package">com.spring.jwt.exception</a> &gt; <span class="el_source">GlobalException.java</span></div><h1>GlobalException.java</h1><pre class="source lang-java linenums">package com.spring.jwt.exception;
 
 
+import com.spring.jwt.BrandData.Exception.BrandAlreadyExistsException;
+import com.spring.jwt.BrandData.Exception.BrandNotFoundException;
+import com.spring.jwt.BrandData.Exception.SubVariantNotFoundException;
+import com.spring.jwt.BrandData.Exception.VariantNotFoundException;
+import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
+import com.spring.jwt.Car.Exception.CarNotFoundException;
 import com.spring.jwt.utils.BaseResponseDTO;
 import com.spring.jwt.utils.ErrorResponseDto;
 import jakarta.validation.ConstraintViolationException;
@@ -32,259 +38,329 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-<span class="nc" id="L35">@Slf4j</span>
-<span class="nc" id="L36">public class GlobalException extends ResponseEntityExceptionHandler {</span>
+<span class="nc" id="L41">@Slf4j</span>
+<span class="nc" id="L42">public class GlobalException extends ResponseEntityExceptionHandler {</span>
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity&lt;BaseResponseDTO&gt; handleBaseException(BaseException e) {
-<span class="nc" id="L40">        log.error(&quot;Base exception occurred: {}&quot;, e.getMessage());</span>
+<span class="nc" id="L46">        log.error(&quot;Base exception occurred: {}&quot;, e.getMessage());</span>
 
-<span class="nc" id="L42">        BaseResponseDTO response = BaseResponseDTO.builder()</span>
-<span class="nc" id="L43">                .code(e.getCode())</span>
-<span class="nc" id="L44">                .message(e.getMessage())</span>
-<span class="nc" id="L45">                .build();</span>
+<span class="nc" id="L48">        BaseResponseDTO response = BaseResponseDTO.builder()</span>
+<span class="nc" id="L49">                .code(e.getCode())</span>
+<span class="nc" id="L50">                .message(e.getMessage())</span>
+<span class="nc" id="L51">                .build();</span>
 
         HttpStatus status;
         try {
-<span class="nc" id="L49">            status = HttpStatus.valueOf(Integer.parseInt(e.getCode()));</span>
-<span class="nc" id="L50">        } catch (Exception ex) {</span>
-<span class="nc" id="L51">            status = HttpStatus.INTERNAL_SERVER_ERROR;</span>
-<span class="nc" id="L52">        }</span>
+<span class="nc" id="L55">            status = HttpStatus.valueOf(Integer.parseInt(e.getCode()));</span>
+<span class="nc" id="L56">        } catch (Exception ex) {</span>
+<span class="nc" id="L57">            status = HttpStatus.INTERNAL_SERVER_ERROR;</span>
+<span class="nc" id="L58">        }</span>
 
-<span class="nc" id="L54">        return new ResponseEntity&lt;&gt;(response, status);</span>
+<span class="nc" id="L60">        return new ResponseEntity&lt;&gt;(response, status);</span>
     }
 
     @ExceptionHandler(UserNotFoundExceptions.class)
     public ResponseEntity&lt;ErrorResponseDto&gt; handleUserNotFoundException(UserNotFoundExceptions exception, WebRequest webRequest){
-<span class="nc" id="L59">        log.error(&quot;User not found: {}&quot;, exception.getMessage());</span>
-<span class="nc" id="L60">        ErrorResponseDto errorResponseDTO = new ErrorResponseDto(</span>
-<span class="nc" id="L61">                webRequest.getDescription(false),</span>
+<span class="nc" id="L65">        log.error(&quot;User not found: {}&quot;, exception.getMessage());</span>
+<span class="nc" id="L66">        ErrorResponseDto errorResponseDTO = new ErrorResponseDto(</span>
+<span class="nc" id="L67">                webRequest.getDescription(false),</span>
                 HttpStatus.BAD_REQUEST,
-<span class="nc" id="L63">                exception.getMessage(),</span>
-<span class="nc" id="L64">                LocalDateTime.now()</span>
+<span class="nc" id="L69">                exception.getMessage(),</span>
+<span class="nc" id="L70">                LocalDateTime.now()</span>
         );
-<span class="nc" id="L66">        return new ResponseEntity&lt;&gt;(errorResponseDTO, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L72">        return new ResponseEntity&lt;&gt;(errorResponseDTO, HttpStatus.BAD_REQUEST);</span>
     }
 
     @ExceptionHandler(PageNotFoundException.class)
     public ResponseEntity&lt;ErrorResponseDto&gt; handlePageNotFoundException(PageNotFoundException exception, WebRequest webRequest){
-<span class="nc" id="L71">        log.error(&quot;Page not found: {}&quot;, exception.getMessage());</span>
-<span class="nc" id="L72">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
-<span class="nc" id="L73">                webRequest.getDescription(false),</span>
+<span class="nc" id="L77">        log.error(&quot;Page not found: {}&quot;, exception.getMessage());</span>
+<span class="nc" id="L78">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
+<span class="nc" id="L79">                webRequest.getDescription(false),</span>
                 HttpStatus.NOT_FOUND,
-<span class="nc" id="L75">                exception.getMessage(),</span>
-<span class="nc" id="L76">                LocalDateTime.now()</span>
+<span class="nc" id="L81">                exception.getMessage(),</span>
+<span class="nc" id="L82">                LocalDateTime.now()</span>
         );
-<span class="nc" id="L78">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.NOT_FOUND);</span>
+<span class="nc" id="L84">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.NOT_FOUND);</span>
     }
 
     @ExceptionHandler({EmptyFieldException.class, UserAlreadyExistException.class})
     public ResponseEntity&lt;ErrorResponseDto&gt; handleCommonExceptions(RuntimeException exception, WebRequest webRequest) {
-<span class="nc" id="L83">        log.error(&quot;Validation error: {}&quot;, exception.getMessage());</span>
-<span class="nc" id="L84">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
-<span class="nc" id="L85">                webRequest.getDescription(false),</span>
+<span class="nc" id="L89">        log.error(&quot;Validation error: {}&quot;, exception.getMessage());</span>
+<span class="nc" id="L90">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
+<span class="nc" id="L91">                webRequest.getDescription(false),</span>
                 HttpStatus.BAD_REQUEST,
-<span class="nc" id="L87">                exception.getMessage(),</span>
-<span class="nc" id="L88">                LocalDateTime.now()</span>
+<span class="nc" id="L93">                exception.getMessage(),</span>
+<span class="nc" id="L94">                LocalDateTime.now()</span>
         );
-<span class="nc" id="L90">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L96">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.BAD_REQUEST);</span>
     }
 
     @ExceptionHandler(InvalidOtpException.class)
     public ResponseEntity&lt;ErrorResponseDto&gt; handleInvalidOtpException(InvalidOtpException exception, WebRequest webRequest){
-<span class="nc" id="L95">        log.error(&quot;Invalid OTP: {}&quot;, exception.getMessage());</span>
-<span class="nc" id="L96">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
-<span class="nc" id="L97">                webRequest.getDescription(false),</span>
+<span class="nc" id="L101">        log.error(&quot;Invalid OTP: {}&quot;, exception.getMessage());</span>
+<span class="nc" id="L102">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
+<span class="nc" id="L103">                webRequest.getDescription(false),</span>
                 HttpStatus.BAD_REQUEST,
-<span class="nc" id="L99">                exception.getMessage(),</span>
-<span class="nc" id="L100">                LocalDateTime.now()</span>
+<span class="nc" id="L105">                exception.getMessage(),</span>
+<span class="nc" id="L106">                LocalDateTime.now()</span>
         );
-<span class="nc" id="L102">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L108">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.BAD_REQUEST);</span>
     }
 
     @ExceptionHandler(OtpExpiredException.class)
     public ResponseEntity&lt;ErrorResponseDto&gt; handleOtpExpiredException(OtpExpiredException exception, WebRequest webRequest){
-<span class="nc" id="L107">        log.error(&quot;OTP expired: {}&quot;, exception.getMessage());</span>
-<span class="nc" id="L108">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
-<span class="nc" id="L109">                webRequest.getDescription(false),</span>
+<span class="nc" id="L113">        log.error(&quot;OTP expired: {}&quot;, exception.getMessage());</span>
+<span class="nc" id="L114">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
+<span class="nc" id="L115">                webRequest.getDescription(false),</span>
                 HttpStatus.BAD_REQUEST,
-<span class="nc" id="L111">                exception.getMessage(),</span>
-<span class="nc" id="L112">                LocalDateTime.now()</span>
+<span class="nc" id="L117">                exception.getMessage(),</span>
+<span class="nc" id="L118">                LocalDateTime.now()</span>
         );
-<span class="nc" id="L114">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L120">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.BAD_REQUEST);</span>
     }
 
     @ExceptionHandler(EmailNotVerifiedException.class)
     public ResponseEntity&lt;ErrorResponseDto&gt; handleEmailNotVerifiedException(EmailNotVerifiedException exception, WebRequest webRequest){
-<span class="nc" id="L119">        log.error(&quot;Email not verified: {}&quot;, exception.getMessage());</span>
-<span class="nc" id="L120">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
-<span class="nc" id="L121">                webRequest.getDescription(false),</span>
+<span class="nc" id="L125">        log.error(&quot;Email not verified: {}&quot;, exception.getMessage());</span>
+<span class="nc" id="L126">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
+<span class="nc" id="L127">                webRequest.getDescription(false),</span>
                 HttpStatus.BAD_REQUEST,
-<span class="nc" id="L123">                exception.getMessage(),</span>
-<span class="nc" id="L124">                LocalDateTime.now()</span>
+<span class="nc" id="L129">                exception.getMessage(),</span>
+<span class="nc" id="L130">                LocalDateTime.now()</span>
         );
-<span class="nc" id="L126">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L132">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.BAD_REQUEST);</span>
     }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity&lt;ErrorResponseDto&gt; handleAuthenticationException(AuthenticationException exception, WebRequest webRequest) {
-<span class="nc" id="L131">        log.error(&quot;Authentication error: {}&quot;, exception.getMessage());</span>
-<span class="nc" id="L132">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
-<span class="nc" id="L133">                webRequest.getDescription(false),</span>
+<span class="nc" id="L137">        log.error(&quot;Authentication error: {}&quot;, exception.getMessage());</span>
+<span class="nc" id="L138">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
+<span class="nc" id="L139">                webRequest.getDescription(false),</span>
                 HttpStatus.UNAUTHORIZED,
-<span class="nc" id="L135">                &quot;Authentication failed: &quot; + exception.getMessage(),</span>
-<span class="nc" id="L136">                LocalDateTime.now()</span>
+<span class="nc" id="L141">                &quot;Authentication failed: &quot; + exception.getMessage(),</span>
+<span class="nc" id="L142">                LocalDateTime.now()</span>
         );
-<span class="nc" id="L138">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.UNAUTHORIZED);</span>
+<span class="nc" id="L144">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.UNAUTHORIZED);</span>
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity&lt;ErrorResponseDto&gt; handleBadCredentialsException(BadCredentialsException exception, WebRequest webRequest) {
-<span class="nc" id="L143">        log.error(&quot;Bad credentials: {}&quot;, exception.getMessage());</span>
-<span class="nc" id="L144">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
-<span class="nc" id="L145">                webRequest.getDescription(false),</span>
+<span class="nc" id="L149">        log.error(&quot;Bad credentials: {}&quot;, exception.getMessage());</span>
+<span class="nc" id="L150">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
+<span class="nc" id="L151">                webRequest.getDescription(false),</span>
                 HttpStatus.UNAUTHORIZED,
                 &quot;Invalid username or password&quot;,
-<span class="nc" id="L148">                LocalDateTime.now()</span>
+<span class="nc" id="L154">                LocalDateTime.now()</span>
         );
-<span class="nc" id="L150">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.UNAUTHORIZED);</span>
+<span class="nc" id="L156">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.UNAUTHORIZED);</span>
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity&lt;ErrorResponseDto&gt; handleAccessDeniedException(AccessDeniedException exception, WebRequest webRequest) {
-<span class="nc" id="L155">        log.error(&quot;Access denied: {}&quot;, exception.getMessage());</span>
-<span class="nc" id="L156">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
-<span class="nc" id="L157">                webRequest.getDescription(false),</span>
+<span class="nc" id="L161">        log.error(&quot;Access denied: {}&quot;, exception.getMessage());</span>
+<span class="nc" id="L162">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
+<span class="nc" id="L163">                webRequest.getDescription(false),</span>
                 HttpStatus.FORBIDDEN,
                 &quot;Access denied: You don't have permission to access this resource&quot;,
-<span class="nc" id="L160">                LocalDateTime.now()</span>
+<span class="nc" id="L166">                LocalDateTime.now()</span>
         );
-<span class="nc" id="L162">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.FORBIDDEN);</span>
+<span class="nc" id="L168">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.FORBIDDEN);</span>
     }
 
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity&lt;ErrorResponseDto&gt; handleDataAccessException(DataAccessException exception, WebRequest webRequest) {
-<span class="nc" id="L167">        log.error(&quot;Database error: {}&quot;, exception.getMessage());</span>
-<span class="nc" id="L168">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
-<span class="nc" id="L169">                webRequest.getDescription(false),</span>
+<span class="nc" id="L173">        log.error(&quot;Database error: {}&quot;, exception.getMessage());</span>
+<span class="nc" id="L174">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
+<span class="nc" id="L175">                webRequest.getDescription(false),</span>
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 &quot;Database error occurred&quot;,
-<span class="nc" id="L172">                LocalDateTime.now()</span>
+<span class="nc" id="L178">                LocalDateTime.now()</span>
         );
-<span class="nc" id="L174">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);</span>
+<span class="nc" id="L180">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);</span>
     }
 
     // KEEP ONLY ONE handler for MethodArgumentTypeMismatchException!
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity&lt;ErrorResponseDto&gt; handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException exception, WebRequest request) {
-<span class="nc" id="L180">        log.error(&quot;Type mismatch: {}&quot;, exception.getMessage());</span>
+<span class="nc" id="L186">        log.error(&quot;Type mismatch: {}&quot;, exception.getMessage());</span>
         String error;
-<span class="nc bnc" id="L182" title="All 2 branches missed.">        if (exception.getRequiredType() != null) {</span>
-<span class="nc" id="L183">            error = exception.getName() + &quot; should be of type &quot; + exception.getRequiredType().getName();</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        if (exception.getRequiredType() != null) {</span>
+<span class="nc" id="L189">            error = exception.getName() + &quot; should be of type &quot; + exception.getRequiredType().getName();</span>
         } else {
-<span class="nc" id="L185">            error = exception.getName() + &quot; has an invalid type&quot;;</span>
+<span class="nc" id="L191">            error = exception.getName() + &quot; has an invalid type&quot;;</span>
         }
-<span class="nc" id="L187">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
-<span class="nc" id="L188">                request.getDescription(false),</span>
+<span class="nc" id="L193">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
+<span class="nc" id="L194">                request.getDescription(false),</span>
                 HttpStatus.BAD_REQUEST,
                 error,
-<span class="nc" id="L191">                LocalDateTime.now()</span>
+<span class="nc" id="L197">                LocalDateTime.now()</span>
         );
-<span class="nc" id="L193">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L199">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.BAD_REQUEST);</span>
     }
 
     @Override
     protected ResponseEntity&lt;Object&gt; handleMissingServletRequestParameter(
             MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-<span class="nc" id="L199">        log.error(&quot;Missing parameter: {}&quot;, ex.getMessage());</span>
-<span class="nc" id="L200">        String error = ex.getParameterName() + &quot; parameter is missing&quot;;</span>
+<span class="nc" id="L205">        log.error(&quot;Missing parameter: {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L206">        String error = ex.getParameterName() + &quot; parameter is missing&quot;;</span>
 
-<span class="nc" id="L202">        Map&lt;String, String&gt; errors = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L203">        errors.put(ex.getParameterName(), error);</span>
+<span class="nc" id="L208">        Map&lt;String, String&gt; errors = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L209">        errors.put(ex.getParameterName(), error);</span>
 
-<span class="nc" id="L205">        return new ResponseEntity&lt;&gt;(errors, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L211">        return new ResponseEntity&lt;&gt;(errors, HttpStatus.BAD_REQUEST);</span>
     }
 
     @Override
     protected ResponseEntity&lt;Object&gt; handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-<span class="nc" id="L211">        log.error(&quot;Validation error: {}&quot;, ex.getMessage());</span>
-<span class="nc" id="L212">        Map&lt;String, String&gt; validationErrors = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L213">        List&lt;ObjectError&gt; validationErrorList = ex.getBindingResult().getAllErrors();</span>
+<span class="nc" id="L217">        log.error(&quot;Validation error: {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L218">        Map&lt;String, String&gt; validationErrors = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L219">        List&lt;ObjectError&gt; validationErrorList = ex.getBindingResult().getAllErrors();</span>
 
-<span class="nc" id="L215">        validationErrorList.forEach((error) -&gt; {</span>
-<span class="nc" id="L216">            String fieldName = ((FieldError) error).getField();</span>
-<span class="nc" id="L217">            String validationMsg = error.getDefaultMessage();</span>
-<span class="nc" id="L218">            validationErrors.put(fieldName, validationMsg);</span>
-<span class="nc" id="L219">        });</span>
-<span class="nc" id="L220">        return new ResponseEntity&lt;&gt;(validationErrors, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L221">        validationErrorList.forEach((error) -&gt; {</span>
+<span class="nc" id="L222">            String fieldName = ((FieldError) error).getField();</span>
+<span class="nc" id="L223">            String validationMsg = error.getDefaultMessage();</span>
+<span class="nc" id="L224">            validationErrors.put(fieldName, validationMsg);</span>
+<span class="nc" id="L225">        });</span>
+<span class="nc" id="L226">        return new ResponseEntity&lt;&gt;(validationErrors, HttpStatus.BAD_REQUEST);</span>
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
     public Map&lt;String, String&gt; handleConstraintViolation(ConstraintViolationException ex) {
-<span class="nc" id="L226">        log.error(&quot;Constraint violation: {}&quot;, ex.getMessage());</span>
-<span class="nc" id="L227">        return ex.getConstraintViolations().stream()</span>
-<span class="nc" id="L228">                .collect(Collectors.toMap(</span>
-<span class="nc" id="L229">                        violation -&gt; violation.getPropertyPath().toString(),</span>
-<span class="nc" id="L230">                        violation -&gt; violation.getMessage(),</span>
-<span class="nc" id="L231">                        (existingMessage, newMessage) -&gt; existingMessage + &quot;; &quot; + newMessage</span>
+<span class="nc" id="L232">        log.error(&quot;Constraint violation: {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L233">        return ex.getConstraintViolations().stream()</span>
+<span class="nc" id="L234">                .collect(Collectors.toMap(</span>
+<span class="nc" id="L235">                        violation -&gt; violation.getPropertyPath().toString(),</span>
+<span class="nc" id="L236">                        violation -&gt; violation.getMessage(),</span>
+<span class="nc" id="L237">                        (existingMessage, newMessage) -&gt; existingMessage + &quot;; &quot; + newMessage</span>
                 ));
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity&lt;Object&gt; handleResourceNotFound(ResourceNotFoundException ex) {
-<span class="nc" id="L237">        Map&lt;String, Object&gt; body = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L238">        body.put(&quot;timestamp&quot;, LocalDateTime.now());</span>
-<span class="nc" id="L239">        body.put(&quot;status&quot;, HttpStatus.NOT_FOUND.value());</span>
-<span class="nc" id="L240">        body.put(&quot;error&quot;, &quot;Resource Not Found&quot;);</span>
-<span class="nc" id="L241">        body.put(&quot;message&quot;, ex.getMessage());</span>
-<span class="nc" id="L242">        return new ResponseEntity&lt;&gt;(body, HttpStatus.NOT_FOUND);</span>
+<span class="nc" id="L243">        Map&lt;String, Object&gt; body = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L244">        body.put(&quot;timestamp&quot;, LocalDateTime.now());</span>
+<span class="nc" id="L245">        body.put(&quot;status&quot;, HttpStatus.NOT_FOUND.value());</span>
+<span class="nc" id="L246">        body.put(&quot;error&quot;, &quot;Resource Not Found&quot;);</span>
+<span class="nc" id="L247">        body.put(&quot;message&quot;, ex.getMessage());</span>
+<span class="nc" id="L248">        return new ResponseEntity&lt;&gt;(body, HttpStatus.NOT_FOUND);</span>
+    }
+    @ExceptionHandler(BrandNotFoundException.class)
+    public ResponseEntity&lt;Object&gt; handleBrandNotFound(BrandNotFoundException ex){
+<span class="nc" id="L252">        Map&lt;String, Object&gt; body = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L253">        body.put(&quot;timestamp&quot;, LocalDateTime.now());</span>
+<span class="nc" id="L254">        body.put(&quot;status&quot;, HttpStatus.NOT_FOUND.value());</span>
+<span class="nc" id="L255">        body.put(&quot;error&quot;, &quot;Brand Not Found&quot;);</span>
+<span class="nc" id="L256">        body.put(&quot;message&quot;, ex.getMessage());</span>
+
+<span class="nc" id="L258">        return new ResponseEntity&lt;&gt;(body, HttpStatus.NOT_FOUND);</span>
+    }
+
+    @ExceptionHandler(VariantNotFoundException.class)
+    public ResponseEntity&lt;Object&gt; handleVariantNotFound(VariantNotFoundException ex){
+<span class="nc" id="L263">        Map&lt;String, Object&gt; body = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L264">        body.put(&quot;timestamp&quot;, LocalDateTime.now());</span>
+<span class="nc" id="L265">        body.put(&quot;status&quot;, HttpStatus.NOT_FOUND.value());</span>
+<span class="nc" id="L266">        body.put(&quot;error&quot;, &quot;Variant Not Found for given brand&quot;);</span>
+<span class="nc" id="L267">        body.put(&quot;message&quot;, ex.getMessage());</span>
+
+<span class="nc" id="L269">        return new ResponseEntity&lt;&gt;(body, HttpStatus.NOT_FOUND);</span>
+    }
+
+    @ExceptionHandler(SubVariantNotFoundException.class)
+    public ResponseEntity&lt;Object&gt; handleSubVariantNotFound(SubVariantNotFoundException ex){
+<span class="nc" id="L274">        Map&lt;String, Object&gt; body = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L275">        body.put(&quot;timestamp&quot;, LocalDateTime.now());</span>
+<span class="nc" id="L276">        body.put(&quot;status&quot;, HttpStatus.NOT_FOUND.value());</span>
+<span class="nc" id="L277">        body.put(&quot;error&quot;, &quot;SubVariant Not Found for given Brand and Variant&quot;);</span>
+<span class="nc" id="L278">        body.put(&quot;message&quot;, ex.getMessage());</span>
+
+<span class="nc" id="L280">        return new ResponseEntity&lt;&gt;(body, HttpStatus.NOT_FOUND);</span>
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity&lt;ErrorResponseDto&gt; handleAllUncaughtException(Exception exception, WebRequest webRequest) {
-<span class="nc" id="L247">        log.error(&quot;Uncaught error occurred: &quot;, exception);</span>
-<span class="nc" id="L248">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
-<span class="nc" id="L249">                webRequest.getDescription(false),</span>
+<span class="nc" id="L285">        log.error(&quot;Uncaught error occurred: &quot;, exception);</span>
+<span class="nc" id="L286">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
+<span class="nc" id="L287">                webRequest.getDescription(false),</span>
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 &quot;An unexpected error occurred&quot;,
-<span class="nc" id="L252">                LocalDateTime.now()</span>
+<span class="nc" id="L290">                LocalDateTime.now()</span>
         );
-<span class="nc" id="L254">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);</span>
+<span class="nc" id="L292">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);</span>
     }
 
     @ExceptionHandler(ExamTimeWindowException.class)
     public ResponseEntity&lt;ErrorResponseDto&gt; handleExamTimeWindowException(ExamTimeWindowException exception, WebRequest webRequest){
-<span class="nc" id="L259">        log.error(&quot;Exam time window error: {}&quot;, exception.getMessage());</span>
-<span class="nc" id="L260">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
-<span class="nc" id="L261">                webRequest.getDescription(false),</span>
+<span class="nc" id="L297">        log.error(&quot;Exam time window error: {}&quot;, exception.getMessage());</span>
+<span class="nc" id="L298">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
+<span class="nc" id="L299">                webRequest.getDescription(false),</span>
                 HttpStatus.BAD_REQUEST,
-<span class="nc" id="L263">                exception.getMessage(),</span>
-<span class="nc" id="L264">                LocalDateTime.now()</span>
+<span class="nc" id="L301">                exception.getMessage(),</span>
+<span class="nc" id="L302">                LocalDateTime.now()</span>
         );
-<span class="nc" id="L266">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L304">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.BAD_REQUEST);</span>
     }
 
     @ExceptionHandler(InvalidPaginationParameterException.class)
     public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; handleInvalidPagination(InvalidPaginationParameterException ex) {
-<span class="nc" id="L271">        Map&lt;String, Object&gt; error = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L272">        error.put(&quot;error&quot;, &quot;Invalid pagination parameters&quot;);</span>
-<span class="nc" id="L273">        error.put(&quot;message&quot;, ex.getMessage());</span>
-<span class="nc" id="L274">        error.put(&quot;status&quot;, HttpStatus.BAD_REQUEST.value());</span>
-<span class="nc" id="L275">        return new ResponseEntity&lt;&gt;(error, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L309">        Map&lt;String, Object&gt; error = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L310">        error.put(&quot;error&quot;, &quot;Invalid pagination parameters&quot;);</span>
+<span class="nc" id="L311">        error.put(&quot;message&quot;, ex.getMessage());</span>
+<span class="nc" id="L312">        error.put(&quot;status&quot;, HttpStatus.BAD_REQUEST.value());</span>
+<span class="nc" id="L313">        return new ResponseEntity&lt;&gt;(error, HttpStatus.BAD_REQUEST);</span>
     }
 
     // In your GlobalExceptionHandler.java
     @ExceptionHandler(NotesNotCreatedException.class)
     public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; handleNotesNotCreatedException(NotesNotCreatedException ex) {
-<span class="nc" id="L281">        Map&lt;String, Object&gt; body = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L282">        body.put(&quot;timestamp&quot;, new Date());</span>
-<span class="nc" id="L283">        body.put(&quot;status&quot;, HttpStatus.BAD_REQUEST.value());</span>
-<span class="nc" id="L284">        body.put(&quot;error&quot;, &quot;Notes Not Created&quot;);</span>
-<span class="nc" id="L285">        body.put(&quot;message&quot;, ex.getMessage());</span>
-<span class="nc" id="L286">        return new ResponseEntity&lt;&gt;(body, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L319">        Map&lt;String, Object&gt; body = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L320">        body.put(&quot;timestamp&quot;, new Date());</span>
+<span class="nc" id="L321">        body.put(&quot;status&quot;, HttpStatus.BAD_REQUEST.value());</span>
+<span class="nc" id="L322">        body.put(&quot;error&quot;, &quot;Notes Not Created&quot;);</span>
+<span class="nc" id="L323">        body.put(&quot;message&quot;, ex.getMessage());</span>
+<span class="nc" id="L324">        return new ResponseEntity&lt;&gt;(body, HttpStatus.BAD_REQUEST);</span>
     }
+    @ExceptionHandler(BrandAlreadyExistsException.class)
+    public ResponseEntity&lt;ErrorResponseDto&gt; handleBrandAlreadyExistsException(BrandAlreadyExistsException ex, WebRequest webRequest)
+    {
+
+<span class="nc" id="L330">        log.error(&quot;Brand Already Exists: {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L331">        ErrorResponseDto errorResponseDto = new ErrorResponseDto(</span>
+<span class="nc" id="L332">                webRequest.getDescription(false),</span>
+                HttpStatus.BAD_REQUEST,
+<span class="nc" id="L334">                ex.getMessage(),</span>
+<span class="nc" id="L335">                LocalDateTime.now());</span>
+
+<span class="nc" id="L337">        return new ResponseEntity&lt;&gt;(errorResponseDto, HttpStatus.BAD_REQUEST);</span>
+    }
+
+    @ExceptionHandler(CarAlreadyExistsException.class)
+    public ResponseEntity&lt;ErrorResponseDto&gt; handleCarAlreadyExists(CarAlreadyExistsException ex, WebRequest webRequest)
+    {
+<span class="nc" id="L343">        log.error(&quot;Car Already Exists: {}&quot;, ex.getMessage());</span>
+
+<span class="nc" id="L345">        ErrorResponseDto errorResponse = new ErrorResponseDto(</span>
+<span class="nc" id="L346">                webRequest.getDescription(false),</span>
+                HttpStatus.BAD_REQUEST,
+<span class="nc" id="L348">                ex.getMessage(),</span>
+<span class="nc" id="L349">                LocalDateTime.now());</span>
+<span class="nc" id="L350">        return new ResponseEntity&lt;&gt;(errorResponse, HttpStatus.BAD_REQUEST);</span>
+    }
+
+    @ExceptionHandler(CarNotFoundException.class)
+    public ResponseEntity&lt;Object&gt; handleCarNotFound(CarNotFoundException ex){
+<span class="nc" id="L355">        Map&lt;String, Object&gt; body = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L356">        body.put(&quot;timestamp&quot;, LocalDateTime.now());</span>
+<span class="nc" id="L357">        body.put(&quot;status&quot;, HttpStatus.NOT_FOUND.value());</span>
+<span class="nc" id="L358">        body.put(&quot;error&quot;, &quot;Car Not Found&quot;);</span>
+<span class="nc" id="L359">        body.put(&quot;message&quot;, ex.getMessage());</span>
+
+<span class="nc" id="L361">        return new ResponseEntity&lt;&gt;(body, HttpStatus.NOT_FOUND);</span>
+    }
+
 
 
 }

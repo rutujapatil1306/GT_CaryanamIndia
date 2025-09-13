@@ -8,60 +8,65 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
-<span class="nc" id="L12">@Setter</span>
+<span class="nc" id="L15">@Setter</span>
 @Entity
-<span class="nc" id="L14">@AllArgsConstructor</span>
-<span class="nc" id="L15">@NoArgsConstructor</span>
-<span class="nc" id="L16">@ToString</span>
+<span class="nc" id="L17">@AllArgsConstructor</span>
+<span class="nc" id="L18">@NoArgsConstructor</span>
+<span class="nc" id="L19">@ToString</span>
 @Table(name = &quot;dealer&quot;)
 public class Dealer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = &quot;Dealer_id&quot;)
-<span class="nc" id="L22">    private Integer id;</span>
+<span class="nc" id="L25">    private Integer id;</span>
 
     @NotBlank (message = &quot;Address cannot be blank&quot;)
     @Column(name = &quot;address&quot;)
-<span class="nc" id="L26">    private String address;</span>
+<span class="nc" id="L29">    private String address;</span>
 
     @Column(name = &quot;area&quot;, nullable = false, length = 45)
-<span class="nc" id="L29">    private String area;</span>
+<span class="nc" id="L32">    private String area;</span>
 
     @Column(name = &quot;city&quot;, nullable = false, length = 45)
-<span class="nc" id="L32">    private String city;</span>
+<span class="nc" id="L35">    private String city;</span>
 
     @Column(name = &quot;firstname&quot;, length = 45)
-<span class="nc" id="L35">    private String firstname;</span>
+<span class="nc" id="L38">    private String firstname;</span>
 
     @Column(name = &quot;last_name&quot;, length = 45)
-<span class="nc" id="L38">    private String lastName;</span>
+<span class="nc" id="L41">    private String lastName;</span>
 
     @Column(name = &quot;sales_person_id&quot;,unique = true,nullable = false)
-<span class="nc" id="L41">    private Long salesPersonId;</span>
+<span class="nc" id="L44">    private Long salesPersonId;</span>
 
     @NotNull(message = &quot;Mobile number is required&quot;)
 //    @Pattern(regexp = &quot;[0-9]{10}&quot;, message = &quot;Invalid mobile number format&quot;)
 //    @Column(name = &quot;mobile_no&quot;, nullable = false, length = 45)
-<span class="nc" id="L46">    private Long mobileNo;</span>
+<span class="nc" id="L49">    private Long mobileNo;</span>
 
     @Column(name = &quot;shop_name&quot;, nullable = false, length = 250)
-<span class="nc" id="L49">    private String shopName;</span>
+<span class="nc" id="L52">    private String shopName;</span>
 
     @NotBlank(message = &quot;Email cannot be blank&quot;)
     @Column(unique = true)
-<span class="nc" id="L53">    private String email;</span>
+<span class="nc" id="L56">    private String email;</span>
 
-<span class="nc" id="L55">    private long dealerDocumentPhoto;</span>
+<span class="nc" id="L58">    private long dealerDocumentPhoto;</span>
 
 //    private Boolean status;
      @Enumerated(EnumType.STRING) // Stores as &quot;ACTIVE&quot;, &quot;DEACTIVE&quot;, &quot;BLOCKED&quot;
      @Column(name = &quot;status&quot;, nullable = false)
-<span class="nc" id="L60">     private DealerStatus status;</span>
+<span class="nc" id="L63">     private DealerStatus status;</span>
 
     @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = &quot;user_user_id&quot;, referencedColumnName = &quot;user_id&quot;, nullable = false)
-<span class="nc" id="L64">    private User user;</span>
+<span class="nc" id="L67">    private User user;</span>
+
+
 
 //    @OneToMany(mappedBy = &quot;dealerVendor&quot;)
 //    private Set&lt;Car&gt; cars = new LinkedHashSet&lt;&gt;();

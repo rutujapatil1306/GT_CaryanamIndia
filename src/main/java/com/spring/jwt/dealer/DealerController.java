@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/dealer")
 public class DealerController {
-    @Autowired
+
     private final DealerService dealerService;
 
 

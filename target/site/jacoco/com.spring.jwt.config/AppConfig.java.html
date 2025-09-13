@@ -144,14 +144,16 @@ import java.util.List;
 <span class="nc" id="L144">                .requestMatchers(HttpMethod.POST, &quot;/dealer&quot;).permitAll()  // added</span>
 <span class="nc" id="L145">                .requestMatchers(&quot;/api/auth/**&quot;).permitAll()</span>
 <span class="nc" id="L146">                .requestMatchers(&quot;/api/v1/users/register&quot;).permitAll()</span>
-<span class="nc" id="L147">                .requestMatchers(&quot;/api/v1/users/register/dealer&quot;).permitAll() // add</span>
+<span class="nc" id="L147">                .requestMatchers(&quot;/api/v1/users/register/dealer&quot;).permitAll()// add</span>
 <span class="nc" id="L148">                .requestMatchers(&quot;/api/v1/users/password/**&quot;).permitAll()</span>
 <span class="nc" id="L149">                .requestMatchers(&quot;/api/v1/exam/**&quot;).permitAll()</span>
 <span class="nc" id="L150">                .requestMatchers(&quot;/api/v1/**&quot;).permitAll()</span>
-<span class="nc" id="L151">                .requestMatchers(jwtConfig.getUrl()).permitAll()</span>
-<span class="nc" id="L152">                .requestMatchers(jwtConfig.getRefreshUrl()).permitAll()</span>
+<span class="nc" id="L151">                .requestMatchers(&quot;/api/brands/**&quot;).permitAll()</span>
+<span class="nc" id="L152">                .requestMatchers(&quot;/api/cars/**&quot;).permitAll()</span>
+<span class="nc" id="L153">                .requestMatchers(jwtConfig.getUrl()).permitAll()</span>
+<span class="nc" id="L154">                .requestMatchers(jwtConfig.getRefreshUrl()).permitAll()</span>
 
-<span class="nc" id="L154">                .requestMatchers(</span>
+<span class="nc" id="L156">                .requestMatchers(</span>
                         &quot;/v2/api-docs&quot;,
                         &quot;/v3/api-docs&quot;,
                         &quot;/v*/a*-docs/**&quot;,
@@ -162,18 +164,18 @@ import java.util.List;
                         &quot;/swagger-ui/**&quot;,
                         &quot;/webjars/**&quot;,
                         &quot;/swagger-ui.html&quot;
-<span class="nc" id="L165">                ).permitAll()</span>
+<span class="nc" id="L167">                ).permitAll()</span>
 
-<span class="nc" id="L167">                .requestMatchers(&quot;/api/public/**&quot;).permitAll()</span>
-<span class="nc" id="L168">                .requestMatchers(&quot;/user/**&quot;).permitAll()</span>
-<span class="nc" id="L169">                .requestMatchers(&quot;/dealer/**&quot;).permitAll() // add</span>
+<span class="nc" id="L169">                .requestMatchers(&quot;/api/public/**&quot;).permitAll()</span>
+<span class="nc" id="L170">                .requestMatchers(&quot;/user/**&quot;).permitAll()</span>
+<span class="nc" id="L171">                .requestMatchers(&quot;/dealer/**&quot;).permitAll() // add</span>
 
 
 
-<span class="nc" id="L173">                .anyRequest().authenticated());</span>
+<span class="nc" id="L175">                .anyRequest().authenticated());</span>
 
         // Create a request matcher for public URLs
-<span class="nc" id="L176">        org.springframework.security.web.util.matcher.RequestMatcher publicUrls =</span>
+<span class="nc" id="L178">        org.springframework.security.web.util.matcher.RequestMatcher publicUrls =</span>
             new org.springframework.security.web.util.matcher.OrRequestMatcher(
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(&quot;/api/auth/**&quot;),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(&quot;/api/public/**&quot;),
@@ -181,6 +183,10 @@ import java.util.List;
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher(&quot;/api/v1/users/register/dealer&quot;),// add
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher(&quot;/dealer/**&quot;),// added
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher(&quot;/api/v1/users/password/**&quot;),
+                    new org.springframework.security.web.util.matcher.AntPathRequestMatcher(&quot;/api/v1/users/password/**&quot;),
+                    new org.springframework.security.web.util.matcher.AntPathRequestMatcher(&quot;/api/v1/users/password/**&quot;),
+                    new org.springframework.security.web.util.matcher.AntPathRequestMatcher(&quot;/api/brands/**&quot;),
+                    new org.springframework.security.web.util.matcher.AntPathRequestMatcher(&quot;/api/cars/**&quot;),
 
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(&quot;/v2/api-docs/**&quot;),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(&quot;/v3/api-docs/**&quot;),
@@ -190,52 +196,52 @@ import java.util.List;
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(&quot;/webjars/**&quot;),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(&quot;/swagger-ui.html&quot;),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(&quot;/user/**&quot;),
-<span class="nc" id="L193">                new org.springframework.security.web.util.matcher.AntPathRequestMatcher(jwtConfig.getUrl()),</span>
-<span class="nc" id="L194">                new org.springframework.security.web.util.matcher.AntPathRequestMatcher(jwtConfig.getRefreshUrl())</span>
+<span class="nc" id="L199">                new org.springframework.security.web.util.matcher.AntPathRequestMatcher(jwtConfig.getUrl()),</span>
+<span class="nc" id="L200">                new org.springframework.security.web.util.matcher.AntPathRequestMatcher(jwtConfig.getRefreshUrl())</span>
             );
 
-<span class="nc" id="L197">        log.debug(&quot;Configuring security filters&quot;);</span>
-<span class="nc" id="L198">        JwtUsernamePasswordAuthenticationFilter jwtUsernamePasswordAuthenticationFilter = new JwtUsernamePasswordAuthenticationFilter(authenticationManager(http), jwtConfig, jwtService, userRepository, activeSessionService);</span>
-<span class="nc" id="L199">        JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter = new JwtTokenAuthenticationFilter(jwtConfig, jwtService, userDetailsService(), publicUrls, activeSessionService);</span>
-<span class="nc" id="L200">        JwtRefreshTokenFilter jwtRefreshTokenFilter = new JwtRefreshTokenFilter(authenticationManager(http), jwtConfig, jwtService, userDetailsService(), activeSessionService);</span>
+<span class="nc" id="L203">        log.debug(&quot;Configuring security filters&quot;);</span>
+<span class="nc" id="L204">        JwtUsernamePasswordAuthenticationFilter jwtUsernamePasswordAuthenticationFilter = new JwtUsernamePasswordAuthenticationFilter(authenticationManager(http), jwtConfig, jwtService, userRepository, activeSessionService);</span>
+<span class="nc" id="L205">        JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter = new JwtTokenAuthenticationFilter(jwtConfig, jwtService, userDetailsService(), publicUrls, activeSessionService);</span>
+<span class="nc" id="L206">        JwtRefreshTokenFilter jwtRefreshTokenFilter = new JwtRefreshTokenFilter(authenticationManager(http), jwtConfig, jwtService, userDetailsService(), activeSessionService);</span>
 
-<span class="nc" id="L202">        http.addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)</span>
-<span class="nc" id="L203">                .addFilterBefore(jwtUsernamePasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)</span>
-<span class="nc" id="L204">                .addFilterBefore(jwtRefreshTokenFilter, UsernamePasswordAuthenticationFilter.class)</span>
-<span class="nc" id="L205">                .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class)</span>
-<span class="nc" id="L206">                .addFilterBefore(xssFilter, UsernamePasswordAuthenticationFilter.class)</span>
-<span class="nc" id="L207">                .addFilterBefore(sqlInjectionFilter, UsernamePasswordAuthenticationFilter.class)</span>
-<span class="nc" id="L208">                .addFilterBefore(securityHeadersFilter, UsernamePasswordAuthenticationFilter.class);</span>
+<span class="nc" id="L208">        http.addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)</span>
+<span class="nc" id="L209">                .addFilterBefore(jwtUsernamePasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)</span>
+<span class="nc" id="L210">                .addFilterBefore(jwtRefreshTokenFilter, UsernamePasswordAuthenticationFilter.class)</span>
+<span class="nc" id="L211">                .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class)</span>
+<span class="nc" id="L212">                .addFilterBefore(xssFilter, UsernamePasswordAuthenticationFilter.class)</span>
+<span class="nc" id="L213">                .addFilterBefore(sqlInjectionFilter, UsernamePasswordAuthenticationFilter.class)</span>
+<span class="nc" id="L214">                .addFilterBefore(securityHeadersFilter, UsernamePasswordAuthenticationFilter.class);</span>
 
-<span class="nc" id="L210">        http.authenticationProvider(customAuthenticationProvider);</span>
+<span class="nc" id="L216">        http.authenticationProvider(customAuthenticationProvider);</span>
 
-<span class="nc" id="L212">        log.debug(&quot;Security configuration completed&quot;);</span>
-<span class="nc" id="L213">        return http.build();</span>
+<span class="nc" id="L218">        log.debug(&quot;Security configuration completed&quot;);</span>
+<span class="nc" id="L219">        return http.build();</span>
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-<span class="nc" id="L218">        return new CorsConfigurationSource() {</span>
+<span class="nc" id="L224">        return new CorsConfigurationSource() {</span>
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-<span class="nc" id="L221">                CorsConfiguration config = new CorsConfiguration();</span>
-<span class="nc" id="L222">                config.setAllowedOrigins(allowedOrigins);</span>
-<span class="nc" id="L223">                config.setAllowedMethods(Arrays.asList(&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;OPTIONS&quot;));</span>
-<span class="nc" id="L224">                config.setAllowCredentials(true);</span>
-<span class="nc" id="L225">                config.setAllowedHeaders(Arrays.asList(&quot;Authorization&quot;, &quot;Content-Type&quot;, &quot;X-Requested-With&quot;, &quot;Accept&quot;));</span>
-<span class="nc" id="L226">                config.setExposedHeaders(Arrays.asList(&quot;Authorization&quot;));</span>
-<span class="nc" id="L227">                config.setMaxAge(3600L);</span>
-<span class="nc" id="L228">                return config;</span>
+<span class="nc" id="L227">                CorsConfiguration config = new CorsConfiguration();</span>
+<span class="nc" id="L228">                config.setAllowedOrigins(allowedOrigins);</span>
+<span class="nc" id="L229">                config.setAllowedMethods(Arrays.asList(&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;OPTIONS&quot;));</span>
+<span class="nc" id="L230">                config.setAllowCredentials(true);</span>
+<span class="nc" id="L231">                config.setAllowedHeaders(Arrays.asList(&quot;Authorization&quot;, &quot;Content-Type&quot;, &quot;X-Requested-With&quot;, &quot;Accept&quot;));</span>
+<span class="nc" id="L232">                config.setExposedHeaders(Arrays.asList(&quot;Authorization&quot;));</span>
+<span class="nc" id="L233">                config.setMaxAge(3600L);</span>
+<span class="nc" id="L234">                return config;</span>
             }
         };
     }
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-<span class="nc" id="L235">        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);</span>
-<span class="nc" id="L236">        builder.userDetailsService(userDetailsService())</span>
-<span class="nc" id="L237">                .passwordEncoder(passwordEncoder());</span>
-<span class="nc" id="L238">        return builder.build();</span>
+<span class="nc" id="L241">        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);</span>
+<span class="nc" id="L242">        builder.userDetailsService(userDetailsService())</span>
+<span class="nc" id="L243">                .passwordEncoder(passwordEncoder());</span>
+<span class="nc" id="L244">        return builder.build();</span>
     }
 
 

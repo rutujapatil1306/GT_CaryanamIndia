@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PremiumCarBandServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JWT-with-Spring-Security</a> &gt; <a href="index.source.html" class="el_package">com.spring.jwt.PremiumCarBrandData</a> &gt; <span class="el_source">PremiumCarBandServiceImpl.java</span></div><h1>PremiumCarBandServiceImpl.java</h1><pre class="source lang-java linenums">package com.spring.jwt.PremiumCarBrandData;
+
+import com.spring.jwt.dto.ResponseDto;
+import com.spring.jwt.exception.PageNotFoundException;
+import com.spring.jwt.exception.ResourceNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+<span class="nc" id="L17">public class PremiumCarBandServiceImpl implements PremiumCarBrandService {</span>
+@Autowired
+    PremiumCarBrandRepository premiumCarBrandRepository;
+
+
+    @Override
+    public PremiumBrandDTO save(PremiumBrandDTO dto) {
+<span class="nc" id="L24">        PremiumCarBrandData entity = PremiumBrandMapper.toEntity(dto);</span>
+<span class="nc" id="L25">        return PremiumBrandMapper.toDTO(premiumCarBrandRepository.save(entity));</span>
+    }
+
+    @Override
+    public PremiumBrandDTO updateBrandById(PremiumBrandDTO brandDataDto, Integer premiumCarBrandDataId) {
+<span class="nc" id="L30">        PremiumCarBrandData update = premiumCarBrandRepository.findById(premiumCarBrandDataId).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Brand not found with id&quot; + premiumCarBrandDataId));</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        if (brandDataDto.getBrand() != null) {</span>
+<span class="nc" id="L32">            update.setBrand(brandDataDto.getBrand());</span>
+        }
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        if (brandDataDto.getVariant() != null) {</span>
+<span class="nc" id="L35">            update.setVariant(brandDataDto.getVariant());</span>
+        }
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (brandDataDto.getSubVariant() != null) {</span>
+<span class="nc" id="L38">            update.setSubVariant(brandDataDto.getSubVariant());</span>
+        }
+
+<span class="nc" id="L41">        PremiumCarBrandData updatedBrand = premiumCarBrandRepository.save(update);</span>
+<span class="nc" id="L42">        return PremiumBrandMapper.toDTO(updatedBrand);</span>
+    }
+
+
+
+
+    @Override
+    public PremiumBrandDTO deletePremiumBrand(Integer premiumCarBrandDataId) {
+<span class="nc" id="L50">        PremiumCarBrandData deleteData = premiumCarBrandRepository.findById(premiumCarBrandDataId)</span>
+<span class="nc" id="L51">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Premium brand with ID &quot; + premiumCarBrandDataId + &quot; not found&quot;));</span>
+
+<span class="nc" id="L53">        premiumCarBrandRepository.delete(deleteData);</span>
+<span class="nc" id="L54">        return PremiumBrandMapper.toDTO(deleteData);</span>
+    }
+    // fetch Data
+    @Override
+    public PremiumBrandDTO getPremiumBrandById(Integer premiumCarBrandDataId) {
+<span class="nc" id="L59">        PremiumCarBrandData entity = premiumCarBrandRepository.findById(premiumCarBrandDataId)</span>
+<span class="nc" id="L60">                .orElseThrow(() -&gt; new PremiumBrandNotFoundException(&quot;Brand with ID &quot; + premiumCarBrandDataId + &quot; not found&quot;));</span>
+<span class="nc" id="L61">        return PremiumBrandMapper.toDTO(entity);</span>
+    }
+
+    @Override
+    public List&lt;PremiumBrandDTO&gt; getAllPremiumBrands(int page, int size) {
+<span class="nc" id="L66">        Page&lt;PremiumCarBrandData&gt; entities = premiumCarBrandRepository.findAll(PageRequest.of(page, size));</span>
+<span class="nc" id="L67">        return entities.stream().map(PremiumBrandMapper::toDTO).collect(Collectors.toList());</span>
+    }
+
+
+    @Override
+    public List&lt;String&gt; getUniqueBrands() {
+<span class="nc" id="L73">        List&lt;String&gt; brands = premiumCarBrandRepository.findDistinctBrands();</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (brands.isEmpty()) {</span>
+<span class="nc" id="L75">            throw new PremiumBrandNotFoundException(&quot;No premium brands found&quot;);</span>
+        }
+<span class="nc" id="L77">        return brands;</span>
+    }
+
+    @Override
+    public List&lt;String&gt; getVariantsByBrand(String brand) {
+<span class="nc" id="L82">        List&lt;String&gt; variants = premiumCarBrandRepository.findVariantsByBrand(brand);</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (variants.isEmpty()) {</span>
+<span class="nc" id="L84">            throw new VariantNotFoundException(&quot;No variants found for brand: &quot; + brand);</span>
+        }
+<span class="nc" id="L86">        return variants;</span>
+    }
+
+    @Override
+    public List&lt;String&gt; getSubVariantsByBrandAndVariant(String brand, String variant) {
+<span class="nc" id="L91">        List&lt;String&gt; subVariants = premiumCarBrandRepository.findSubVariantsByBrandAndVariant(brand, variant);</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (subVariants.isEmpty()) {</span>
+<span class="nc" id="L93">            throw new SubVariantNotFoundException(&quot;No sub-variants found for brand: &quot; + brand + &quot; and variant: &quot; + variant);</span>
+        }
+<span class="nc" id="L95">        return subVariants;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

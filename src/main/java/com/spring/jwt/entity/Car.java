@@ -1,6 +1,7 @@
 package com.spring.jwt.entity;
 
 
+import com.spring.jwt.Car.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -27,8 +28,8 @@ public class Car {
     @Column(name = "airbag")
     private Boolean airbag;
 
-    @Column(name = "ABS")
-    private Boolean ABS;
+    @Column(name = "abs")
+    private Boolean abs;
 
     @Column(name = "button_start")
     private Boolean buttonStart;
@@ -129,6 +130,10 @@ public class Car {
 
     @OneToMany(mappedBy = "carCar")
     private Set<PendingBooking> pendingBookings = new LinkedHashSet<>();
+
+//    @ManyToOne
+//    @JoinColumn(name = "dealer_id", nullable = false)
+//    private Dealer dealer;
 
 
 }

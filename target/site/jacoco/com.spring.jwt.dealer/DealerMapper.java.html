@@ -8,48 +8,40 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 <span class="nc" id="L9">public class DealerMapper {</span>
 
-    public static Dealer toEntity(DealerDTO dto) {
-<span class="nc" id="L12">        Dealer dealer = new Dealer();</span>
-<span class="nc" id="L13">        dealer.setAddress(dto.getAddress());</span>
-<span class="nc" id="L14">        dealer.setArea(dto.getArea());</span>
-<span class="nc" id="L15">        dealer.setCity(dto.getCity());</span>
-<span class="nc" id="L16">        dealer.setFirstname(dto.getFirstname());</span>
-<span class="nc" id="L17">        dealer.setLastName(dto.getLastName());</span>
-<span class="nc" id="L18">        dealer.setSalesPersonId(dto.getSalesPersonId());</span>
-<span class="nc" id="L19">        dealer.setMobileNo(dto.getMobileNo());</span>
-<span class="nc" id="L20">        dealer.setShopName(dto.getShopName());</span>
-<span class="nc" id="L21">        dealer.setEmail(dto.getEmail());</span>
-<span class="nc" id="L22">        dealer.setDealerDocumentPhoto(dto.getDealerDocumentPhoto());</span>
-<span class="nc" id="L23">        dealer.setStatus(dto.getStatus());</span>
 
+    public static DealerDTO toDTO(Dealer dealer) {
+<span class="nc" id="L13">        DealerDTO dto = new DealerDTO();</span>
+<span class="nc" id="L14">        dto.setId(dealer.getId());</span>
+<span class="nc" id="L15">        dto.setAddress(dealer.getAddress());</span>
+<span class="nc" id="L16">        dto.setArea(dealer.getArea());</span>
+<span class="nc" id="L17">        dto.setCity(dealer.getCity());</span>
+<span class="nc" id="L18">        dto.setFirstname(dealer.getFirstname());</span>
+<span class="nc" id="L19">        dto.setLastName(dealer.getLastName());</span>
+<span class="nc" id="L20">        dto.setSalesPersonId(dealer.getSalesPersonId());</span>
+<span class="nc" id="L21">        dto.setMobileNo(dealer.getMobileNo());</span>
+<span class="nc" id="L22">        dto.setShopName(dealer.getShopName());</span>
+<span class="nc" id="L23">        dto.setEmail(dealer.getEmail());</span>
+<span class="nc" id="L24">        dto.setDealerDocumentPhoto(dealer.getDealerDocumentPhoto());</span>
+<span class="nc" id="L25">        dto.setStatus(dealer.getStatus());</span>
 
-        // Create User and set it
-<span class="nc" id="L27">        User user = new User();</span>
-<span class="nc" id="L28">        user.setEmail(dto.getUserEmail());</span>
-<span class="nc" id="L29">        user.setPassword(new BCryptPasswordEncoder().encode(dto.getUserPassword()));</span>
-<span class="nc" id="L30">        user.setFirstName(dto.getUserFirstName());</span>
-<span class="nc" id="L31">        user.setLastName(dto.getUserLastName());</span>
-
-<span class="nc" id="L33">        dealer.setUser(user);</span>
-
-<span class="nc" id="L35">        return dealer;</span>
+<span class="nc" id="L27">        return dto;</span>
     }
 
     public static void updateEntityFromDTO(DealerDTO dto, Dealer dealer) {
-<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (dto.getAddress() != null) dealer.setAddress(dto.getAddress());</span>
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (dto.getArea() != null) dealer.setArea(dto.getArea());</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (dto.getCity() != null) dealer.setCity(dto.getCity());</span>
-<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (dto.getFirstname() != null) dealer.setFirstname(dto.getFirstname());</span>
-<span class="nc bnc" id="L43" title="All 2 branches missed.">        if (dto.getLastName() != null) dealer.setLastName(dto.getLastName());</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (dto.getSalesPersonId() != null) dealer.setSalesPersonId(dto.getSalesPersonId());</span>
-<span class="nc bnc" id="L45" title="All 2 branches missed.">        if (dto.getMobileNo() != null) dealer.setMobileNo(dto.getMobileNo());</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">        if (dto.getShopName() != null) dealer.setShopName(dto.getShopName());</span>
-<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (dto.getEmail() != null) dealer.setEmail(dto.getEmail());</span>
-<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (dto.getDealerDocumentPhoto() != 0) dealer.setDealerDocumentPhoto(dto.getDealerDocumentPhoto());</span>
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        if (dto.getStatus() != null) {</span>
-<span class="nc" id="L50">            dealer.setStatus(dto.getStatus());</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        if (dto.getAddress() != null) dealer.setAddress(dto.getAddress());</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (dto.getArea() != null) dealer.setArea(dto.getArea());</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        if (dto.getCity() != null) dealer.setCity(dto.getCity());</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        if (dto.getFirstname() != null) dealer.setFirstname(dto.getFirstname());</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (dto.getLastName() != null) dealer.setLastName(dto.getLastName());</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (dto.getSalesPersonId() != null) dealer.setSalesPersonId(dto.getSalesPersonId());</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (dto.getMobileNo() != null) dealer.setMobileNo(dto.getMobileNo());</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        if (dto.getShopName() != null) dealer.setShopName(dto.getShopName());</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (dto.getEmail() != null) dealer.setEmail(dto.getEmail());</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (dto.getDealerDocumentPhoto() != 0) dealer.setDealerDocumentPhoto(dto.getDealerDocumentPhoto());</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (dto.getStatus() != null) {</span>
+<span class="nc" id="L42">            dealer.setStatus(dto.getStatus());</span>
         }
-<span class="nc" id="L52">    }</span>
+<span class="nc" id="L44">    }</span>
 }
 
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

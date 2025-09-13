@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/brands")
 @Slf4j
-public class BrandDataController {
+public class  BrandDataController {
 
     @Autowired
     BrandDataService brandDataService;
