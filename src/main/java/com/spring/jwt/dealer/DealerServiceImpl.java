@@ -61,12 +61,18 @@ public class DealerServiceImpl implements DealerService {
     public DealerResponseDto getAllDealers() {
         List<Dealer> dealers = dealerRepository.findAll();
 
+        if (dealers.isEmpty()) {
+            throw new DealerNotFoundException("No dealers found");
+        }
+
         List<DealerDTO> dealerDTOs = dealers.stream()
                 .map(DealerMapper::toDTO)
                 .toList();
 
-        return DealerResponseDto.successWithCount("Dealers fetched successfully", dealerDTOs.size());
+        // ✅ use successWithList to populate dataList + totalDealers
+        return DealerResponseDto.successWithList("Dealers fetched successfully", dealerDTOs);
     }
+
 
 
 
@@ -75,10 +81,14 @@ public class DealerServiceImpl implements DealerService {
     public DealerResponseDto getDealersByStatus(DealerStatus status) {
         List<DealerDTO> dealerDTOs = dealerRepository.findAll().stream()
                 .filter(d -> d.getStatus() != null && d.getStatus().equals(status))
-                .map(DealerMapper::toDTO) // ✅ mapping inside service
+                .map(DealerMapper::toDTO)
                 .toList();
 
-        return DealerResponseDto.successWithCount("Dealers fetched successfully", dealerDTOs.size());
+        if (dealerDTOs.isEmpty()) {
+            throw new DealerNotFoundException("No dealers found with status: " + status);
+        }
+
+        return DealerResponseDto.successWithList("Dealers fetched successfully", dealerDTOs);
     }
 
 
@@ -123,12 +133,16 @@ public class DealerServiceImpl implements DealerService {
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         Page<Dealer> dealerPage = dealerRepository.findAll(pageRequest);
 
+        if (dealerPage.isEmpty()) {
+            throw new DealerNotFoundException("No dealers found for given pagination");
+        }
+
         List<DealerDTO> dealerDTOs = dealerPage.getContent()
                 .stream()
                 .map(DealerMapper::toDTO)
                 .toList();
 
-        return DealerResponseDto.successWithCount("Dealers fetched successfully", dealerDTOs.size());
+        return DealerResponseDto.successWithList("Dealers fetched successfully", dealerDTOs);
     }
 
 

@@ -8,29 +8,32 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DealerResponseDto {
     private String message;
-    private DealerDTO data;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private DealerDTO data;  // for single dealer
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<DealerDTO> dataList; // multiple dealers
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer totalDealers;
+
     private String exception;
 
     public static DealerResponseDto success(String message, DealerDTO data) {
-        return new DealerResponseDto(message, data, null, null);
+        return new DealerResponseDto(message, data, null, null, null);
     }
 
-    // Response for only total count (no data list)
-    public static DealerResponseDto successWithCount(String message, int totalDealers) {
-        return new DealerResponseDto(message, null, totalDealers, null);
+    public static DealerResponseDto successWithList(String message, List<DealerDTO> dataList) {
+        return new DealerResponseDto(message, null, dataList, dataList.size(), null);
     }
-    // add one static method
+
     public static DealerResponseDto error(String message, String exception) {
-        return new DealerResponseDto(message, null, 0, exception);
+        return new DealerResponseDto(message, null, null, null, exception);
     }
 }
-
