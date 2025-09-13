@@ -20,6 +20,7 @@ import java.util.List;
 @RequestMapping("/dealer")
 public class DealerController {
 
+    
     private final DealerService dealerService;
 
     @PatchMapping
