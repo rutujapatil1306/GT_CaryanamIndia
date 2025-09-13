@@ -48,7 +48,7 @@ public class CarDto {
     private long carPhotoId;
     private String mainCarId;
     private String carType;
-    private long totalNoOfCars;
+    //private long totalNoOfCars;
 
    // private Set<PendingBooking> pendingBookings = new LinkedHashSet<>(); }
 

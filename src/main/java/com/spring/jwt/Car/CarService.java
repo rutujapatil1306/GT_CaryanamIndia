@@ -25,7 +25,14 @@ public interface CarService {
     //Get All Cars By Status
     CarResponseDto<List<CarDto>> getAllCarsByStatus(String carStatus, int page, int size);
 
+    //Get Cars By DealerId and Status
     CarResponseDto<List<CarDto>> getCarsByDealerIdAndStatus(Integer dealerId, String carStatus, int page, int size);
+
+    //Get Number Of Cars by dealer Id And Status
+    long getNumberOfCarsByDealerIdAndStatus(Integer dealerId, String carStatus);
+
+    //Get Car By MainCarID
+    CarDto getCarByMainCarId(String mainCarId);
 
 
 
