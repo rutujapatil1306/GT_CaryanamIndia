@@ -18,7 +18,7 @@ public class DealerResponseDto {
     private DealerDTO data;  // for single dealer
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<DealerDTO> dataList; // multiple dealers
+    private List<DealerDTO> dataList; // fetch multiple dealers
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer totalDealers;
