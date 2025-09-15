@@ -20,21 +20,19 @@ import static org.springframework.web.servlet.function.ServerResponse.status;
 @Slf4j
 @RestController
 @RequestMapping("/premiumbrands")
-public class PremiumCarBrandController {
+    public class PremiumCarBrandController {
     @Autowired
     PremiumCarBrandService premiumCarBrandService;
 
 
 
-@PostMapping("/add")
-public ResponseEntity<com.spring.jwt.utils.ResponseDto> create( @RequestBody PremiumBrandDTO Dto)
+    @PostMapping("/add")
+    public ResponseEntity<ResponseDto> create(@RequestBody PremiumBrandDTO Dto)
 {
-
     PremiumBrandDTO addedBrand =premiumCarBrandService.save(Dto);
-    return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto("Success","Brand added Successfully"));
+    return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto("success","PremiumCar Add Successfully"));
+
 }
-
-
     @PatchMapping("/{brandId}")
     public ResponseEntity<ResponseDto> updateBrandById(
             @RequestBody PremiumBrandDTO dto,
@@ -43,8 +41,6 @@ public ResponseEntity<com.spring.jwt.utils.ResponseDto> create( @RequestBody Pre
         return ResponseEntity.ok(new ResponseDto("success", "updated successfully"));
     }
 
-
-
     @DeleteMapping("/{brandId}")
     public ResponseEntity<ResponseDto> deletePremiumBrand(@PathVariable Integer brandId) {
         premiumCarBrandService.deletePremiumBrand(brandId);
@@ -52,10 +48,12 @@ public ResponseEntity<com.spring.jwt.utils.ResponseDto> create( @RequestBody Pre
 }
 
     @GetMapping("/{brandId}")
-    public ResponseEntity<ResponseDto> getPremiumBrandById(@PathVariable Integer brandId) {
+    public ResponseEntity<AllBrandDTO> getPremiumBrandById(@PathVariable Integer brandId) {
 
         PremiumBrandDTO response = premiumCarBrandService.getPremiumBrandById(brandId);
-     return ResponseEntity.ok(new ResponseDto("Success","Brand Found Successfully"));
+
+        return ResponseEntity.ok(AllBrandDTO.success("brand found Suceessfully",response));
+
 
     }
 
@@ -65,7 +63,7 @@ public ResponseEntity<com.spring.jwt.utils.ResponseDto> create( @RequestBody Pre
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
         List<PremiumBrandDTO> response = premiumCarBrandService.getAllPremiumBrands(page, size);
-        return ResponseEntity.ok(new AllBrandDTO<>("List of Brand Data",response,null));
+        return ResponseEntity.ok(AllBrandDTO.success("Brand Retrived Successfully",response));
     }
 
     @GetMapping("/unique")
@@ -73,13 +71,12 @@ public ResponseEntity<com.spring.jwt.utils.ResponseDto> create( @RequestBody Pre
     {
         List<String> uniqueBrands = premiumCarBrandService.getUniqueBrands();
 
-        return ResponseEntity.ok(new AllBrandDTO<>("List of Unique Data",uniqueBrands,null));
+        return ResponseEntity.ok(AllBrandDTO.success("List of Unique brands", uniqueBrands));
     }
-
     @GetMapping("/variants")
     public ResponseEntity<AllBrandDTO> getVariantsByBrand(@RequestParam String brandName) {
         List<String> variants = premiumCarBrandService.getVariantsByBrand(brandName);
-        return ResponseEntity.ok(new AllBrandDTO<>("List of Brand Data",variants,null));
+        return ResponseEntity.ok(AllBrandDTO.success("Fetched list of Variants by brand",variants));
     }
 
     @GetMapping("/subvariants")
@@ -87,8 +84,8 @@ public ResponseEntity<com.spring.jwt.utils.ResponseDto> create( @RequestBody Pre
             @RequestParam String brandName,
             @RequestParam String variantName) {
 
-   List <String>  subVariants= premiumCarBrandService.getSubVariantsByBrandAndVariant(brandName,variantName);
-      return ResponseEntity.ok(new AllBrandDTO<>("List of Sub Variant Data",subVariants,null));
+        List <String>  subVariants= premiumCarBrandService.getSubVariantsByBrandAndVariant(brandName,variantName);
+        return ResponseEntity.ok(AllBrandDTO.success("Fetched subvarient fro given brand and variant",subVariants));
 
     }
 }

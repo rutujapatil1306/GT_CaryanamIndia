@@ -1,6 +1,6 @@
-package com.spring.jwt.entity;
+package com.spring.jwt.PremiumCarData;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.spring.jwt.entity.PremiumCarPendingBooking;
 import com.spring.jwt.entity.Status;
 
 import jakarta.persistence.*;
@@ -123,8 +123,8 @@ public class PremiumCar {
     @Column(name = "main_car_id", nullable = false)
     private String mainCarId;
 
-//    @Column(name = "carType", nullable = false)
-//    private String carType;
+   @Column(name = "carType", nullable = false)
+  private String carType;
 
     @OneToMany(mappedBy = "premiumCarCar")
     private Set<PremiumCarPendingBooking> pendingBookings = new LinkedHashSet<>();

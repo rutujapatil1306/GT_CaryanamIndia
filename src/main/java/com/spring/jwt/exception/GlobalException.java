@@ -1,6 +1,11 @@
 package com.spring.jwt.exception;
 
 
+import com.spring.jwt.PremiumCarBrandData.PremiumBrandNotFoundException;
+import com.spring.jwt.PremiumCarBrandData.SubVariantNotFoundException;
+import com.spring.jwt.PremiumCarBrandData.VariantNotFoundException;
+import com.spring.jwt.PremiumCarData.PremiumCarNotFoundException;
+import com.spring.jwt.dto.ResponseDto;
 import com.spring.jwt.utils.BaseResponseDTO;
 import com.spring.jwt.utils.ErrorResponseDto;
 import jakarta.validation.ConstraintViolationException;
@@ -284,6 +289,37 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         body.put("error", "Notes Not Created");
         body.put("message", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(PremiumBrandNotFoundException.class)
+    public ResponseEntity<ResponseDto<Object>> handlePremiumBrandNotFound(PremiumBrandNotFoundException ex) {
+        return new ResponseEntity<>(
+                ResponseDto.error("Premium brand not found", ex.getMessage()),
+                HttpStatus.NOT_FOUND
+        );
+    }
+    @ExceptionHandler(VariantNotFoundException.class)
+    public ResponseEntity<ResponseDto<Object>> handleVariantNotFound(VariantNotFoundException ex) {
+        return new ResponseEntity<>(
+                ResponseDto.error("Variant not found", ex.getMessage()),
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(SubVariantNotFoundException.class)
+    public ResponseEntity<ResponseDto<Object>> handleSubVariantNotFound(SubVariantNotFoundException ex) {
+        return new ResponseEntity<>(
+                ResponseDto.error("Sub-variant not found", ex.getMessage()),
+                HttpStatus.NOT_FOUND
+        );
+    }
+    @ExceptionHandler(PremiumCarNotFoundException.class)
+    public ResponseEntity<ResponseDto<Object>> handlePremiumCarNotFound(PremiumCarNotFoundException ex) {
+        return new ResponseEntity<>(
+                ResponseDto.error("Premium Car not found", ex.getMessage()),
+                HttpStatus.NOT_FOUND
+        );
     }
 
 
