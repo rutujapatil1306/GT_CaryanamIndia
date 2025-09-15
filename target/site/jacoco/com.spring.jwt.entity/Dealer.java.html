@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Dealer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JWT-with-Spring-Security</a> &gt; <a href="index.source.html" class="el_package">com.spring.jwt.entity</a> &gt; <span class="el_source">Dealer.java</span></div><h1>Dealer.java</h1><pre class="source lang-java linenums">package com.spring.jwt.entity;
+
+
+
+import com.spring.jwt.dealer.DealerStatus;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+<span class="nc" id="L15">@Setter</span>
+@Entity
+<span class="nc" id="L17">@AllArgsConstructor</span>
+<span class="nc" id="L18">@NoArgsConstructor</span>
+<span class="nc" id="L19">@ToString</span>
+@Table(name = &quot;dealer&quot;)
+public class Dealer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = &quot;Dealer_id&quot;)
+<span class="nc" id="L25">    private Integer id;</span>
+
+    @NotBlank (message = &quot;Address cannot be blank&quot;)
+    @Column(name = &quot;address&quot;)
+<span class="nc" id="L29">    private String address;</span>
+
+    @Column(name = &quot;area&quot;, nullable = false, length = 45)
+<span class="nc" id="L32">    private String area;</span>
+
+    @Column(name = &quot;city&quot;, nullable = false, length = 45)
+<span class="nc" id="L35">    private String city;</span>
+
+    @Column(name = &quot;firstname&quot;, length = 45)
+<span class="nc" id="L38">    private String firstname;</span>
+
+    @Column(name = &quot;last_name&quot;, length = 45)
+<span class="nc" id="L41">    private String lastName;</span>
+
+    @Column(name = &quot;sales_person_id&quot;,unique = true,nullable = false)
+<span class="nc" id="L44">    private Long salesPersonId;</span>
+
+    @NotNull(message = &quot;Mobile number is required&quot;)
+//    @Pattern(regexp = &quot;[0-9]{10}&quot;, message = &quot;Invalid mobile number format&quot;)
+//    @Column(name = &quot;mobile_no&quot;, nullable = false, length = 45)
+<span class="nc" id="L49">    private Long mobileNo;</span>
+
+    @Column(name = &quot;shop_name&quot;, nullable = false, length = 250)
+<span class="nc" id="L52">    private String shopName;</span>
+
+    @NotBlank(message = &quot;Email cannot be blank&quot;)
+    @Column(unique = true)
+<span class="nc" id="L56">    private String email;</span>
+
+<span class="nc" id="L58">    private long dealerDocumentPhoto;</span>
+
+//    private Boolean status;
+     @Enumerated(EnumType.STRING) // Stores as &quot;ACTIVE&quot;, &quot;DEACTIVE&quot;, &quot;BLOCKED&quot;
+     @Column(name = &quot;status&quot;, nullable = false)
+<span class="nc" id="L63">     private DealerStatus status;</span>
+
+    @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn(name = &quot;user_user_id&quot;, referencedColumnName = &quot;user_id&quot;, nullable = false)
+<span class="nc" id="L67">    private User user;</span>
+
+
+
+//    @OneToMany(mappedBy = &quot;dealerVendor&quot;)
+//    private Set&lt;Car&gt; cars = new LinkedHashSet&lt;&gt;();
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

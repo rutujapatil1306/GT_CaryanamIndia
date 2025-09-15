@@ -1,11 +1,8 @@
 package com.spring.jwt.Car.DTO;
-
-
 import com.spring.jwt.Car.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 
 
@@ -49,7 +46,6 @@ public class CarDto {
     private String mainCarId;
     private String carType;
     //private long totalNoOfCars;
-
    // private Set<PendingBooking> pendingBookings = new LinkedHashSet<>(); }
 
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SalesPerson.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JWT-with-Spring-Security</a> &gt; <a href="index.source.html" class="el_package">com.spring.jwt.entity</a> &gt; <span class="el_source">SalesPerson.java</span></div><h1>SalesPerson.java</h1><pre class="source lang-java linenums">package com.spring.jwt.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Date;
+
+@Getter
+<span class="nc" id="L10">@Setter</span>
+@Entity
+@Table(name = &quot;sales_person&quot;)
+<span class="nc" id="L13">public class SalesPerson {</span>
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = &quot;salesPersonId&quot;, nullable = false)
+<span class="nc" id="L17">    private Integer salesPersonId;</span>
+
+    @Column(name = &quot;address&quot;)
+<span class="nc" id="L20">    private String address;</span>
+
+    @Column (name = &quot;first_name&quot;)
+<span class="nc" id="L23">    private String firstName;</span>
+
+    @Column (name = &quot;last_name&quot;)
+<span class="nc" id="L26">    private String lastName;</span>
+
+    @Column(name = &quot;document_id&quot;)
+<span class="nc" id="L29">    private Long  documentId;</span>
+
+    @Column(name = &quot;area&quot;)
+<span class="nc" id="L32">    private String area;</span>
+
+    @Column (name = &quot;city&quot;)
+<span class="nc" id="L35">    private String city;</span>
+
+    @Column(name = &quot;joining date&quot;)
+<span class="nc" id="L38">    private Date joiningdate;</span>
+
+    @Column(name = &quot;status&quot;)
+<span class="nc" id="L41">    private Boolean status;</span>
+
+    @OneToOne
+    @JoinColumn(name = &quot;UserId&quot;)
+<span class="nc" id="L45">    private User user;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

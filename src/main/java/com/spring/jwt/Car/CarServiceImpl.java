@@ -1,10 +1,8 @@
 package com.spring.jwt.Car;
-
 import com.spring.jwt.Car.DTO.CarDto;
 import com.spring.jwt.Car.DTO.CarResponseDto;
 import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
 import com.spring.jwt.Car.Exception.CarNotFoundException;
-import com.spring.jwt.Car.Exception.DealerNotFoundExceptions;
 import com.spring.jwt.Car.Exception.StatusNotFoundException;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.exception.PageNotFoundException;
@@ -14,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -193,6 +190,35 @@ public class CarServiceImpl implements CarService{
     }
 
     @Override
+    public CarResponseDto<List<CarDto>> getCarsWithPaginationOnlyActivePending(int page, int size) {
+        List<Status> allowedStatuses = List.of(Status.PENDING, Status.ACTIVE);
+        Pageable pageable = PageRequest.of(page, size);
+        List<Car> cars = carRepository.findByCarStatusIn(allowedStatuses)
+                .stream()
+                .skip(page * size)
+                .limit(size)
+                .toList();
+        if (cars.isEmpty()) {
+            throw new CarNotFoundException("No cars found with status PENDING or ACTIVE on page " + page);
+        }
+        List<CarDto> dtos = cars.stream().map(carMapper::toDto).toList();
+        long totalCars = carRepository.countByCarStatus(Status.PENDING) + carRepository.countByCarStatus(Status.ACTIVE);
+        return new CarResponseDto<>("Cars with status PENDING or ACTIVE", dtos, null, totalCars);
+    }
+
+    @Override
+    public CarResponseDto<List<CarDto>> getCarsWithoutPaginationOnlyActivePending() {
+        List<Status> allowedStatuses = List.of(Status.PENDING, Status.ACTIVE);
+        List<Car> cars = carRepository.findByCarStatusIn(allowedStatuses);
+        if (cars.isEmpty()) {
+            throw new CarNotFoundException("No cars found with status PENDING or ACTIVE");
+        }
+        List<CarDto> dtos = cars.stream().map(carMapper::toDto).toList();
+        long totalCars = cars.size();
+        return new CarResponseDto<>("Cars with status PENDING or ACTIVE", dtos, null, totalCars);
+    }
+
+
     public long getNumberOfCarsByDealerIdAndStatus(Integer dealerId, String carStatus) {
 
         Status status;
