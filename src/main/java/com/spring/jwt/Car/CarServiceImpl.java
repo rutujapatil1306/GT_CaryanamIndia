@@ -1,16 +1,17 @@
 package com.spring.jwt.Car;
-
 import com.spring.jwt.Car.DTO.CarDto;
 import com.spring.jwt.Car.DTO.CarResponseDto;
 import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
 import com.spring.jwt.Car.Exception.CarNotFoundException;
+import com.spring.jwt.Car.Exception.StatusNotFoundException;
 import com.spring.jwt.entity.Car;
+import com.spring.jwt.exception.PageNotFoundException;
+import com.spring.jwt.repository.DealerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -20,16 +21,25 @@ public class CarServiceImpl implements CarService{
     CarRepository carRepository;
 
     @Autowired
+    DealerRepository dealerRepository;
+
+    @Autowired
     CarMapper carMapper;
 
     @Override
     public CarDto addCar(CarDto cardto) {
-        boolean exists = carRepository.existsByMainCarId(cardto.getMainCarId());
+
+        Car car = carMapper.toEntity(cardto);
+        Car savedCar = carRepository.save(car);
+        String mainCarId = generateMainCarId(savedCar);
+        savedCar.setMainCarId(mainCarId);
+        boolean exists = carRepository.existsByMainCarId(mainCarId);
         if(exists)
         {
-            throw  new CarAlreadyExistsException("Car Already Exists");
+            throw  new CarAlreadyExistsException("Car Already Exists for id: " + mainCarId);
         }
-        Car addedCar = carRepository.save(carMapper.toEntity(cardto));;
+
+        Car addedCar = carRepository.save(savedCar);
         return carMapper.toDto(addedCar);
     }
 
@@ -96,7 +106,7 @@ public class CarServiceImpl implements CarService{
         Car car = carRepository.findById(id).orElseThrow(()-> new CarNotFoundException("Car Not Found At id " + id));
 
         //set Car Status to DELETED for Soft Delete
-        car.setCarStatus(Status.DELETED);
+        car.setCarStatus(Status.INACTIVE);
         carRepository.save(car);
     }
 
@@ -114,10 +124,19 @@ public class CarServiceImpl implements CarService{
             status = Status.valueOf(carStatus.toUpperCase());
         }
         catch (IllegalArgumentException e) {
-            throw new CarNotFoundException("Invalid car status: " + carStatus);
+            throw new StatusNotFoundException("Invalid car status: " + carStatus);
         }
 
         Pageable pageable = PageRequest.of(page, size);
+
+        long totalNoOfCars = carRepository.countByCarStatus(status);
+        int totalPages = (int) Math.ceil((double) totalNoOfCars / size);
+
+        if (page >= totalPages && totalNoOfCars > 0) {
+            throw new PageNotFoundException(
+                    "Page " + page + " not found. Total available pages: " + totalPages
+            );
+        }
 
         List<Car> cars = carRepository.findByCarStatus(status, pageable);
         if(cars.isEmpty())
@@ -125,7 +144,7 @@ public class CarServiceImpl implements CarService{
             throw  new CarNotFoundException("Car Not found for given Status " + carStatus + " on Page Number " + page);
         }
         List<CarDto> dtos = cars.stream().map(c -> carMapper.toDto(c)).toList();
-        long totalNoOfCars = carRepository.countByCarStatus(status);
+        //long totalNoOfCars = carRepository.countByCarStatus(status);
         return new CarResponseDto<>("List of cars with status " + carStatus + " on page number " + page, dtos, null, totalNoOfCars);
 
     }
@@ -139,10 +158,24 @@ public class CarServiceImpl implements CarService{
         try {
             status = Status.valueOf(carStatus.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new CarNotFoundException("Invalid car status: " + carStatus);
+            throw new StatusNotFoundException("Invalid car status: " + carStatus);
         }
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("dealerId").descending());
+
+//        boolean dealerExists = dealerRepository.existsById(dealerId);
+//        if (!dealerExists) {
+//            throw new DealerNotFoundExceptions("Dealer not found with ID: " + dealerId);
+//        }
+
+        long totalNoOfCars = carRepository.countByDealerIdAndCarStatus(dealerId, status);
+        int totalPages = (int) Math.ceil((double) totalNoOfCars / size);
+
+        if (page >= totalPages && totalNoOfCars > 0) {
+            throw new PageNotFoundException(
+                    "Page " + page + " not found. Total available pages: " + totalPages
+            );
+        }
 
         List<Car> allCars = carRepository.findByDealerIdAndCarStatus(dealerId, status, pageable);
 
@@ -151,7 +184,7 @@ public class CarServiceImpl implements CarService{
             throw new CarNotFoundException("No cars found for dealerId: " + dealerId + " and status: " + carStatus);
         }
         List<CarDto> cars = allCars.stream().map(c -> carMapper.toDto(c)).toList();
-        long totalNoOfCars = carRepository.countByDealerIdAndCarStatus(dealerId, status);
+        //long totalNoOfCars = carRepository.countByDealerIdAndCarStatus(dealerId, status);
 
         return new CarResponseDto<>("Cars for DealerId " + dealerId + " with status " + status + " on page number " + page, cars, null, totalNoOfCars);
     }
@@ -185,4 +218,33 @@ public class CarServiceImpl implements CarService{
         return new CarResponseDto<>("Cars with status PENDING or ACTIVE", dtos, null, totalCars);
     }
 
+
+    public long getNumberOfCarsByDealerIdAndStatus(Integer dealerId, String carStatus) {
+
+        Status status;
+
+        try {
+            status = Status.valueOf(carStatus.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new CarNotFoundException("Invalid car status: " + carStatus);
+        }
+
+        return carRepository.countByDealerIdAndCarStatus(dealerId, status);
+
+
+    }
+
+    public String generateMainCarId(Car car) {
+        String brandInitials = car.getBrand().replaceAll("\\s+", "").substring(0, 2).toUpperCase();
+        String modelInitials = car.getModel().replaceAll("\\s+", "").substring(0, 2).toUpperCase();
+        String yearSuffix = String.valueOf(car.getYear()).substring(2);
+
+        return brandInitials + modelInitials + yearSuffix + "-" + car.getId();
+    }
+
+    @Override
+    public CarDto getCarByMainCarId(String mainCarId) {
+        Car car = carRepository.findByMainCarId(mainCarId).orElseThrow(() -> new CarNotFoundException("Car Not Found With MainCarId " + mainCarId));
+        return carMapper.toDto(car);
+    }
 }
