@@ -1,5 +1,6 @@
 package com.spring.jwt.Car;
 import com.spring.jwt.entity.Car;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,7 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     List<Car> findByCarStatusIn(List<Status> statuses);
 
     Optional<Car> findByMainCarId(String mainCarId);
+
 
 
 }
