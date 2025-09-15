@@ -20,6 +20,6 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
 
     long countByDealerIdAndCarStatus(Integer id, Status carStatus);
 
-
+    List<Car> findByCarStatusIn(List<Status> statuses);
 
 }

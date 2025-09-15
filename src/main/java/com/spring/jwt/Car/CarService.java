@@ -28,6 +28,8 @@ public interface CarService {
     CarResponseDto<List<CarDto>> getCarsByDealerIdAndStatus(Integer dealerId, String carStatus, int page, int size);
 
 
+    CarResponseDto<List<CarDto>> getCarsWithPaginationOnlyActivePending(int page, int size);
+    CarResponseDto<List<CarDto>> getCarsWithoutPaginationOnlyActivePending();
 
 
 

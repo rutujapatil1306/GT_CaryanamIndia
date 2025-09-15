@@ -40,15 +40,15 @@ public class DealerDTO {
     private DealerStatus status;
 
     // For User entity creation
-    @NotBlank(message = "User email cannot be blank")
-    private String userEmail;
-
-    @NotBlank(message = "User password cannot be blank")
-    private String userPassword;
-
-    @NotBlank(message = "User first name cannot be blank")
-    private String userFirstName;
-
-    @NotBlank(message = "User last name cannot be blank")
-    private String userLastName;
+//    @NotBlank(message = "User email cannot be blank")
+//    private String userEmail;
+//
+//    @NotBlank(message = "User password cannot be blank")
+//    private String userPassword;
+//
+//    @NotBlank(message = "User first name cannot be blank")
+//    private String userFirstName;
+//
+//    @NotBlank(message = "User last name cannot be blank")
+//    private String userLastName;
 }
