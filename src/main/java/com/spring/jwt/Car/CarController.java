@@ -82,16 +82,19 @@ public class CarController {
     @GetMapping("/filter")
     public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsWithPaginationOnlyActivePending(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        CarResponseDto<List<CarDto>> response = carService.getCarsWithPaginationOnlyActivePending(page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Status status) {
+        CarResponseDto<List<CarDto>> response = carService.getCarsWithPaginationOnlyActivePending(page, size,status);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/filter/all")
-    public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsWithPaginationOnlyActivePending() {
-        CarResponseDto<List<CarDto>> response = carService.getCarsWithoutPaginationOnlyActivePending();
+    public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsWithoutPaginationOnlyActivePending(
+            @RequestParam(required = false) Status status) {
+        CarResponseDto<List<CarDto>> response = carService.getCarsWithoutPaginationOnlyActivePending(status);
         return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("/dealer/carCount")
     public ResponseEntity<CarCountResponseDto> getNumberOfCarsByDealerIdAndCarStatus(@RequestParam Integer dealerId,

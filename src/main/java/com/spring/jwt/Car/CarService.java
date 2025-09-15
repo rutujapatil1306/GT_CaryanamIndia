@@ -35,8 +35,8 @@ public interface CarService {
     CarDto getCarByMainCarId(String mainCarId);
 
 
-    CarResponseDto<List<CarDto>> getCarsWithPaginationOnlyActivePending(int page, int size);
-    CarResponseDto<List<CarDto>> getCarsWithoutPaginationOnlyActivePending();
+    CarResponseDto<List<CarDto>> getCarsWithPaginationOnlyActivePending(int page, int size,Status status);
+    CarResponseDto<List<CarDto>> getCarsWithoutPaginationOnlyActivePending(Status status);
 
 
 
