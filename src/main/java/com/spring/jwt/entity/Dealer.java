@@ -67,9 +67,6 @@ public class Dealer {
     @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "dealer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Car> cars = new ArrayList<>();
-
 
 
 

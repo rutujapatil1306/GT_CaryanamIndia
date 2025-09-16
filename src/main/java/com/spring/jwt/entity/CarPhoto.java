@@ -1,7 +1,6 @@
 package com.spring.jwt.entity;
 
 
-import com.spring.jwt.CarPhoto.DocType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,14 +19,14 @@ public class CarPhoto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne
-    @JoinColumn(name = "Car_Id", nullable = false)
-    private Car car;
+    //@OneToOne(cascade = CascadeType.ALL)
+   // @JoinColumn(name = "Car_Car_Id")
+    @Column(name = "CarId", nullable = false)
+    private int car_id;
 
     @Column(name = "PhotoLink", nullable = false)
     private String photo_link;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "PhotoType", nullable = false)
-    private DocType type;
+    private String type;
 }

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarDto {
-    private Integer id;
+    private int id;
     private Boolean airbag;
     private Boolean abs;
     private Boolean buttonStart;
@@ -25,24 +25,24 @@ public class CarDto {
     private String carInsuranceDate;
     private String carInsuranceType;
     private Status carStatus;
-    private Boolean pendingApproval;
+    private boolean pendingApproval;
     private String city;
     private String color;
     private String description;
     private String fuelType;
-    private Integer kmDriven;
+    private int kmDriven;
     private String model;
-    private Integer ownerSerial;
+    private int ownerSerial;
     private Boolean powerWindowFeature;
-    private Integer price;
+    private int price;
     private Boolean rearParkingCameraFeature;
     private String registration;
     private String title;
     private String transmission;
-    private Integer year;
+    private int year;
     private LocalDate date;
-    private Integer dealerId;
-    private Long carPhotoId;
+    private int dealerId;
+    private long carPhotoId;
     private String mainCarId;
     private String carType;
     //private long totalNoOfCars;

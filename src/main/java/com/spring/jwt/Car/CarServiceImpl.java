@@ -3,14 +3,9 @@ import com.spring.jwt.Car.DTO.CarDto;
 import com.spring.jwt.Car.DTO.CarResponseDto;
 import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
 import com.spring.jwt.Car.Exception.CarNotFoundException;
-<<<<<<< HEAD
-=======
 import com.spring.jwt.Car.Exception.InvalidStatusException;
->>>>>>> d8870504e268337bcfd4886f7f5512c0cd4f7fe2
 import com.spring.jwt.Car.Exception.StatusNotFoundException;
-import com.spring.jwt.dealer.DealerNotFoundException;
 import com.spring.jwt.entity.Car;
-import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.repository.DealerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-<<<<<<< HEAD
-
-import java.util.EnumSet;
-=======
->>>>>>> d8870504e268337bcfd4886f7f5512c0cd4f7fe2
 import java.util.List;
 @Service
 public class CarServiceImpl implements CarService{
@@ -33,20 +23,13 @@ public class CarServiceImpl implements CarService{
     @Autowired
     DealerRepository dealerRepository;
 
-
     @Autowired
     CarMapper carMapper;
 
     @Override
     public CarDto addCar(CarDto cardto) {
 
-        Dealer dealer = dealerRepository.findById(cardto.getDealerId())
-                .orElseThrow(() -> new DealerNotFoundException("Dealer not found with id: " + cardto.getDealerId()));
-
         Car car = carMapper.toEntity(cardto);
-        car.setDealer(dealer);
-
-
         Car savedCar = carRepository.save(car);
         String mainCarId = generateMainCarId(savedCar);
         savedCar.setMainCarId(mainCarId);
@@ -56,15 +39,8 @@ public class CarServiceImpl implements CarService{
             throw  new CarAlreadyExistsException("Car Already Exists for id: " + mainCarId);
         }
 
-        if (cardto.getCarStatus() == null) {
-            throw new StatusNotFoundException("Car status cannot be null");
-        }
-
         Car addedCar = carRepository.save(savedCar);
-        CarDto responseDto = carMapper.toDto(addedCar);
-
-        responseDto.setDealerId(addedCar.getDealer().getId());
-        return responseDto;
+        return carMapper.toDto(addedCar);
     }
 
     @Override
@@ -78,13 +54,46 @@ public class CarServiceImpl implements CarService{
     public CarDto updateCar(CarDto carDto, int id) {
         Car car = carRepository.findById(id).orElseThrow(()-> new CarNotFoundException("Car Not Found At Id: " + id));
 
-        carMapper.updateCarFromDto(car, carDto);
+        //Update Fields
 
-        if (carDto.getDealerId() != null) {
-            Dealer dealer = dealerRepository.findById(carDto.getDealerId())
-                    .orElseThrow(() -> new DealerNotFoundException("Dealer Not Found At Id: " + carDto.getDealerId()));
-            car.setDealer(dealer);
-        }
+        //Validated Fields Are checked to be null or not if not null then only update fields
+         if(carDto.getAbs() != null){car.setAbs(carDto.getAbs());}
+         if(carDto.getBrand() != null){car.setBrand(carDto.getBrand());}
+         if(carDto.getCarStatus() != null){car.setCarStatus(carDto.getCarStatus());}
+         if(carDto.getPrice() != 0){car.setPrice(carDto.getPrice());}
+         if(carDto.getDealerId() != 0){car.setDealerId(carDto.getDealerId());}
+         if(carDto.getMainCarId() != null){car.setMainCarId(carDto.getMainCarId());}
+         if(carDto.getCarType() != null){car.setCarType(carDto.getCarType());}
+
+         //other fields updated as it is
+         car.setAirbag(carDto.getAirbag());
+         car.setButtonStart(carDto.getButtonStart());
+         car.setSunroof(carDto.getSunroof());
+         car.setChildSafetyLocks(carDto.getChildSafetyLocks());
+         car.setAcFeature(carDto.getAcFeature());
+         car.setMusicFeature(carDto.getMusicFeature());
+         car.setArea(carDto.getArea());
+         car.setVariant(carDto.getVariant());
+         car.setCarInsurance(carDto.getCarInsurance());
+         car.setCarInsuranceDate(carDto.getCarInsuranceDate());
+         car.setCarInsuranceType(carDto.getCarInsuranceType());
+         car.setPendingApproval(carDto.isPendingApproval());
+         car.setCity(carDto.getCity());
+         car.setColor(carDto.getColor());
+         car.setDescription(carDto.getDescription());
+         car.setFuelType(carDto.getFuelType());
+         car.setKmDriven(carDto.getKmDriven());
+         car.setModel(carDto.getModel());
+         car.setOwnerSerial(carDto.getOwnerSerial());
+         car.setPowerWindowFeature(carDto.getPowerWindowFeature());
+         car.setRearParkingCameraFeature(carDto.getRearParkingCameraFeature());
+         car.setRegistration(carDto.getRegistration());
+         car.setTitle(carDto.getTitle());
+         car.setTransmission(carDto.getTransmission());
+         car.setYear(carDto.getYear());
+         car.setDate(carDto.getDate());
+         car.setCarPhotoId(carDto.getCarPhotoId());
+
 
          Car updatedCar = carRepository.save(car);
          return carMapper.toDto(updatedCar);
@@ -141,7 +150,7 @@ public class CarServiceImpl implements CarService{
     }
 
     @Override
-    public CarResponseDto<List<CarDto>> getCarsByDealerIdAndStatus(Integer id, String carStatus, int page, int size) {
+    public CarResponseDto<List<CarDto>> getCarsByDealerIdAndStatus(Integer dealerId, String carStatus, int page, int size) {
 
         Status status;
 
@@ -149,15 +158,17 @@ public class CarServiceImpl implements CarService{
         try {
             status = Status.valueOf(carStatus.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new StatusNotFoundException("Invalid Car Status: " + carStatus);
+            throw new StatusNotFoundException("Invalid car status: " + carStatus);
         }
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("dealerId").descending());
 
-        Dealer dealer = dealerRepository.findById(id)
-                .orElseThrow(() -> new DealerNotFoundException("Dealer with ID " + id + " not found"));
+//        boolean dealerExists = dealerRepository.existsById(dealerId);
+//        if (!dealerExists) {
+//            throw new DealerNotFoundExceptions("Dealer not found with ID: " + dealerId);
+//        }
 
-        long totalNoOfCars = carRepository.countByDealerIdAndCarStatus(id, status);
+        long totalNoOfCars = carRepository.countByDealerIdAndCarStatus(dealerId, status);
         int totalPages = (int) Math.ceil((double) totalNoOfCars / size);
 
         if (page >= totalPages && totalNoOfCars > 0) {
@@ -166,37 +177,30 @@ public class CarServiceImpl implements CarService{
             );
         }
 
-        List<Car> allCars = carRepository.findByDealerIdAndCarStatus(id, status, pageable);
+        List<Car> allCars = carRepository.findByDealerIdAndCarStatus(dealerId, status, pageable);
 
         if (allCars.isEmpty())
         {
-            throw new CarNotFoundException("No cars found for dealerId: " + id + " and status: " + carStatus);
+            throw new CarNotFoundException("No cars found for dealerId: " + dealerId + " and status: " + carStatus);
         }
         List<CarDto> cars = allCars.stream().map(c -> carMapper.toDto(c)).toList();
         //long totalNoOfCars = carRepository.countByDealerIdAndCarStatus(dealerId, status);
 
-        return new CarResponseDto<>("Cars for DealerId " + id + " with status " + status + " on page number " + page, cars, null, totalNoOfCars);
+        return new CarResponseDto<>("Cars for DealerId " + dealerId + " with status " + status + " on page number " + page, cars, null, totalNoOfCars);
     }
 
-<<<<<<< HEAD
-    @Override
-    public long getNumberOfCarsByDealerIdAndStatus(Integer id, String carStatus) {
-=======
 
     public long getNumberOfCarsByDealerIdAndStatus(Integer dealerId, String carStatus) {
->>>>>>> d8870504e268337bcfd4886f7f5512c0cd4f7fe2
 
-        Dealer dealer = dealerRepository.findById(id)
-                .orElseThrow(() -> new DealerNotFoundException("Dealer with ID " + id + " not found"));
         Status status;
 
         try {
             status = Status.valueOf(carStatus.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new StatusNotFoundException("Invalid car status: " + carStatus);
+            throw new CarNotFoundException("Invalid car status: " + carStatus);
         }
 
-        return carRepository.countByDealerIdAndCarStatus(id, status);
+        return carRepository.countByDealerIdAndCarStatus(dealerId, status);
 
 
     }
@@ -209,7 +213,7 @@ public class CarServiceImpl implements CarService{
         return brandInitials + modelInitials + yearSuffix + "-" + car.getId();
     }
 
-//*    @Override
+    @Override
     public CarDto getCarByMainCarId(String mainCarId) {
         Car car = carRepository.findByMainCarId(mainCarId).orElseThrow(() -> new CarNotFoundException("Car Not Found With MainCarId " + mainCarId));
         return carMapper.toDto(car);

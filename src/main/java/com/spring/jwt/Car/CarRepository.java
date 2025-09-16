@@ -16,7 +16,7 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
 
     long countByCarStatus(Status carStatus);
 
-    List<Car> findByDealerIdAndCarStatus(Integer id, Status carStatus, Pageable pageable);
+    List<Car> findByDealerIdAndCarStatus(Integer dealerId, Status carStatus, Pageable pageable);
 
     long countByDealerIdAndCarStatus(Integer id, Status carStatus);
 
@@ -25,10 +25,6 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
 
     Optional<Car> findByMainCarId(String mainCarId);
 
-<<<<<<< HEAD
-    List<Car> findByDealer_Id(Integer id);
-=======
 
->>>>>>> d8870504e268337bcfd4886f7f5512c0cd4f7fe2
 
 }

@@ -66,12 +66,12 @@ public class CarController {
     }
 
     @GetMapping("/dealer")
-    public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsByDealerIdAndCarStatus(@RequestParam Integer id,
+    public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsByDealerIdAndCarStatus(@RequestParam Integer dealerId,
                                                                                       @RequestParam String carStatus,
                                                                                       @RequestParam int page,
                                                                                       @RequestParam int size)
     {
-        CarResponseDto<List<CarDto>> response = carService.getCarsByDealerIdAndStatus(id, carStatus, page, size);
+        CarResponseDto<List<CarDto>> response = carService.getCarsByDealerIdAndStatus(dealerId, carStatus, page, size);
         return ResponseEntity.ok(response);
     }
 
@@ -94,11 +94,11 @@ public class CarController {
 
 
     @GetMapping("/dealer/carCount")
-    public ResponseEntity<CarCountResponseDto> getNumberOfCarsByDealerIdAndCarStatus(@RequestParam Integer id,
+    public ResponseEntity<CarCountResponseDto> getNumberOfCarsByDealerIdAndCarStatus(@RequestParam Integer dealerId,
                                                                                      @RequestParam String carStatus)
     {
-        long carCount = carService.getNumberOfCarsByDealerIdAndStatus(id, carStatus);
-        return ResponseEntity.ok(new CarCountResponseDto(id, carStatus,carCount));
+        long carCount = carService.getNumberOfCarsByDealerIdAndStatus(dealerId, carStatus);
+        return ResponseEntity.ok(new CarCountResponseDto(dealerId, carStatus,carCount));
     }
 
     @GetMapping("/main")
