@@ -23,7 +23,7 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "car_id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "airbag")
     private Boolean airbag;
@@ -68,7 +68,7 @@ public class Car {
     private Status carStatus;
 
     @Column(name = "pending_approval", nullable = false)
-    private boolean pendingApproval;
+    private Boolean pendingApproval;
 
     @Column(name = "city", length = 50)
     private String city;
@@ -84,19 +84,19 @@ public class Car {
     private String fuelType;
 
     @Column(name = "km_driven", length = 50)
-    private int kmDriven;
+    private Integer kmDriven;
 
     @Column(name = "model", length = 45)
     private String model;
 
     @Column(name = "owner_serial")
-    private int ownerSerial;
+    private Integer ownerSerial;
 
     @Column(name = "power_window_feature")
     private Boolean powerWindowFeature;
 
     @Column(name = "price", length = 45)
-    private int price;
+    private Integer price;
 
     @Column(name = "rear_parking_camera_feature")
     private Boolean rearParkingCameraFeature;
@@ -112,13 +112,13 @@ public class Car {
 
 
     @Column(name = "year")
-    private int year;
+    private Integer year;
 
     @Column(name = "date")
     private LocalDate date;
 
-    @Column(name = "dealer_id")
-    private int dealerId;
+//    @Column(name = "dealer_id")
+//    private int dealerId;
 
     private long carPhotoId;
 
@@ -131,9 +131,11 @@ public class Car {
     @OneToMany(mappedBy = "carCar")
     private Set<PendingBooking> pendingBookings = new LinkedHashSet<>();
 
-//    @ManyToOne
-//    @JoinColumn(name = "dealer_id", nullable = false)
-//    private Dealer dealer;
+    @ManyToOne
+    @JoinColumn(name = "Dealer_id", nullable = false)
+    private Dealer dealer;
 
+    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
+    private CarPhoto carPhoto;
 
 }
