@@ -1,10 +1,7 @@
 package com.spring.jwt.Car;
-
 import com.spring.jwt.Car.DTO.CarDto;
 import com.spring.jwt.Car.DTO.CarResponseDto;
-
 import java.util.List;
-
 public interface CarService {
 
     // Add Car
@@ -37,7 +34,5 @@ public interface CarService {
 
     CarResponseDto<List<CarDto>> getCarsWithPaginationOnlyActivePending(int page, int size,Status status);
     CarResponseDto<List<CarDto>> getCarsWithoutPaginationOnlyActivePending(Status status);
-
-
 
 }

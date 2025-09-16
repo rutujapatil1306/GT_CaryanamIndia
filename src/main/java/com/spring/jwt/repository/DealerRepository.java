@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public interface DealerRepository extends JpaRepository<Dealer, Integer> {
     // Add these methods
     boolean existsByEmail(String email);
-    boolean existsByMobileNo(Long mobileNo);
+    boolean existsByMobileNo(String mobileNo);
 
     boolean existsBySalesPersonId(Long salesPersonId);
 }

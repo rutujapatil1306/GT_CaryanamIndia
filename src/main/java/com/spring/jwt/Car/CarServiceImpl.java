@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
-
 @Service
 public class CarServiceImpl implements CarService{
 
@@ -230,7 +229,6 @@ public class CarServiceImpl implements CarService{
         if (status != null && !allowedStatuses.contains(status)) {
             throw new InvalidStatusException("Invalid status: " + status + ". Allowed values: PENDING, ACTIVE");
         }
-        Pageable pageable = PageRequest.of(page, size);
         List<Car> cars = carRepository.findByCarStatusIn(allowedStatuses)
                 .stream()
                 .skip(page * size)
