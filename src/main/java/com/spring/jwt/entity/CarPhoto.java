@@ -12,17 +12,16 @@ import lombok.Setter;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "carphoto")
+@Table(name = "car_photo")
 public class CarPhoto {
     @Id
     @Column(name = "car_photo_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    //@OneToOne(cascade = CascadeType.ALL)
-   // @JoinColumn(name = "Car_Car_Id")
-    @Column(name = "CarId", nullable = false)
-    private int car_id;
+    @OneToOne
+    @JoinColumn(name = "Car_Id", nullable = false)
+    private Car car;
 
     @Column(name = "PhotoLink", nullable = false)
     private String photo_link;

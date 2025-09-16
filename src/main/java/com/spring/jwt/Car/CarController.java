@@ -1,4 +1,5 @@
 package com.spring.jwt.Car;
+
 import com.spring.jwt.Car.DTO.CarCountResponseDto;
 import com.spring.jwt.Car.DTO.CarDto;
 import com.spring.jwt.Car.DTO.CarResponseDto;
@@ -8,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+
 @RestController
 @RequestMapping("/api/cars")
 public class CarController {
@@ -66,39 +69,21 @@ public class CarController {
     }
 
     @GetMapping("/dealer")
-    public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsByDealerIdAndCarStatus(@RequestParam Integer dealerId,
+    public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsByDealerIdAndCarStatus(@RequestParam Integer id,
                                                                                       @RequestParam String carStatus,
                                                                                       @RequestParam int page,
                                                                                       @RequestParam int size)
     {
-        CarResponseDto<List<CarDto>> response = carService.getCarsByDealerIdAndStatus(dealerId, carStatus, page, size);
+        CarResponseDto<List<CarDto>> response = carService.getCarsByDealerIdAndStatus(id, carStatus, page, size);
         return ResponseEntity.ok(response);
     }
-
-
-    @GetMapping("/filter")
-    public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsWithPaginationOnlyActivePending(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) Status status) {
-        CarResponseDto<List<CarDto>> response = carService.getCarsWithPaginationOnlyActivePending(page, size,status);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/filter/all")
-    public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsWithoutPaginationOnlyActivePending(
-            @RequestParam(required = false) Status status) {
-        CarResponseDto<List<CarDto>> response = carService.getCarsWithoutPaginationOnlyActivePending(status);
-        return ResponseEntity.ok(response);
-    }
-
 
     @GetMapping("/dealer/carCount")
-    public ResponseEntity<CarCountResponseDto> getNumberOfCarsByDealerIdAndCarStatus(@RequestParam Integer dealerId,
+    public ResponseEntity<CarCountResponseDto> getNumberOfCarsByDealerIdAndCarStatus(@RequestParam Integer id,
                                                                                      @RequestParam String carStatus)
     {
-        long carCount = carService.getNumberOfCarsByDealerIdAndStatus(dealerId, carStatus);
-        return ResponseEntity.ok(new CarCountResponseDto(dealerId, carStatus,carCount));
+        long carCount = carService.getNumberOfCarsByDealerIdAndStatus(id, carStatus);
+        return ResponseEntity.ok(new CarCountResponseDto(id, carStatus,carCount));
     }
 
     @GetMapping("/main")
@@ -107,5 +92,6 @@ public class CarController {
         CarDto car = carService.getCarByMainCarId(mainCarId);
         return ResponseEntity.ok(CarResponseDto2.response("Fetched Car By MainCarId " + mainCarId, car));
     }
+
 
 }
