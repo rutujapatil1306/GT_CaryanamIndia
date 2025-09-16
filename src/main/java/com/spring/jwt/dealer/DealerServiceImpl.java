@@ -33,7 +33,7 @@ public class DealerServiceImpl implements DealerService {
         DealerMapper.updateEntityFromDTO(dealerDTO, dealer);
 
         Dealer updatedDealer = dealerRepository.save(dealer);
-        DealerDTO dto = DealerMapper.toDTO(updatedDealer);
+        DealerDTO dto = DealerMapper.toDTO(updatedDealer, false);
 
         return DealerResponseDto.success("Dealer updated successfully", dto);
     }
@@ -52,7 +52,7 @@ public class DealerServiceImpl implements DealerService {
         Dealer dealer = dealerRepository.findById(dealerId)
                 .orElseThrow(() -> new DealerNotFoundException("Dealer not found with id: " + dealerId));
 
-        DealerDTO dto = DealerMapper.toDTO(dealer);
+        DealerDTO dto = DealerMapper.toDTO(dealer, false);
         return DealerResponseDto.success("Dealer fetched successfully", dto);
     }
 
@@ -66,10 +66,10 @@ public class DealerServiceImpl implements DealerService {
         }
 
         List<DealerDTO> dealerDTOs = dealers.stream()
-                .map(DealerMapper::toDTO)
+                .map(dealer -> DealerMapper.toDTO(dealer, false))
                 .toList();
 
-        // ✅ use successWithList to populate dataList + totalDealers
+        // use successWithList to populate dataList + totalDealers
         return DealerResponseDto.successWithList("Dealers fetched successfully", dealerDTOs);
     }
 
@@ -81,7 +81,7 @@ public class DealerServiceImpl implements DealerService {
     public DealerResponseDto getDealersByStatus(DealerStatus status) {
         List<DealerDTO> dealerDTOs = dealerRepository.findAll().stream()
                 .filter(d -> d.getStatus() != null && d.getStatus().equals(status))
-                .map(DealerMapper::toDTO)
+                .map(dealer -> DealerMapper.toDTO(dealer, false))
                 .toList();
 
         if (dealerDTOs.isEmpty()) {
@@ -97,7 +97,7 @@ public class DealerServiceImpl implements DealerService {
         return dealerRepository.findAll().stream()
                 .filter(d -> d.getUser() != null && d.getUser().getId().equals(userId.intValue()))
                 .findFirst()
-                .map(dealer -> DealerResponseDto.success("Dealer fetched successfully", DealerMapper.toDTO(dealer)))
+                .map(dealer -> DealerResponseDto.success("Dealer fetched successfully", DealerMapper.toDTO(dealer,false)))
                 .orElseThrow(() -> new DealerNotFoundException("No dealer found for userId: " + userId));
     }
 
@@ -119,7 +119,7 @@ public class DealerServiceImpl implements DealerService {
         dealer.setStatus(status);
         Dealer savedDealer = dealerRepository.save(dealer);
 
-        DealerDTO dto = DealerMapper.toDTO(savedDealer);
+        DealerDTO dto = DealerMapper.toDTO(savedDealer,false);
         return DealerResponseDto.success("Dealer status updated successfully", dto);
     }
 
@@ -139,7 +139,7 @@ public class DealerServiceImpl implements DealerService {
 
         List<DealerDTO> dealerDTOs = dealerPage.getContent()
                 .stream()
-                .map(DealerMapper::toDTO)
+                .map(dealer -> DealerMapper.toDTO(dealer, true))
                 .toList();
 
         return DealerResponseDto.successWithList("Dealers fetched successfully", dealerDTOs);

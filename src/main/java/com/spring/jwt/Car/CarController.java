@@ -1,5 +1,4 @@
 package com.spring.jwt.Car;
-
 import com.spring.jwt.Car.DTO.CarCountResponseDto;
 import com.spring.jwt.Car.DTO.CarDto;
 import com.spring.jwt.Car.DTO.CarResponseDto;
@@ -9,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/cars")
 public class CarController {

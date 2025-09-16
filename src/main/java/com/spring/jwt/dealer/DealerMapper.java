@@ -1,5 +1,6 @@
 package com.spring.jwt.dealer;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spring.jwt.dealer.DealerStatus;
 import com.spring.jwt.dto.DealerDTO;
 import com.spring.jwt.entity.Dealer;
@@ -9,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class DealerMapper {
 
 
-    public static DealerDTO toDTO(Dealer dealer) {
+    public static DealerDTO toDTO(Dealer dealer,boolean includeUser) {
         DealerDTO dto = new DealerDTO();
         dto.setId(dealer.getId());
         dto.setAddress(dealer.getAddress());
@@ -24,6 +25,12 @@ public class DealerMapper {
         dto.setDealerDocumentPhoto(dealer.getDealerDocumentPhoto());
         dto.setStatus(dealer.getStatus());
 
+        if (includeUser &&dealer.getUser() != null) {
+            dto.setUserFirstName(dealer.getUser().getFirstName());
+            dto.setUserLastName(dealer.getUser().getLastName());
+            dto.setUserEmail(dealer.getUser().getEmail());
+            dto.setUserMobileNumber(String.valueOf(dealer.getUser().getMobileNumber()));
+        }
         return dto;
     }
 
