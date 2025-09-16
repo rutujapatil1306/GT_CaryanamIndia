@@ -1,5 +1,4 @@
 package com.spring.jwt.Car;
-
 import com.spring.jwt.Car.DTO.CarCountResponseDto;
 import com.spring.jwt.Car.DTO.CarDto;
 import com.spring.jwt.Car.DTO.CarResponseDto;
@@ -9,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/cars")
 public class CarController {
@@ -78,6 +75,24 @@ public class CarController {
         return ResponseEntity.ok(response);
     }
 
+
+    @GetMapping("/filter")
+    public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsWithPaginationOnlyActivePending(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Status status) {
+        CarResponseDto<List<CarDto>> response = carService.getCarsWithPaginationOnlyActivePending(page, size,status);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/filter/all")
+    public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsWithoutPaginationOnlyActivePending(
+            @RequestParam(required = false) Status status) {
+        CarResponseDto<List<CarDto>> response = carService.getCarsWithoutPaginationOnlyActivePending(status);
+        return ResponseEntity.ok(response);
+    }
+
+
     @GetMapping("/dealer/carCount")
     public ResponseEntity<CarCountResponseDto> getNumberOfCarsByDealerIdAndCarStatus(@RequestParam Integer id,
                                                                                      @RequestParam String carStatus)
@@ -92,6 +107,5 @@ public class CarController {
         CarDto car = carService.getCarByMainCarId(mainCarId);
         return ResponseEntity.ok(CarResponseDto2.response("Fetched Car By MainCarId " + mainCarId, car));
     }
-
 
 }

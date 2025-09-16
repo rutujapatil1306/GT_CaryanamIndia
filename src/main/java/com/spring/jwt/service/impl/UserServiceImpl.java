@@ -201,7 +201,12 @@ public class UserServiceImpl implements UserService {
 
         User user = new User();
         user.setEmail(userDTO.getEmail());
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        } else {
+            user.setPassword(null);
+        }
+
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setMobileNumber(userDTO.getMobileNumber());
@@ -231,13 +236,28 @@ public class UserServiceImpl implements UserService {
                     createUserProfile(user, userDTO);
                     break;
                 case  "DEALER":
-                // Create Dealer entity for this user
+                    if (userDTO.getShopName() == null || userDTO.getShopName().isEmpty()) {
+                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Shop name is required");
+                    }
+                    if (userDTO.getFirstName() == null || userDTO.getFirstName().isEmpty()) {
+                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "First name is required");
+                    }
+
+                    if (userDTO.getLastName() == null || userDTO.getLastName().isEmpty()) {
+                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Last name is required");
+                    }
+
+                    if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
+                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Password is required");
+                    }
+
+                    // Create Dealer entity for this user
                 Dealer dealer = new Dealer();
                     dealer.setUser(user);
                     dealer.setEmail(userDTO.getEmail());
                     dealer.setFirstname(userDTO.getFirstName());
                     dealer.setLastName(userDTO.getLastName());
-                    dealer.setMobileNo(Long.valueOf(userDTO.getMobileNumber())); //convert Long -> String
+                    dealer.setMobileNo(String.valueOf(userDTO.getMobileNumber()));
                     dealer.setShopName(userDTO.getShopName());
                     dealer.setAddress(userDTO.getAddress());
                     dealer.setArea(userDTO.getArea());
