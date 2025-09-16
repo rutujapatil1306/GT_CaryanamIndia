@@ -17,10 +17,12 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
 
     long countByCarStatus(Status carStatus);
 
-    List<Car> findByDealerIdAndCarStatus(Integer dealerId, Status carStatus, Pageable pageable);
+    List<Car> findByDealerIdAndCarStatus(Integer id, Status carStatus, Pageable pageable);
 
     long countByDealerIdAndCarStatus(Integer id, Status carStatus);
 
     Optional<Car> findByMainCarId(String mainCarId);
+
+    List<Car> findByDealer_Id(Integer id);
 
 }
