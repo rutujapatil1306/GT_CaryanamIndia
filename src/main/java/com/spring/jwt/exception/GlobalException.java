@@ -6,6 +6,9 @@ import com.spring.jwt.BrandData.Exception.BrandNotFoundException;
 import com.spring.jwt.BrandData.Exception.SubVariantNotFoundException;
 import com.spring.jwt.BrandData.Exception.VariantNotFoundException;
 import com.spring.jwt.Car.Exception.*;
+import com.spring.jwt.dealer.DTO.DealerResponseDto;
+import com.spring.jwt.dealer.exception.DealerNotFoundException;
+import com.spring.jwt.dealer.exception.InvalidDealerDataException;
 import com.spring.jwt.utils.BaseResponseDTO;
 import com.spring.jwt.utils.ErrorResponseDto;
 import jakarta.validation.ConstraintViolationException;
@@ -29,6 +32,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -391,6 +395,46 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(error);
     }
 
+    @ExceptionHandler(DealerNotFoundException.class)
+    public ResponseEntity<DealerResponseDto> handleDealerNotFound(DealerNotFoundException ex) {
+        DealerResponseDto response = DealerResponseDto.error(
+                "Dealer Not Found",
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidDealerDataException.class)
+    public ResponseEntity<DealerResponseDto> handleInvalidDealerData(InvalidDealerDataException ex) {
+        DealerResponseDto response = DealerResponseDto.error(
+                "Invalid Dealer Data",
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<ErrorResponseDto> handleIOException(IOException ex, WebRequest webRequest) {
+        log.error("I/O error occurred: {}", ex.getMessage());
+        ErrorResponseDto error = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "File processing error: " + ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponseDto> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest webRequest) {
+        log.error("Invalid argument: {}", ex.getMessage());
+        ErrorResponseDto error = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 
 
 }
