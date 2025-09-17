@@ -5,7 +5,8 @@ import com.spring.jwt.Car.DTO.CarResponseDto;
 import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
 import com.spring.jwt.Car.Exception.CarNotFoundException;
 import com.spring.jwt.Car.Exception.StatusNotFoundException;
-import com.spring.jwt.dealer.DealerNotFoundException;
+//import com.spring.jwt.dealer.DealerNotFoundException;
+import com.spring.jwt.dealer.exception.DealerNotFoundException;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.exception.PageNotFoundException;
@@ -151,7 +152,7 @@ public class CarServiceImpl implements CarService{
         Pageable pageable = PageRequest.of(page, size, Sort.by("dealerId").descending());
 
         Dealer dealer = dealerRepository.findById(id)
-                .orElseThrow(() -> new DealerNotFoundException("Dealer with ID " + id + " not found"));
+                .orElseThrow(() -> new com.spring.jwt.dealer.exception.DealerNotFoundException("Dealer with ID " + id + " not found"));
 
         long totalNoOfCars = carRepository.countByDealerIdAndCarStatus(id, status);
         int totalPages = (int) Math.ceil((double) totalNoOfCars / size);
@@ -178,7 +179,7 @@ public class CarServiceImpl implements CarService{
     public long getNumberOfCarsByDealerIdAndStatus(Integer id, String carStatus) {
 
         Dealer dealer = dealerRepository.findById(id)
-                .orElseThrow(() -> new DealerNotFoundException("Dealer with ID " + id + " not found"));
+                .orElseThrow(() -> new com.spring.jwt.dealer.exception.DealerNotFoundException("Dealer with ID " + id + " not found"));
         Status status;
 
         try {
@@ -204,5 +205,15 @@ public class CarServiceImpl implements CarService{
     public CarDto getCarByMainCarId(String mainCarId) {
         Car car = carRepository.findByMainCarId(mainCarId).orElseThrow(() -> new CarNotFoundException("Car Not Found With MainCarId " + mainCarId));
         return carMapper.toDto(car);
+    }
+
+    @Override
+    public CarResponseDto<List<CarDto>> getCarsWithPaginationOnlyActivePending(int page, int size, Status status) {
+        return null;
+    }
+
+    @Override
+    public CarResponseDto<List<CarDto>> getCarsWithoutPaginationOnlyActivePending(Status status) {
+        return null;
     }
 }
