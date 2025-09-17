@@ -6,6 +6,7 @@ import com.spring.jwt.dealer.DealerStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -44,9 +45,9 @@ public class Dealer {
     private Long salesPersonId;
 
     @NotNull(message = "Mobile number is required")
-//    @Pattern(regexp = "[0-9]{10}", message = "Invalid mobile number format")
-//    @Column(name = "mobile_no", nullable = false, length = 45)
-    private Long mobileNo;
+    @Pattern(regexp = "[0-9]{10}", message = "Invalid mobile number format")
+    @Column(name = "mobile_no", nullable = false, length = 45)
+    private String mobileNo;
 
     @Column(name = "shop_name", nullable = false, length = 250)
     private String shopName;
