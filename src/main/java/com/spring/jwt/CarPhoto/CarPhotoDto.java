@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 public class CarPhotoDto {
 
 
-        private int id;
-        private int car_id;
+        private Integer id;
+        private Integer car_id;
         private String photo_link;
-        private String type;
+        private DocType type;
 }
