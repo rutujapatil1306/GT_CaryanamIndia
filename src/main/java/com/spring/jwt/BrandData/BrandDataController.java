@@ -23,7 +23,7 @@ public class  BrandDataController {
 
     // API To Create Brand
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ResponseDto> createBrand(@Valid @RequestBody BrandDataDto brandDataDto)
     {
 
@@ -34,7 +34,7 @@ public class  BrandDataController {
 
     // API To Get Brand By Id
 
-    @GetMapping("/{brandId}")
+    @GetMapping("/getBrand")
     public ResponseEntity<BrandResponseDto> getBrandById(@RequestParam Integer brandId)
     {
 
@@ -45,7 +45,7 @@ public class  BrandDataController {
 
     // API TO Update Brand
 
-    @PatchMapping
+    @PatchMapping("/update")
     public ResponseEntity<BrandResponseDto> updateBrandById(@Valid @RequestBody BrandDataDto brandDataDto, @RequestParam Integer brandId)
     {
         try {
@@ -59,7 +59,7 @@ public class  BrandDataController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete")
     public ResponseEntity<ApiResponse<Void>> deleteBrand(@RequestParam Integer brandId)
     {
         brandDataService.deleteBrand(brandId);
@@ -78,7 +78,7 @@ public class  BrandDataController {
     }
 
 
-    @GetMapping
+    @GetMapping("/uniqueBrands")
     public ResponseEntity<BrandResponseDto<List<String>>> getUniqueBrands()
     {
         List<String> uniqueBrands = brandDataService.getUniqueBrands();
