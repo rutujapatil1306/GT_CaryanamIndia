@@ -3,6 +3,7 @@ package com.spring.jwt.entity;
 
 import com.spring.jwt.Car.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -131,6 +132,7 @@ public class Car {
     @OneToMany(mappedBy = "carCar")
     private Set<PendingBooking> pendingBookings = new LinkedHashSet<>();
 
+    @NotNull(message = "Dealer is required")
     @ManyToOne
     @JoinColumn(name = "Dealer_id", nullable = false)
     private Dealer dealer;
