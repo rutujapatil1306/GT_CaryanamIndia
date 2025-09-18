@@ -81,8 +81,12 @@ import java.util.List;
 
 <span class="nc" id="L82">        Pageable pageable = PageRequest.of(page, size, Sort.by(&quot;brandDataId&quot;).descending());</span>
 <span class="nc" id="L83">        Page&lt;BrandData&gt; brandDataPage = brandDataRepository.findAll(pageable);</span>
-<span class="nc" id="L84">        return brandDataPage.getContent().stream()</span>
-<span class="nc" id="L85">                .map(brandData -&gt; brandMapper.toDto(brandData)).toList();</span>
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (page &gt;= brandDataPage.getTotalPages()) {</span>
+<span class="nc" id="L86">            throw new PageNotFoundException(&quot;Page &quot; + page + &quot; not found. Total pages: &quot; + brandDataPage.getTotalPages());</span>
+        }
+<span class="nc" id="L88">        return brandDataPage.getContent().stream()</span>
+<span class="nc" id="L89">                .map(brandData -&gt; brandMapper.toDto(brandData)).toList();</span>
 
 
 
@@ -90,49 +94,49 @@ import java.util.List;
 
     @Override
     public List&lt;String&gt; getUniqueBrands() {
-<span class="nc" id="L93">        List&lt;String&gt; uniqueBrands = brandDataRepository.findDistinctBrands();</span>
-<span class="nc bnc" id="L94" title="All 2 branches missed.">        if(uniqueBrands.isEmpty())</span>
+<span class="nc" id="L97">        List&lt;String&gt; uniqueBrands = brandDataRepository.findDistinctBrands();</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        if(uniqueBrands.isEmpty())</span>
         {
-<span class="nc" id="L96">            throw new BrandNotFoundException(&quot;No Brands Available in Database&quot;);</span>
+<span class="nc" id="L100">            throw new BrandNotFoundException(&quot;No Brands Available in Database&quot;);</span>
         }
-<span class="nc" id="L98">        return uniqueBrands;</span>
+<span class="nc" id="L102">        return uniqueBrands;</span>
 
     }
 
     @Override
     public List&lt;String&gt; getVariantsByBrand(String brand) {
-<span class="nc" id="L104">        List&lt;BrandData&gt; variants = brandDataRepository.findByBrand(brand);</span>
+<span class="nc" id="L108">        List&lt;BrandData&gt; variants = brandDataRepository.findByBrand(brand);</span>
 
-<span class="nc bnc" id="L106" title="All 2 branches missed.">        if(variants.isEmpty())</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        if(variants.isEmpty())</span>
         {
-<span class="nc" id="L108">            throw new VariantNotFoundException(&quot;No Variants found for given brand&quot;);</span>
+<span class="nc" id="L112">            throw new VariantNotFoundException(&quot;No Variants found for given brand&quot;);</span>
         }
 
-<span class="nc" id="L111">        return variants.stream().filter(b -&gt; b.getBrand().equalsIgnoreCase(brand))</span>
-<span class="nc" id="L112">                .map(BrandData::getVariant)</span>
-<span class="nc bnc" id="L113" title="All 4 branches missed.">                .filter(v -&gt; v != null  &amp;&amp; !v.isBlank())</span>
-<span class="nc" id="L114">                .map(String::toLowerCase)</span>
-<span class="nc" id="L115">                .distinct()</span>
-<span class="nc" id="L116">                .toList();</span>
+<span class="nc" id="L115">        return variants.stream().filter(b -&gt; b.getBrand().equalsIgnoreCase(brand))</span>
+<span class="nc" id="L116">                .map(BrandData::getVariant)</span>
+<span class="nc bnc" id="L117" title="All 4 branches missed.">                .filter(v -&gt; v != null  &amp;&amp; !v.isBlank())</span>
+<span class="nc" id="L118">                .map(String::toLowerCase)</span>
+<span class="nc" id="L119">                .distinct()</span>
+<span class="nc" id="L120">                .toList();</span>
     }
 
     @Override
     public List&lt;String&gt; getSubVariantsByBrandVariant(String brand, String variant) {
-<span class="nc" id="L121">        List&lt;BrandData&gt; subVariants = brandDataRepository.findByBrandAndVariant(brand, variant);</span>
+<span class="nc" id="L125">        List&lt;BrandData&gt; subVariants = brandDataRepository.findByBrandAndVariant(brand, variant);</span>
 
-<span class="nc bnc" id="L123" title="All 2 branches missed.">        if(subVariants.isEmpty())</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        if(subVariants.isEmpty())</span>
         {
-<span class="nc" id="L125">            throw new SubVariantNotFoundException(&quot;No Subvariants found for given brand and variant&quot;);</span>
+<span class="nc" id="L129">            throw new SubVariantNotFoundException(&quot;No Subvariants found for given brand and variant&quot;);</span>
         }
 
-<span class="nc" id="L128">        return subVariants.stream()</span>
-<span class="nc" id="L129">                .filter(b -&gt; b.getBrand().equalsIgnoreCase(brand))</span>
-<span class="nc" id="L130">                .filter(v -&gt; v.getVariant().equalsIgnoreCase(variant))</span>
-<span class="nc" id="L131">                .map(BrandData::getSubVariant)</span>
-<span class="nc bnc" id="L132" title="All 4 branches missed.">                .filter(s -&gt; s != null &amp;&amp; !s.isBlank())</span>
-<span class="nc" id="L133">                .map(String::toLowerCase)</span>
-<span class="nc" id="L134">                .distinct()</span>
-<span class="nc" id="L135">                .toList();</span>
+<span class="nc" id="L132">        return subVariants.stream()</span>
+<span class="nc" id="L133">                .filter(b -&gt; b.getBrand().equalsIgnoreCase(brand))</span>
+<span class="nc" id="L134">                .filter(v -&gt; v.getVariant().equalsIgnoreCase(variant))</span>
+<span class="nc" id="L135">                .map(BrandData::getSubVariant)</span>
+<span class="nc bnc" id="L136" title="All 4 branches missed.">                .filter(s -&gt; s != null &amp;&amp; !s.isBlank())</span>
+<span class="nc" id="L137">                .map(String::toLowerCase)</span>
+<span class="nc" id="L138">                .distinct()</span>
+<span class="nc" id="L139">                .toList();</span>
 
 
     }

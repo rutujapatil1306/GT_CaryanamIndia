@@ -71,104 +71,6 @@ public class UserServiceImpl implements UserService {
     private String passwordResetUrl;
 
 
-// add Dealer
-//@Transactional
-//public BaseResponseDTO registerDealer(DealerDTO dealerDTO) {
-//    BaseResponseDTO response = new BaseResponseDTO();
-//
-//    // ✅ Validate required fields and return messages if missing
-//    if (dealerDTO.getFirstname() == null || dealerDTO.getFirstname().isEmpty()) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("First name is required");
-//        return response;
-//    }
-//    if (dealerDTO.getLastName() == null || dealerDTO.getLastName().isEmpty()) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("Last name is required");
-//        return response;
-//    }
-//    if (dealerDTO.getEmail() == null || dealerDTO.getEmail().isEmpty()) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("Email is required");
-//        return response;
-//    }
-//    if (dealerDTO.getPassword() == null || dealerDTO.getPassword().isEmpty()) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("Password is required");
-//        return response;
-//    }
-//    if (dealerDTO.getMobileNo() == null) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("Mobile number is required");
-//        return response;
-//    }
-//
-//    // Check if dealer already exists
-//    if (dealerRepository.existsByEmail(dealerDTO.getEmail())) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("Dealer with this email already exists");
-//        return response;
-//    }
-//    if (dealerRepository.existsByMobileNo(dealerDTO.getMobileNo())) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("Dealer with this mobile number already exists");
-//        return response;
-//    }
-//
-//    // Create User entity
-//    User user = new User();
-//    user.setFirstName(dealerDTO.getFirstname());
-//    user.setLastName(dealerDTO.getLastName());
-//    user.setEmail(dealerDTO.getEmail());
-//    user.setPassword(passwordEncoder.encode(dealerDTO.getPassword()));
-//    user.setMobileNumber(dealerDTO.getMobileNo());
-//    user.setAddress(dealerDTO.getAddress());
-//
-//    // Assign DEALER role
-//    Role role = roleRepository.findByName("DEALER");
-//    if (role == null) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("Dealer role not found");
-//        return response;
-//    }
-////    user.setRoles(Collections.singleton(role));
-//    Set<Role> roles = new HashSet<>();
-//    roles.add(role);
-//    user.setRoles(roles);
-//
-//    userRepository.save(user);
-//
-//    //  Create Dealer entity
-//    Dealer dealer = new Dealer();
-//    dealer.setAddress(dealerDTO.getAddress());
-//    dealer.setEmail(dealerDTO.getEmail());
-//    dealer.setMobileNo(dealerDTO.getMobileNo());
-//    dealer.setFirstname(dealerDTO.getFirstname());
-//    dealer.setLastName(dealerDTO.getLastName());
-//    dealer.setArea(dealerDTO.getArea());
-//    dealer.setCity(dealerDTO.getCity());
-//    dealer.setSalesPersonId(dealerDTO.getSalesPersonId());
-//    dealer.setShopName(dealerDTO.getShopName());
-//    dealer.setDealerDocumentPhoto(dealerDTO.getDealerDocumentPhoto());
-//    dealer.setStatus(dealerDTO.getStatus());
-//    dealer.setUser(user); // Link to User
-//    dealerRepository.save(dealer);
-//
-//    dealerRepository.save(dealer);
-//
-//    response.setCode(String.valueOf(HttpStatus.OK.value()));
-//    response.setMessage("Dealer registered successfully!");
-//    return response;
-//}
-
-
-
-
-
-
-
-
-
     @Override
     @Transactional
     public BaseResponseDTO registerAccount(UserDTO userDTO) {
@@ -250,23 +152,6 @@ public class UserServiceImpl implements UserService {
                     if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
                         throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Password is required");
                     }
-
-                    // Create Dealer entity for this user
-                Dealer dealer = new Dealer();
-                    dealer.setUser(user);
-                    dealer.setEmail(userDTO.getEmail());
-                    dealer.setFirstname(userDTO.getFirstName());
-                    dealer.setLastName(userDTO.getLastName());
-                    dealer.setMobileNo(String.valueOf(userDTO.getMobileNumber()));
-                    dealer.setShopName(userDTO.getShopName());
-                    dealer.setAddress(userDTO.getAddress());
-                    dealer.setArea(userDTO.getArea());
-                    dealer.setCity(userDTO.getCity());
-                    dealer.setSalesPersonId(userDTO.getSalesPersonId());
-                    dealer.setDealerDocumentPhoto(userDTO.getDealerDocumentPhoto());
-                    dealer.setStatus(DealerStatus.ACTIVE);  // ✅
-                    dealerRepository.save(dealer); //  Dealer entity saved
-
                     break;
                 default:
                     break;

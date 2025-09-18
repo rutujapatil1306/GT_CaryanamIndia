@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PremiumCarPhotoServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JWT-with-Spring-Security</a> &gt; <a href="index.source.html" class="el_package">com.spring.jwt.premiumcar</a> &gt; <span class="el_source">PremiumCarPhotoServiceImpl.java</span></div><h1>PremiumCarPhotoServiceImpl.java</h1><pre class="source lang-java linenums">package com.spring.jwt.premiumcar;
+
+import com.spring.jwt.Car.CarRepository;
+import com.spring.jwt.premiumcar.PremiumCarPhoto;
+import com.spring.jwt.premiumcar.PremiumCarPhotoRepository;
+import com.spring.jwt.premiumcar.PremiumCarPhotoService;
+import com.spring.jwt.entity.Car;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+<span class="nc" id="L17">@RequiredArgsConstructor</span>
+public class PremiumCarPhotoServiceImpl implements PremiumCarPhotoService {
+
+    private final PremiumCarPhotoRepository repository;
+    private final CarRepository carRepository;
+    private final CloudinaryService cloudinaryService;
+
+    @Override
+    public PremiumCarPhotoDto createPhoto(int carId, String docType, MultipartFile file) throws IOException {
+<span class="nc" id="L26">        Car car = carRepository.findById(carId)</span>
+<span class="nc" id="L27">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Invalid carId&quot;));</span>
+
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        if (file.isEmpty()) throw new IllegalArgumentException(&quot;File is empty&quot;);</span>
+<span class="nc bnc" id="L30" title="All 4 branches missed.">        if (docType == null || docType.isBlank()) throw new IllegalArgumentException(&quot;docType required&quot;);</span>
+
+<span class="nc" id="L32">        String fileUrl = cloudinaryService.uploadFile(file, &quot;premiumcars&quot;);</span>
+
+<span class="nc" id="L34">        PremiumCarPhoto photo = new PremiumCarPhoto();</span>
+<span class="nc" id="L35">        photo.setCar(car);</span>
+<span class="nc" id="L36">        photo.setDocType(DocType.valueOf(docType));</span>
+<span class="nc" id="L37">        photo.setFileSize(file.getSize());</span>
+<span class="nc" id="L38">        photo.setContentType(file.getContentType());</span>
+<span class="nc" id="L39">        photo.setUploadedAt(LocalDateTime.now());</span>
+<span class="nc" id="L40">        photo.setFileUrl(fileUrl);</span>
+
+<span class="nc" id="L42">        return PremiumCarPhotoMapper.toDto(repository.save(photo));</span>
+    }
+
+    @Override
+    public PremiumCarPhotoDto updatePhoto(Long photoId, String docType, MultipartFile file) throws IOException {
+<span class="nc" id="L47">        PremiumCarPhoto photo = repository.findById(photoId)</span>
+<span class="nc" id="L48">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Photo not found&quot;));</span>
+
+<span class="nc bnc" id="L50" title="All 4 branches missed.">        if (docType != null &amp;&amp; !docType.isBlank()) {</span>
+<span class="nc" id="L51">            photo.setDocType(DocType.valueOf(docType));</span>
+        }
+
+<span class="nc bnc" id="L54" title="All 4 branches missed.">        if (file != null &amp;&amp; !file.isEmpty()) {</span>
+<span class="nc" id="L55">            String fileUrl = cloudinaryService.uploadFile(file, &quot;premiumcars&quot;);</span>
+<span class="nc" id="L56">            photo.setFileSize(file.getSize());</span>
+<span class="nc" id="L57">            photo.setContentType(file.getContentType());</span>
+<span class="nc" id="L58">            photo.setFileUrl(fileUrl);</span>
+        }
+
+<span class="nc" id="L61">        return PremiumCarPhotoMapper.toDto(repository.save(photo));</span>
+    }
+
+    @Override
+    public Optional&lt;PremiumCarPhotoDto&gt; getPhotoById(Long photoId) {
+<span class="nc" id="L66">        return repository.findById(photoId)</span>
+<span class="nc" id="L67">                .map(PremiumCarPhotoMapper::toDto);</span>
+    }
+
+    @Override
+    public List&lt;PremiumCarPhotoDto&gt; getPhotosByCar(int carId) {
+<span class="nc" id="L72">        Car car = carRepository.findById(carId)</span>
+<span class="nc" id="L73">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Invalid carId&quot;));</span>
+
+<span class="nc" id="L75">        return repository.findByCar(car).stream()</span>
+<span class="nc" id="L76">                .map(PremiumCarPhotoMapper::toDto)</span>
+<span class="nc" id="L77">                .toList();</span>
+    }
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

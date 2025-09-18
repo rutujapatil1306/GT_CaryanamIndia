@@ -7,6 +7,7 @@ com\spring\jwt\exception\GlobalException.class
 com\spring\jwt\jwt\JwtService.class
 com\spring\jwt\PremiumCarBrandData\PremiumCarBrandService.class
 com\spring\jwt\repository\RoleRepository.class
+com\spring\jwt\premiumcar\PremiumCarPhoto.class
 com\spring\jwt\entity\Car.class
 com\spring\jwt\entity\PendingBooking.class
 com\spring\jwt\BrandData\Exception\BrandAlreadyExistsException.class
@@ -21,6 +22,7 @@ com\spring\jwt\config\RateLimitingAspect.class
 com\spring\jwt\dealer\DealerServiceImpl.class
 com\spring\jwt\BrandData\BrandDataServiceImpl.class
 com\spring\jwt\entity\Color.class
+com\spring\jwt\premiumcar\PremiumCarPhotoDto.class
 com\spring\jwt\PremiumCarBrandData\PremiumBrandNotFoundException.class
 com\spring\jwt\utils\EmailVerificationService\EmailUtils\ResponseMessage.class
 com\spring\jwt\dealer\DealerMapper.class
@@ -40,18 +42,18 @@ com\spring\jwt\BrandData\Exception\BrandNotFoundException.class
 com\spring\jwt\dto\UserProfileDTO.class
 com\spring\jwt\config\filter\CustomAuthenticationProvider.class
 com\spring\jwt\service\security\UserDetailsCustom.class
+com\spring\jwt\premiumcar\PremiumCarPhotoRepository.class
 com\spring\jwt\utils\EmailVerificationService\EmailUtils\VerifyOtpRequest.class
 com\spring\jwt\dto\PageResponseDto.class
 com\spring\jwt\exception\NotesNotCreatedException.class
-com\spring\jwt\Car\Exception\DealerNotFoundException.class
 com\spring\jwt\entity\InspectorProfile.class
 com\spring\jwt\entity\SalesPerson.class
 com\spring\jwt\exception\ResourceNotFoundException.class
 com\spring\jwt\exception\ExamTimeWindowException.class
 com\spring\jwt\config\filter\SqlInjectionFilter$SqlInjectionRequestWrapper.class
-com\spring\jwt\dealer\exception\GlobalExceptionHandler.class
 com\spring\jwt\config\filter\XssFilter$XssRequestWrapper.class
 com\spring\jwt\utils\BaseResponseDTO$BaseResponseDTOBuilder.class
+com\spring\jwt\premiumcar\PremiumCarPhotoMapper.class
 com\spring\jwt\utils\DataMaskingUtils.class
 com\spring\jwt\entity\SaveCar.class
 com\spring\jwt\Car\CarController.class
@@ -64,6 +66,7 @@ com\spring\jwt\repository\DealerRepository.class
 com\spring\jwt\utils\EmailVerificationService\EmailVerificationRepo.class
 com\spring\jwt\entity\Type.class
 com\spring\jwt\PremiumCarBrandData\PremiumCarBandServiceImpl.class
+com\spring\jwt\premiumcar\CloudinaryService.class
 com\spring\jwt\utils\EncryptionUtil.class
 com\spring\jwt\BrandData\Exception\VariantNotFoundException.class
 com\spring\jwt\dto\RefreshTokenRequest.class
@@ -77,6 +80,7 @@ com\spring\jwt\Car\Exception\StatusNotFoundException.class
 com\spring\jwt\utils\ResponseDto.class
 com\spring\jwt\dto\LoginRequest.class
 com\spring\jwt\entity\Photo.class
+com\spring\jwt\premiumcar\DocType.class
 com\spring\jwt\Car\CarService.class
 com\spring\jwt\BrandData\BrandDataController.class
 com\spring\jwt\config\filter\JwtUsernamePasswordAuthenticationFilter.class
@@ -92,8 +96,8 @@ com\spring\jwt\config\filter\JwtRefreshTokenFilter.class
 com\spring\jwt\entity\CarPhoto.class
 com\spring\jwt\jwt\ActiveSessionService.class
 com\spring\jwt\config\filter\RateLimitingFilter$RequestCounter.class
+com\spring\jwt\premiumcar\PremiumCarPhotoController.class
 com\spring\jwt\jwt\JwtConfig.class
-com\spring\jwt\Car\DTO\UpdateCarResponseDto.class
 com\spring\jwt\controller\UserController.class
 com\spring\jwt\dealer\exception\DealerNotFoundException.class
 com\spring\jwt\utils\GenericResponseDto.class
@@ -105,6 +109,7 @@ com\spring\jwt\entity\B2BCars.class
 com\spring\jwt\entity\ProfilePhoto.class
 com\spring\jwt\Car\Exception\PageNotFoundException.class
 com\spring\jwt\package-info.class
+com\spring\jwt\Car\DTO\CarCountResponseDto.class
 com\spring\jwt\entity\UserForm.class
 com\spring\jwt\dto\EmailVerificationMapper.class
 com\spring\jwt\dto\TokenResponse.class
@@ -122,11 +127,13 @@ com\spring\jwt\dealer\exception\InvalidDealerDataException.class
 com\spring\jwt\entity\PDocument.class
 com\spring\jwt\config\filter\RateLimitingFilter.class
 com\spring\jwt\exception\CustomAccessDeniedHandler.class
+com\spring\jwt\Car\Exception\InvalidStatusException.class
 com\spring\jwt\config\SslConfig.class
 com\spring\jwt\config\filter\XssFilter.class
 com\spring\jwt\entity\PendingB2B.class
 com\spring\jwt\dto\ResponseDto.class
 com\spring\jwt\entity\Status.class
+com\spring\jwt\Car\DTO\CarResponseDto2.class
 com\spring\jwt\PremiumCarBrandData\AllBrandDTO.class
 com\spring\jwt\utils\EmailVerificationService\OtpUtil.class
 com\spring\jwt\BrandData\DTO\BrandResponseDto.class
@@ -141,6 +148,7 @@ com\spring\jwt\utils\SecurityAuditLogger.class
 com\spring\jwt\config\SchedulingConfig.class
 com\spring\jwt\dto\DealerDTO.class
 com\spring\jwt\jwt\TokenBlacklistService$TokenInfo.class
+com\spring\jwt\premiumcar\PremiumCarPhotoService.class
 com\spring\jwt\entity\User.class
 com\spring\jwt\exception\UserNotFoundExceptions.class
 com\spring\jwt\config\filter\SqlInjectionFilter$SqlInjectionRequestWrapper$1.class
@@ -150,6 +158,7 @@ com\spring\jwt\utils\KeystoreInitializer.class
 com\spring\jwt\repository\LocalDateTimeToOffsetDateTimeConverter.class
 com\spring\jwt\PremiumCarBrandData\PremiumBrandDTO.class
 com\spring\jwt\jwt\TokenBlacklistService.class
+com\spring\jwt\premiumcar\CloudinaryConfig.class
 com\spring\jwt\jwt\ActiveSessionService$SessionInfo.class
 com\spring\jwt\entity\B2B.class
 com\spring\jwt\entity\PremiumCar.class
@@ -175,9 +184,11 @@ com\spring\jwt\entity\DocumentPhoto.class
 com\spring\jwt\entity\TempPendingBookingReq.class
 com\spring\jwt\BrandData\Exception\SubVariantNotFoundException.class
 com\spring\jwt\utils\EmailVerificationService\EmailUtils\EmailVerificationRequest.class
+com\spring\jwt\Car\Exception\DealerNotFoundExceptions.class
 com\spring\jwt\entity\InspectionReport.class
 com\spring\jwt\utils\CookieService.class
 com\spring\jwt\Car\Exception\CarAlreadyExistsException.class
+com\spring\jwt\premiumcar\PremiumCarPhotoServiceImpl.class
 com\spring\jwt\utils\EmailVerificationService\EmailVerificationService.class
 com\spring\jwt\utils\LRIUtils.class
 com\spring\jwt\exception\InvalidOtpException.class
