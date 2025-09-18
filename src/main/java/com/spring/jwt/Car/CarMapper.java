@@ -141,7 +141,7 @@ public class CarMapper {
         if (carDto.getVariant() != null) car.setVariant(carDto.getVariant());
         if (carDto.getBrand() != null) car.setBrand(carDto.getBrand());
         if (carDto.getCarInsurance() != null) car.setCarInsurance(carDto.getCarInsurance());
-        if (carDto.getCarInsuranceDate() != null) car.setCarInsuranceDate(carDto.getCarInsuranceDate());
+        //if (carDto.getCarInsuranceDate() != null) car.setCarInsuranceDate(carDto.getCarInsuranceDate());
         if (carDto.getCarInsuranceType() != null) car.setCarInsuranceType(carDto.getCarInsuranceType());
         if (carDto.getCarStatus() != null) car.setCarStatus(carDto.getCarStatus());
 
@@ -155,7 +155,7 @@ public class CarMapper {
         if (carDto.getModel() != null) car.setModel(carDto.getModel());
         if (carDto.getOwnerSerial() != null) car.setOwnerSerial(carDto.getOwnerSerial());
         if (carDto.getPowerWindowFeature() != null) car.setPowerWindowFeature(carDto.getPowerWindowFeature());
-        if (carDto.getPrice() != null) car.setPrice(carDto.getPrice());
+        //if (carDto.getPrice() != null) car.setPrice(carDto.getPrice());
         if (carDto.getRearParkingCameraFeature() != null) car.setRearParkingCameraFeature(carDto.getRearParkingCameraFeature());
         if (carDto.getRegistration() != null) car.setRegistration(carDto.getRegistration());
         if (carDto.getTitle() != null) car.setTitle(carDto.getTitle());

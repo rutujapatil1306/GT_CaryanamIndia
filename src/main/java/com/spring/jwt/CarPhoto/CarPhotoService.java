@@ -7,5 +7,7 @@ public interface CarPhotoService {
 
     CarPhotoDto uploadCarPhoto(Integer carId, MultipartFile imageFile, DocType type);
 
+    CarPhotoDto getCarPhotoById(Integer id);
+
 
 }

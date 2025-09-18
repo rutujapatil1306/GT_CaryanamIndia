@@ -5,16 +5,13 @@ import com.spring.jwt.BrandData.Exception.BrandAlreadyExistsException;
 import com.spring.jwt.BrandData.Exception.BrandNotFoundException;
 import com.spring.jwt.BrandData.Exception.SubVariantNotFoundException;
 import com.spring.jwt.BrandData.Exception.VariantNotFoundException;
-<<<<<<< HEAD
 import com.spring.jwt.Car.Exception.*;
 import com.spring.jwt.dealer.DTO.DealerResponseDto;
 import com.spring.jwt.dealer.exception.DealerNotFoundException;
 import com.spring.jwt.dealer.exception.InvalidDealerDataException;
-=======
 import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
 import com.spring.jwt.Car.Exception.CarNotFoundException;
 import com.spring.jwt.Car.Exception.StatusNotFoundException;
->>>>>>> ff86f14d3d8b5c7fc2815880eff550663af38c96
 import com.spring.jwt.utils.BaseResponseDTO;
 import com.spring.jwt.utils.ErrorResponseDto;
 import jakarta.validation.ConstraintViolationException;
@@ -421,6 +418,9 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
+
+
 
 
 }

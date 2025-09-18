@@ -25,6 +25,10 @@ public class CarPhotoMapper {
 
             dto.setType(carPhoto.getType());
 
+            dto.setFileFormat(carPhoto.getFileFormat());
+
+            dto.setUploadedAt(carPhoto.getUploadedAt());
+
             if(carPhoto.getCar() != null)
             {
                 dto.setCar_id(carPhoto.getCar().getId());
@@ -55,6 +59,10 @@ public class CarPhotoMapper {
             photo.setPhoto_link(carPhotoDto.getPhoto_link());
 
             photo.setType(carPhotoDto.getType());
+
+            photo.setFileFormat(carPhotoDto.getFileFormat());
+
+            photo.setUploadedAt(carPhotoDto.getUploadedAt());
 
             return  photo;
         }

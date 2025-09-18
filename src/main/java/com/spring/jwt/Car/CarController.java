@@ -5,6 +5,7 @@ import com.spring.jwt.Car.DTO.CarDto;
 import com.spring.jwt.Car.DTO.CarResponseDto;
 import com.spring.jwt.Car.DTO.CarResponseDto2;
 import com.spring.jwt.utils.ResponseDto;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +24,15 @@ public class CarController {
     CarRepository carRepository;
 
     //Add Car
-    @PostMapping
-    public ResponseEntity<ResponseDto> createCar(@RequestBody CarDto carDto) {
+    @PostMapping("/create")
+    public ResponseEntity<ResponseDto> createCar(@Valid @RequestBody CarDto carDto) {
         CarDto addedCar = carService.addCar(carDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto("success", "Car Added Successfully"));
     }
 
     // Get Car By Id
     //Using RequestParam to take car id
-    @GetMapping
+    @GetMapping("/getCar")
     public ResponseEntity<CarResponseDto2> getCarById(@RequestParam int id) {
         CarDto car = carService.getCarById(id);
         return ResponseEntity.ok(CarResponseDto2.response("Fetched Car with given id " + id + " is Found", car));
@@ -39,7 +40,7 @@ public class CarController {
 
     //Update Car By Id
     @PatchMapping("/update")
-    public ResponseEntity<CarResponseDto2> updateCar(@RequestBody CarDto carDto, @RequestParam int id) {
+    public ResponseEntity<CarResponseDto2> updateCar(@Valid @RequestBody CarDto carDto, @RequestParam int id) {
         CarDto updateCar = carService.updateCar(carDto, id);
         return ResponseEntity.ok(new CarResponseDto2<>("Car Updated Successfully", updateCar, null));
     }
