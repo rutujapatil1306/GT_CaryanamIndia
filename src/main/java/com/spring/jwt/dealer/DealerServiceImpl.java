@@ -3,6 +3,7 @@ import com.spring.jwt.dealer.DTO.DealerResponseDto;
 import com.spring.jwt.dealer.exception.DealerNotFoundException;
 import com.spring.jwt.dto.DealerDTO;
 import com.spring.jwt.entity.Dealer;
+import com.spring.jwt.entity.User;
 import com.spring.jwt.repository.DealerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -145,6 +146,24 @@ public class DealerServiceImpl implements DealerService {
         return DealerResponseDto.successWithList("Dealers fetched successfully", dealerDTOs);
     }
 
+    @Override
+    public Dealer createDealerForUser(User user, DealerDTO dealerDTO) {
+        Dealer dealer = new Dealer();
+        dealer.setUser(user);
+        dealer.setEmail(dealerDTO.getEmail());
+        dealer.setFirstname(dealerDTO.getUserFirstName());
+        dealer.setLastName(dealerDTO.getLastName());
+        dealer.setMobileNo(String.valueOf(dealerDTO.getUserMobileNumber()));
+        dealer.setShopName(dealerDTO.getShopName());
+        dealer.setAddress(dealerDTO.getAddress());
+        dealer.setArea(dealerDTO.getArea());
+        dealer.setCity(dealerDTO.getCity());
+        dealer.setSalesPersonId(dealerDTO.getSalesPersonId());
+        dealer.setDealerDocumentPhoto(dealerDTO.getDealerDocumentPhoto());
+        dealer.setStatus(DealerStatus.ACTIVE);
+
+        return dealerRepository.save(dealer);
+    }
 
 
 }

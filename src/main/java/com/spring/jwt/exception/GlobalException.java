@@ -5,12 +5,13 @@ import com.spring.jwt.BrandData.Exception.BrandAlreadyExistsException;
 import com.spring.jwt.BrandData.Exception.BrandNotFoundException;
 import com.spring.jwt.BrandData.Exception.SubVariantNotFoundException;
 import com.spring.jwt.BrandData.Exception.VariantNotFoundException;
+import com.spring.jwt.Car.Exception.*;
+import com.spring.jwt.dealer.DTO.DealerResponseDto;
+import com.spring.jwt.dealer.exception.DealerNotFoundException;
+import com.spring.jwt.dealer.exception.InvalidDealerDataException;
 import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
 import com.spring.jwt.Car.Exception.CarNotFoundException;
 import com.spring.jwt.Car.Exception.StatusNotFoundException;
-import com.spring.jwt.CarPhoto.Exception.DuplicatePhotoException;
-import com.spring.jwt.CarPhoto.Exception.InvalidFileException;
-import com.spring.jwt.CarPhoto.Exception.PhotoNotFoundException;
 import com.spring.jwt.utils.BaseResponseDTO;
 import com.spring.jwt.utils.ErrorResponseDto;
 import jakarta.validation.ConstraintViolationException;
@@ -20,7 +21,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
@@ -35,6 +35,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -104,19 +105,6 @@ public class GlobalException extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidOtpException.class)
     public ResponseEntity<ErrorResponseDto> handleInvalidOtpException(InvalidOtpException exception, WebRequest webRequest){
         log.error("Invalid OTP: {}", exception.getMessage());
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
-                webRequest.getDescription(false),
-                HttpStatus.BAD_REQUEST,
-                exception.getMessage(),
-                LocalDateTime.now()
-        );
-        return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(InvalidFileException.class)
-    public ResponseEntity<ErrorResponseDto> handleInvalidFileException(InvalidFileException exception, WebRequest webRequest)
-    {
-        log.error("Invalid File: {}", exception.getMessage());
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 webRequest.getDescription(false),
                 HttpStatus.BAD_REQUEST,
@@ -308,29 +296,6 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(PhotoNotFoundException.class)
-    public ResponseEntity<Object> handlePhotoNotFound(PhotoNotFoundException ex){
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.NOT_FOUND.value());
-        body.put("error", "Photo Not Found");
-        body.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(DuplicatePhotoException.class)
-    public ResponseEntity<Object> handleDuplicatePhoto(DuplicatePhotoException ex){
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.CONFLICT.value());
-        body.put("error", "Duplicate Photo Exception");
-        body.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
-    }
-
-
 
     @ExceptionHandler(StatusNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleStatusNotFound(StatusNotFoundException ex) {
@@ -411,6 +376,49 @@ public class GlobalException extends ResponseEntityExceptionHandler {
                 LocalDateTime.now());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+
+    @ExceptionHandler(DealerNotFoundException.class)
+    public ResponseEntity<DealerResponseDto> handleDealerNotFound(DealerNotFoundException ex) {
+        DealerResponseDto response = DealerResponseDto.error(
+                "Dealer Not Found",
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidDealerDataException.class)
+    public ResponseEntity<DealerResponseDto> handleInvalidDealerData(InvalidDealerDataException ex) {
+        DealerResponseDto response = DealerResponseDto.error(
+                "Invalid Dealer Data",
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<ErrorResponseDto> handleIOException(IOException ex, WebRequest webRequest) {
+        log.error("I/O error occurred: {}", ex.getMessage());
+        ErrorResponseDto error = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "File processing error: " + ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponseDto> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest webRequest) {
+        log.error("Invalid argument: {}", ex.getMessage());
+        ErrorResponseDto error = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
 
 
 
