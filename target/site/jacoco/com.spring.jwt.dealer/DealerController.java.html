@@ -13,39 +13,40 @@ import org.springframework.web.bind.annotation.*;
 public class DealerController {
 
     private final DealerService dealerService;
+    // added
 
 
     @PatchMapping
     public ResponseEntity&lt;DealerResponseDto&gt; updateDealer(
             @RequestParam Integer dealerId,
             @RequestBody DealerDTO dealerDTO) {
-<span class="nc" id="L22">        return ResponseEntity.ok(dealerService.updateDealer(dealerId, dealerDTO));</span>
+<span class="nc" id="L23">        return ResponseEntity.ok(dealerService.updateDealer(dealerId, dealerDTO));</span>
     }
 
     @DeleteMapping
     public ResponseEntity&lt;DealerResponseDto&gt; deleteDealer(@RequestParam Integer dealerId) {
-<span class="nc" id="L27">        return ResponseEntity.ok(dealerService.deleteDealer(dealerId));</span>
+<span class="nc" id="L28">        return ResponseEntity.ok(dealerService.deleteDealer(dealerId));</span>
     }
 
     @GetMapping(&quot;/by-id&quot;)
     public ResponseEntity&lt;DealerResponseDto&gt; getDealerById(@RequestParam Integer dealerId) {
-<span class="nc" id="L32">        return ResponseEntity.ok(dealerService.getDealerById(dealerId));</span>
+<span class="nc" id="L33">        return ResponseEntity.ok(dealerService.getDealerById(dealerId));</span>
     }
 
     @GetMapping(&quot;/all&quot;)
     public ResponseEntity&lt;DealerResponseDto&gt; getAllDealers() {
-<span class="nc" id="L37">        return ResponseEntity.ok(dealerService.getAllDealers());</span>
+<span class="nc" id="L38">        return ResponseEntity.ok(dealerService.getAllDealers());</span>
     }
 
     @GetMapping(&quot;/by-status&quot;)
     public ResponseEntity&lt;DealerResponseDto&gt; getDealersByStatus(@RequestParam DealerStatus status) {
-<span class="nc" id="L42">        return ResponseEntity.ok(dealerService.getDealersByStatus(status));</span>
+<span class="nc" id="L43">        return ResponseEntity.ok(dealerService.getDealersByStatus(status));</span>
     }
 
 
     @GetMapping(&quot;/by-user&quot;)
     public ResponseEntity&lt;DealerResponseDto&gt; getDealersByUserId(@RequestParam Long userId) {
-<span class="nc" id="L48">        return ResponseEntity.ok(dealerService.getDealersByUserId(userId));</span>
+<span class="nc" id="L49">        return ResponseEntity.ok(dealerService.getDealersByUserId(userId));</span>
     }
 
 
@@ -56,7 +57,7 @@ public class DealerController {
             @RequestParam(defaultValue = &quot;id&quot;) String sortBy,
             @RequestParam(defaultValue = &quot;asc&quot;) String sortDir) {
 
-<span class="nc" id="L59">        return ResponseEntity.ok(dealerService.getDealersWithPagination(page, size, sortBy, sortDir));</span>
+<span class="nc" id="L60">        return ResponseEntity.ok(dealerService.getDealersWithPagination(page, size, sortBy, sortDir));</span>
     }
 
 
@@ -66,7 +67,7 @@ public class DealerController {
             @RequestParam Integer dealerId,
             @RequestParam DealerStatus status) {
 
-<span class="nc" id="L69">        return ResponseEntity.ok(dealerService.updateDealerStatus(dealerId, status));</span>
+<span class="nc" id="L70">        return ResponseEntity.ok(dealerService.updateDealerStatus(dealerId, status));</span>
     }
 
 }

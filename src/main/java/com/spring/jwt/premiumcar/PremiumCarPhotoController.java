@@ -23,7 +23,7 @@ public class PremiumCarPhotoController {
     private final PremiumCarPhotoService photoService;
 
     // Create Photo
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<PremiumCarPhotoDto> createPhoto(
             @RequestParam int carId,
             @RequestParam String docType,
@@ -34,7 +34,7 @@ public class PremiumCarPhotoController {
     }
 
     // Update Photo
-    @PatchMapping("/{photoId}")
+    @PatchMapping("{photoId}")
     public ResponseEntity<PremiumCarPhotoDto> updatePhoto(
             @PathVariable Long photoId,
             @RequestParam(required = false) String docType,

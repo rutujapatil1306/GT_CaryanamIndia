@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CarController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JWT-with-Spring-Security</a> &gt; <a href="index.source.html" class="el_package">com.spring.jwt.Car</a> &gt; <span class="el_source">CarController.java</span></div><h1>CarController.java</h1><pre class="source lang-java linenums">package com.spring.jwt.Car;
-
+import com.spring.jwt.Car.DTO.CarCountResponseDto;
 import com.spring.jwt.Car.DTO.CarDto;
 import com.spring.jwt.Car.DTO.CarResponseDto;
-import com.spring.jwt.Car.DTO.UpdateCarResponseDto;
+import com.spring.jwt.Car.DTO.CarResponseDto2;
 import com.spring.jwt.utils.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 @RestController
 @RequestMapping(&quot;/api/cars&quot;)
-<span class="nc" id="L16">public class CarController {</span>
+<span class="nc" id="L14">public class CarController {</span>
 
     @Autowired
     CarService carService;
@@ -24,38 +22,37 @@ import java.util.List;
     //Add Car
     @PostMapping
     public ResponseEntity&lt;ResponseDto&gt; createCar(@RequestBody CarDto carDto) {
-<span class="nc" id="L27">        CarDto addedCar = carService.addCar(carDto);</span>
-<span class="nc" id="L28">        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto(&quot;success&quot;, &quot;Car Added Successfully&quot;));</span>
+<span class="nc" id="L25">        CarDto addedCar = carService.addCar(carDto);</span>
+<span class="nc" id="L26">        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto(&quot;success&quot;, &quot;Car Added Successfully&quot;));</span>
     }
 
     // Get Car By Id
     //Using RequestParam to take car id
     @GetMapping
-    public ResponseEntity&lt;CarResponseDto&gt; getCarById(@RequestParam int id) {
-<span class="nc" id="L35">        CarDto car = carService.getCarById(id);</span>
-<span class="nc" id="L36">        long totalNoOfCars = carRepository.count();</span>
-<span class="nc" id="L37">        return ResponseEntity.ok(CarResponseDto.success(&quot;Fetched Car with given id &quot; + id + &quot; is Found&quot;, car, totalNoOfCars));</span>
+    public ResponseEntity&lt;CarResponseDto2&gt; getCarById(@RequestParam int id) {
+<span class="nc" id="L33">        CarDto car = carService.getCarById(id);</span>
+<span class="nc" id="L34">        return ResponseEntity.ok(CarResponseDto2.response(&quot;Fetched Car with given id &quot; + id + &quot; is Found&quot;, car));</span>
     }
 
     //Update Car By Id
     @PatchMapping(&quot;/update&quot;)
-    public ResponseEntity&lt;UpdateCarResponseDto&gt; updateCar(@RequestBody CarDto carDto, @RequestParam int id) {
-<span class="nc" id="L43">        CarDto updateCar = carService.updateCar(carDto, id);</span>
-<span class="nc" id="L44">        return ResponseEntity.ok(new UpdateCarResponseDto&lt;&gt;(&quot;Car Updated Successfully&quot;, updateCar, null));</span>
+    public ResponseEntity&lt;CarResponseDto2&gt; updateCar(@RequestBody CarDto carDto, @RequestParam int id) {
+<span class="nc" id="L40">        CarDto updateCar = carService.updateCar(carDto, id);</span>
+<span class="nc" id="L41">        return ResponseEntity.ok(new CarResponseDto2&lt;&gt;(&quot;Car Updated Successfully&quot;, updateCar, null));</span>
     }
 
     // Delete Car(Soft Delete)
     @DeleteMapping(&quot;/softDelete&quot;)
     public ResponseEntity&lt;ResponseDto&gt; softDelete(@RequestParam int id) {
-<span class="nc" id="L50">        carService.softDelete(id);</span>
-<span class="nc" id="L51">        return ResponseEntity.ok(new ResponseDto(&quot;Success&quot;, &quot;Car Deleted Successfully&quot;));</span>
+<span class="nc" id="L47">        carService.softDelete(id);</span>
+<span class="nc" id="L48">        return ResponseEntity.ok(new ResponseDto(&quot;Success&quot;, &quot;Car Deleted Successfully&quot;));</span>
     }
 
     //Delete Car(Hard Delete)
     @DeleteMapping(&quot;/hardDelete&quot;)
     public ResponseEntity&lt;ResponseDto&gt; hardDelete(@RequestParam int id) {
-<span class="nc" id="L57">        carService.hardDelete(id);</span>
-<span class="nc" id="L58">        return ResponseEntity.ok(new ResponseDto(&quot;Success&quot;, &quot;Car Deleted Successfully&quot;));</span>
+<span class="nc" id="L54">        carService.hardDelete(id);</span>
+<span class="nc" id="L55">        return ResponseEntity.ok(new ResponseDto(&quot;Success&quot;, &quot;Car Deleted Successfully&quot;));</span>
     }
 
     //Get Car By Status
@@ -64,8 +61,8 @@ import java.util.List;
                                                                            @RequestParam int page,
                                                                            @RequestParam int size)
     {
-<span class="nc" id="L67">        CarResponseDto&lt;List&lt;CarDto&gt;&gt; response = carService.getAllCarsByStatus(carStatus, page, size);</span>
-<span class="nc" id="L68">        return ResponseEntity.ok(response);</span>
+<span class="nc" id="L64">        CarResponseDto&lt;List&lt;CarDto&gt;&gt; response = carService.getAllCarsByStatus(carStatus, page, size);</span>
+<span class="nc" id="L65">        return ResponseEntity.ok(response);</span>
     }
 
     @GetMapping(&quot;/dealer&quot;)
@@ -74,8 +71,42 @@ import java.util.List;
                                                                                       @RequestParam int page,
                                                                                       @RequestParam int size)
     {
-<span class="nc" id="L77">        CarResponseDto&lt;List&lt;CarDto&gt;&gt; response = carService.getCarsByDealerIdAndStatus(dealerId, carStatus, page, size);</span>
-<span class="nc" id="L78">        return ResponseEntity.ok(response);</span>
+<span class="nc" id="L74">        CarResponseDto&lt;List&lt;CarDto&gt;&gt; response = carService.getCarsByDealerIdAndStatus(dealerId, carStatus, page, size);</span>
+<span class="nc" id="L75">        return ResponseEntity.ok(response);</span>
     }
+
+
+    @GetMapping(&quot;/filter&quot;)
+    public ResponseEntity&lt;CarResponseDto&lt;List&lt;CarDto&gt;&gt;&gt; getCarsWithPaginationOnlyActivePending(
+            @RequestParam(defaultValue = &quot;0&quot;) int page,
+            @RequestParam(defaultValue = &quot;10&quot;) int size,
+            @RequestParam(required = false) Status status) {
+<span class="nc" id="L84">        CarResponseDto&lt;List&lt;CarDto&gt;&gt; response = carService.getCarsWithPaginationOnlyActivePending(page, size,status);</span>
+<span class="nc" id="L85">        return ResponseEntity.ok(response);</span>
+    }
+
+    @GetMapping(&quot;/filter/all&quot;)
+    public ResponseEntity&lt;CarResponseDto&lt;List&lt;CarDto&gt;&gt;&gt; getCarsWithoutPaginationOnlyActivePending(
+            @RequestParam(required = false) Status status) {
+<span class="nc" id="L91">        CarResponseDto&lt;List&lt;CarDto&gt;&gt; response = carService.getCarsWithoutPaginationOnlyActivePending(status);</span>
+<span class="nc" id="L92">        return ResponseEntity.ok(response);</span>
+    }
+
+
+    @GetMapping(&quot;/dealer/carCount&quot;)
+    public ResponseEntity&lt;CarCountResponseDto&gt; getNumberOfCarsByDealerIdAndCarStatus(@RequestParam Integer dealerId,
+                                                                                     @RequestParam String carStatus)
+    {
+<span class="nc" id="L100">        long carCount = carService.getNumberOfCarsByDealerIdAndStatus(dealerId, carStatus);</span>
+<span class="nc" id="L101">        return ResponseEntity.ok(new CarCountResponseDto(dealerId, carStatus,carCount));</span>
+    }
+
+    @GetMapping(&quot;/main&quot;)
+    public ResponseEntity&lt;CarResponseDto2&lt;CarDto&gt;&gt; getCarByMainCarId(@RequestParam String mainCarId)
+    {
+<span class="nc" id="L107">        CarDto car = carService.getCarByMainCarId(mainCarId);</span>
+<span class="nc" id="L108">        return ResponseEntity.ok(CarResponseDto2.response(&quot;Fetched Car By MainCarId &quot; + mainCarId, car));</span>
+    }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

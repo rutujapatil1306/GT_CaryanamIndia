@@ -1,132 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CarServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JWT-with-Spring-Security</a> &gt; <a href="index.source.html" class="el_package">com.spring.jwt.Car</a> &gt; <span class="el_source">CarServiceImpl.java</span></div><h1>CarServiceImpl.java</h1><pre class="source lang-java linenums">package com.spring.jwt.Car;
-
 import com.spring.jwt.Car.DTO.CarDto;
 import com.spring.jwt.Car.DTO.CarResponseDto;
 import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
 import com.spring.jwt.Car.Exception.CarNotFoundException;
+import com.spring.jwt.Car.Exception.InvalidStatusException;
+import com.spring.jwt.Car.Exception.StatusNotFoundException;
 import com.spring.jwt.entity.Car;
+import com.spring.jwt.exception.PageNotFoundException;
+import com.spring.jwt.repository.DealerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-
 @Service
-<span class="nc" id="L17">public class CarServiceImpl implements CarService{</span>
+<span class="nc" id="L18">public class CarServiceImpl implements CarService{</span>
 
     @Autowired
     CarRepository carRepository;
+
+    @Autowired
+    DealerRepository dealerRepository;
 
     @Autowired
     CarMapper carMapper;
 
     @Override
     public CarDto addCar(CarDto cardto) {
-<span class="nc" id="L27">        boolean exists = carRepository.existsByMainCarId(cardto.getMainCarId());</span>
-<span class="nc bnc" id="L28" title="All 2 branches missed.">        if(exists)</span>
+
+<span class="nc" id="L32">        Car car = carMapper.toEntity(cardto);</span>
+<span class="nc" id="L33">        Car savedCar = carRepository.save(car);</span>
+<span class="nc" id="L34">        String mainCarId = generateMainCarId(savedCar);</span>
+<span class="nc" id="L35">        savedCar.setMainCarId(mainCarId);</span>
+<span class="nc" id="L36">        boolean exists = carRepository.existsByMainCarId(mainCarId);</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if(exists)</span>
         {
-<span class="nc" id="L30">            throw  new CarAlreadyExistsException(&quot;Car Already Exists&quot;);</span>
+<span class="nc" id="L39">            throw  new CarAlreadyExistsException(&quot;Car Already Exists for id: &quot; + mainCarId);</span>
         }
-<span class="nc" id="L32">        Car addedCar = carRepository.save(carMapper.toEntity(cardto));;</span>
-<span class="nc" id="L33">        return carMapper.toDto(addedCar);</span>
+
+<span class="nc" id="L42">        Car addedCar = carRepository.save(savedCar);</span>
+<span class="nc" id="L43">        return carMapper.toDto(addedCar);</span>
     }
 
     @Override
     public CarDto getCarById(int id) {
-<span class="nc" id="L38">        Car car = carRepository.findById(id).orElseThrow(() -&gt; new CarNotFoundException(&quot;Car Not Found At id &quot; + id));</span>
+<span class="nc" id="L48">        Car car = carRepository.findById(id).orElseThrow(() -&gt; new CarNotFoundException(&quot;Car Not Found At id &quot; + id));</span>
 
-<span class="nc" id="L40">        return carMapper.toDto(car);</span>
+<span class="nc" id="L50">        return carMapper.toDto(car);</span>
     }
 
     @Override
     public CarDto updateCar(CarDto carDto, int id) {
-<span class="nc" id="L45">        Car car = carRepository.findById(id).orElseThrow(()-&gt; new CarNotFoundException(&quot;Car Not Found At Id: &quot; + id));</span>
+<span class="nc" id="L55">        Car car = carRepository.findById(id).orElseThrow(()-&gt; new CarNotFoundException(&quot;Car Not Found At Id: &quot; + id));</span>
 
         //Update Fields
 
         //Validated Fields Are checked to be null or not if not null then only update fields
-<span class="nc bnc" id="L50" title="All 2 branches missed.">         if(carDto.getAbs() != null){car.setAbs(carDto.getAbs());}</span>
-<span class="nc bnc" id="L51" title="All 2 branches missed.">         if(carDto.getBrand() != null){car.setBrand(carDto.getBrand());}</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">         if(carDto.getCarStatus() != null){car.setCarStatus(carDto.getCarStatus());}</span>
-<span class="nc bnc" id="L53" title="All 2 branches missed.">         if(carDto.getPrice() != 0){car.setPrice(carDto.getPrice());}</span>
-<span class="nc bnc" id="L54" title="All 2 branches missed.">         if(carDto.getDealerId() != 0){car.setDealerId(carDto.getDealerId());}</span>
-<span class="nc bnc" id="L55" title="All 2 branches missed.">         if(carDto.getMainCarId() != null){car.setMainCarId(carDto.getMainCarId());}</span>
-<span class="nc bnc" id="L56" title="All 2 branches missed.">         if(carDto.getCarType() != null){car.setCarType(carDto.getCarType());}</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">         if(carDto.getAbs() != null){car.setAbs(carDto.getAbs());}</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">         if(carDto.getBrand() != null){car.setBrand(carDto.getBrand());}</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">         if(carDto.getCarStatus() != null){car.setCarStatus(carDto.getCarStatus());}</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">         if(carDto.getPrice() != 0){car.setPrice(carDto.getPrice());}</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">         if(carDto.getDealerId() != 0){car.setDealerId(carDto.getDealerId());}</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">         if(carDto.getMainCarId() != null){car.setMainCarId(carDto.getMainCarId());}</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">         if(carDto.getCarType() != null){car.setCarType(carDto.getCarType());}</span>
 
          //other fields updated as it is
-<span class="nc" id="L59">         car.setAirbag(carDto.getAirbag());</span>
-<span class="nc" id="L60">         car.setButtonStart(carDto.getButtonStart());</span>
-<span class="nc" id="L61">         car.setSunroof(carDto.getSunroof());</span>
-<span class="nc" id="L62">         car.setChildSafetyLocks(carDto.getChildSafetyLocks());</span>
-<span class="nc" id="L63">         car.setAcFeature(carDto.getAcFeature());</span>
-<span class="nc" id="L64">         car.setMusicFeature(carDto.getMusicFeature());</span>
-<span class="nc" id="L65">         car.setArea(carDto.getArea());</span>
-<span class="nc" id="L66">         car.setVariant(carDto.getVariant());</span>
-<span class="nc" id="L67">         car.setCarInsurance(carDto.getCarInsurance());</span>
-<span class="nc" id="L68">         car.setCarInsuranceDate(carDto.getCarInsuranceDate());</span>
-<span class="nc" id="L69">         car.setCarInsuranceType(carDto.getCarInsuranceType());</span>
-<span class="nc" id="L70">         car.setPendingApproval(carDto.isPendingApproval());</span>
-<span class="nc" id="L71">         car.setCity(carDto.getCity());</span>
-<span class="nc" id="L72">         car.setColor(carDto.getColor());</span>
-<span class="nc" id="L73">         car.setDescription(carDto.getDescription());</span>
-<span class="nc" id="L74">         car.setFuelType(carDto.getFuelType());</span>
-<span class="nc" id="L75">         car.setKmDriven(carDto.getKmDriven());</span>
-<span class="nc" id="L76">         car.setModel(carDto.getModel());</span>
-<span class="nc" id="L77">         car.setOwnerSerial(carDto.getOwnerSerial());</span>
-<span class="nc" id="L78">         car.setPowerWindowFeature(carDto.getPowerWindowFeature());</span>
-<span class="nc" id="L79">         car.setRearParkingCameraFeature(carDto.getRearParkingCameraFeature());</span>
-<span class="nc" id="L80">         car.setRegistration(carDto.getRegistration());</span>
-<span class="nc" id="L81">         car.setTitle(carDto.getTitle());</span>
-<span class="nc" id="L82">         car.setTransmission(carDto.getTransmission());</span>
-<span class="nc" id="L83">         car.setYear(carDto.getYear());</span>
-<span class="nc" id="L84">         car.setDate(carDto.getDate());</span>
-<span class="nc" id="L85">         car.setCarPhotoId(carDto.getCarPhotoId());</span>
+<span class="nc" id="L69">         car.setAirbag(carDto.getAirbag());</span>
+<span class="nc" id="L70">         car.setButtonStart(carDto.getButtonStart());</span>
+<span class="nc" id="L71">         car.setSunroof(carDto.getSunroof());</span>
+<span class="nc" id="L72">         car.setChildSafetyLocks(carDto.getChildSafetyLocks());</span>
+<span class="nc" id="L73">         car.setAcFeature(carDto.getAcFeature());</span>
+<span class="nc" id="L74">         car.setMusicFeature(carDto.getMusicFeature());</span>
+<span class="nc" id="L75">         car.setArea(carDto.getArea());</span>
+<span class="nc" id="L76">         car.setVariant(carDto.getVariant());</span>
+<span class="nc" id="L77">         car.setCarInsurance(carDto.getCarInsurance());</span>
+<span class="nc" id="L78">         car.setCarInsuranceDate(carDto.getCarInsuranceDate());</span>
+<span class="nc" id="L79">         car.setCarInsuranceType(carDto.getCarInsuranceType());</span>
+<span class="nc" id="L80">         car.setPendingApproval(carDto.isPendingApproval());</span>
+<span class="nc" id="L81">         car.setCity(carDto.getCity());</span>
+<span class="nc" id="L82">         car.setColor(carDto.getColor());</span>
+<span class="nc" id="L83">         car.setDescription(carDto.getDescription());</span>
+<span class="nc" id="L84">         car.setFuelType(carDto.getFuelType());</span>
+<span class="nc" id="L85">         car.setKmDriven(carDto.getKmDriven());</span>
+<span class="nc" id="L86">         car.setModel(carDto.getModel());</span>
+<span class="nc" id="L87">         car.setOwnerSerial(carDto.getOwnerSerial());</span>
+<span class="nc" id="L88">         car.setPowerWindowFeature(carDto.getPowerWindowFeature());</span>
+<span class="nc" id="L89">         car.setRearParkingCameraFeature(carDto.getRearParkingCameraFeature());</span>
+<span class="nc" id="L90">         car.setRegistration(carDto.getRegistration());</span>
+<span class="nc" id="L91">         car.setTitle(carDto.getTitle());</span>
+<span class="nc" id="L92">         car.setTransmission(carDto.getTransmission());</span>
+<span class="nc" id="L93">         car.setYear(carDto.getYear());</span>
+<span class="nc" id="L94">         car.setDate(carDto.getDate());</span>
+<span class="nc" id="L95">         car.setCarPhotoId(carDto.getCarPhotoId());</span>
 
 
-<span class="nc" id="L88">         Car updatedCar = carRepository.save(car);</span>
-<span class="nc" id="L89">         return carMapper.toDto(updatedCar);</span>
+<span class="nc" id="L98">         Car updatedCar = carRepository.save(car);</span>
+<span class="nc" id="L99">         return carMapper.toDto(updatedCar);</span>
 
 
     }
 
     @Override
     public void softDelete(int id) {
-<span class="nc" id="L96">        Car car = carRepository.findById(id).orElseThrow(()-&gt; new CarNotFoundException(&quot;Car Not Found At id &quot; + id));</span>
+<span class="nc" id="L106">        Car car = carRepository.findById(id).orElseThrow(()-&gt; new CarNotFoundException(&quot;Car Not Found At id &quot; + id));</span>
 
         //set Car Status to DELETED for Soft Delete
-<span class="nc" id="L99">        car.setCarStatus(Status.DELETED);</span>
-<span class="nc" id="L100">        carRepository.save(car);</span>
-<span class="nc" id="L101">    }</span>
+<span class="nc" id="L109">        car.setCarStatus(Status.INACTIVE);</span>
+<span class="nc" id="L110">        carRepository.save(car);</span>
+<span class="nc" id="L111">    }</span>
 
     @Override
     public void hardDelete(int id) {
-<span class="nc" id="L105">        Car car = carRepository.findById(id).orElseThrow(()-&gt; new CarNotFoundException(&quot;Car Not Found At id &quot; + id));</span>
-<span class="nc" id="L106">        carRepository.delete(car);</span>
-<span class="nc" id="L107">    }</span>
+<span class="nc" id="L115">        Car car = carRepository.findById(id).orElseThrow(()-&gt; new CarNotFoundException(&quot;Car Not Found At id &quot; + id));</span>
+<span class="nc" id="L116">        carRepository.delete(car);</span>
+<span class="nc" id="L117">    }</span>
 
     @Override
     public CarResponseDto&lt;List&lt;CarDto&gt;&gt; getAllCarsByStatus(String carStatus , int page, int size) {
         Status status;
         // Convert String to Enum safely
         try {
-<span class="nc" id="L114">            status = Status.valueOf(carStatus.toUpperCase());</span>
+<span class="nc" id="L124">            status = Status.valueOf(carStatus.toUpperCase());</span>
         }
-<span class="nc" id="L116">        catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L117">            throw new CarNotFoundException(&quot;Invalid car status: &quot; + carStatus);</span>
-<span class="nc" id="L118">        }</span>
+<span class="nc" id="L126">        catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L127">            throw new StatusNotFoundException(&quot;Invalid car status: &quot; + carStatus);</span>
+<span class="nc" id="L128">        }</span>
 
-<span class="nc" id="L120">        Pageable pageable = PageRequest.of(page, size);</span>
+<span class="nc" id="L130">        Pageable pageable = PageRequest.of(page, size);</span>
 
-<span class="nc" id="L122">        List&lt;Car&gt; cars = carRepository.findByCarStatus(status, pageable);</span>
-<span class="nc bnc" id="L123" title="All 2 branches missed.">        if(cars.isEmpty())</span>
+<span class="nc" id="L132">        long totalNoOfCars = carRepository.countByCarStatus(status);</span>
+<span class="nc" id="L133">        int totalPages = (int) Math.ceil((double) totalNoOfCars / size);</span>
+
+<span class="nc bnc" id="L135" title="All 4 branches missed.">        if (page &gt;= totalPages &amp;&amp; totalNoOfCars &gt; 0) {</span>
+<span class="nc" id="L136">            throw new PageNotFoundException(</span>
+                    &quot;Page &quot; + page + &quot; not found. Total available pages: &quot; + totalPages
+            );
+        }
+
+<span class="nc" id="L141">        List&lt;Car&gt; cars = carRepository.findByCarStatus(status, pageable);</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if(cars.isEmpty())</span>
         {
-<span class="nc" id="L125">            throw  new CarNotFoundException(&quot;Car Not found for given Status &quot; + carStatus + &quot; on Page Number &quot; + page);</span>
+<span class="nc" id="L144">            throw  new CarNotFoundException(&quot;Car Not found for given Status &quot; + carStatus + &quot; on Page Number &quot; + page);</span>
         }
-<span class="nc" id="L127">        List&lt;CarDto&gt; dtos = cars.stream().map(c -&gt; carMapper.toDto(c)).toList();</span>
-<span class="nc" id="L128">        long totalNoOfCars = carRepository.countByCarStatus(status);</span>
-<span class="nc" id="L129">        return new CarResponseDto&lt;&gt;(&quot;List of cars with status &quot; + carStatus + &quot; on page number &quot; + page, dtos, null, totalNoOfCars);</span>
+<span class="nc" id="L146">        List&lt;CarDto&gt; dtos = cars.stream().map(c -&gt; carMapper.toDto(c)).toList();</span>
+        //long totalNoOfCars = carRepository.countByCarStatus(status);
+<span class="nc" id="L148">        return new CarResponseDto&lt;&gt;(&quot;List of cars with status &quot; + carStatus + &quot; on page number &quot; + page, dtos, null, totalNoOfCars);</span>
 
     }
 
@@ -137,23 +156,118 @@ import java.util.List;
 
         // Convert string to enum safely
         try {
-<span class="nc" id="L140">            status = Status.valueOf(carStatus.toUpperCase());</span>
-<span class="nc" id="L141">        } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L142">            throw new CarNotFoundException(&quot;Invalid car status: &quot; + carStatus);</span>
-<span class="nc" id="L143">        }</span>
+<span class="nc" id="L159">            status = Status.valueOf(carStatus.toUpperCase());</span>
+<span class="nc" id="L160">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L161">            throw new StatusNotFoundException(&quot;Invalid car status: &quot; + carStatus);</span>
+<span class="nc" id="L162">        }</span>
 
-<span class="nc" id="L145">        Pageable pageable = PageRequest.of(page, size, Sort.by(&quot;dealerId&quot;).descending());</span>
+<span class="nc" id="L164">        Pageable pageable = PageRequest.of(page, size, Sort.by(&quot;dealerId&quot;).descending());</span>
 
-<span class="nc" id="L147">        List&lt;Car&gt; allCars = carRepository.findByDealerIdAndCarStatus(dealerId, status, pageable);</span>
+//        boolean dealerExists = dealerRepository.existsById(dealerId);
+//        if (!dealerExists) {
+//            throw new DealerNotFoundExceptions(&quot;Dealer not found with ID: &quot; + dealerId);
+//        }
 
-<span class="nc bnc" id="L149" title="All 2 branches missed.">        if (allCars.isEmpty())</span>
-        {
-<span class="nc" id="L151">            throw new CarNotFoundException(&quot;No cars found for dealerId: &quot; + dealerId + &quot; and status: &quot; + carStatus);</span>
+<span class="nc" id="L171">        long totalNoOfCars = carRepository.countByDealerIdAndCarStatus(dealerId, status);</span>
+<span class="nc" id="L172">        int totalPages = (int) Math.ceil((double) totalNoOfCars / size);</span>
+
+<span class="nc bnc" id="L174" title="All 4 branches missed.">        if (page &gt;= totalPages &amp;&amp; totalNoOfCars &gt; 0) {</span>
+<span class="nc" id="L175">            throw new PageNotFoundException(</span>
+                    &quot;Page &quot; + page + &quot; not found. Total available pages: &quot; + totalPages
+            );
         }
-<span class="nc" id="L153">        List&lt;CarDto&gt; cars = allCars.stream().map(c -&gt; carMapper.toDto(c)).toList();</span>
-<span class="nc" id="L154">        long totalNoOfCars = carRepository.countByDealerIdAndCarStatus(dealerId, status);</span>
 
-<span class="nc" id="L156">        return new CarResponseDto&lt;&gt;(&quot;Cars for DealerId &quot; + dealerId + &quot; with status &quot; + status + &quot; on page number &quot; + page, cars, null, totalNoOfCars);</span>
+<span class="nc" id="L180">        List&lt;Car&gt; allCars = carRepository.findByDealerIdAndCarStatus(dealerId, status, pageable);</span>
+
+<span class="nc bnc" id="L182" title="All 2 branches missed.">        if (allCars.isEmpty())</span>
+        {
+<span class="nc" id="L184">            throw new CarNotFoundException(&quot;No cars found for dealerId: &quot; + dealerId + &quot; and status: &quot; + carStatus);</span>
+        }
+<span class="nc" id="L186">        List&lt;CarDto&gt; cars = allCars.stream().map(c -&gt; carMapper.toDto(c)).toList();</span>
+        //long totalNoOfCars = carRepository.countByDealerIdAndCarStatus(dealerId, status);
+
+<span class="nc" id="L189">        return new CarResponseDto&lt;&gt;(&quot;Cars for DealerId &quot; + dealerId + &quot; with status &quot; + status + &quot; on page number &quot; + page, cars, null, totalNoOfCars);</span>
     }
+
+
+    public long getNumberOfCarsByDealerIdAndStatus(Integer dealerId, String carStatus) {
+
+        Status status;
+
+        try {
+<span class="nc" id="L198">            status = Status.valueOf(carStatus.toUpperCase());</span>
+<span class="nc" id="L199">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L200">            throw new CarNotFoundException(&quot;Invalid car status: &quot; + carStatus);</span>
+<span class="nc" id="L201">        }</span>
+
+<span class="nc" id="L203">        return carRepository.countByDealerIdAndCarStatus(dealerId, status);</span>
+
+
+    }
+
+    public String generateMainCarId(Car car) {
+<span class="nc" id="L209">        String brandInitials = car.getBrand().replaceAll(&quot;\\s+&quot;, &quot;&quot;).substring(0, 2).toUpperCase();</span>
+<span class="nc" id="L210">        String modelInitials = car.getModel().replaceAll(&quot;\\s+&quot;, &quot;&quot;).substring(0, 2).toUpperCase();</span>
+<span class="nc" id="L211">        String yearSuffix = String.valueOf(car.getYear()).substring(2);</span>
+
+<span class="nc" id="L213">        return brandInitials + modelInitials + yearSuffix + &quot;-&quot; + car.getId();</span>
+    }
+
+    @Override
+    public CarDto getCarByMainCarId(String mainCarId) {
+<span class="nc" id="L218">        Car car = carRepository.findByMainCarId(mainCarId).orElseThrow(() -&gt; new CarNotFoundException(&quot;Car Not Found With MainCarId &quot; + mainCarId));</span>
+<span class="nc" id="L219">        return carMapper.toDto(car);</span>
+    }
+
+    @Override
+    public CarResponseDto&lt;List&lt;CarDto&gt;&gt; getCarsWithPaginationOnlyActivePending(int page, int size,Status status) {
+        //Validate pagination input
+<span class="nc bnc" id="L225" title="All 4 branches missed.">        if (page &lt; 0 || size &lt;= 0) {</span>
+<span class="nc" id="L226">            throw new PageNotFoundException(&quot;Page must be &gt;= 0 and size must be &gt; 0&quot;);</span>
+        }
+<span class="nc" id="L228">        List&lt;Status&gt; allowedStatuses = List.of(Status.PENDING, Status.ACTIVE);</span>
+<span class="nc bnc" id="L229" title="All 4 branches missed.">        if (status != null &amp;&amp; !allowedStatuses.contains(status)) {</span>
+<span class="nc" id="L230">            throw new InvalidStatusException(&quot;Invalid status: &quot; + status + &quot;. Allowed values: PENDING, ACTIVE&quot;);</span>
+        }
+<span class="nc" id="L232">        List&lt;Car&gt; cars = carRepository.findByCarStatusIn(allowedStatuses)</span>
+<span class="nc" id="L233">                .stream()</span>
+<span class="nc" id="L234">                .skip(page * size)</span>
+<span class="nc" id="L235">                .limit(size)</span>
+<span class="nc" id="L236">                .toList();</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">        if (cars.isEmpty()) {</span>
+<span class="nc" id="L238">            throw new CarNotFoundException(&quot;No cars found with status PENDING or ACTIVE on page &quot; + page);</span>
+        }
+<span class="nc" id="L240">        List&lt;CarDto&gt; dtos = cars.stream().map(carMapper::toDto).toList();</span>
+<span class="nc" id="L241">        long totalCars = carRepository.countByCarStatus(Status.PENDING) + carRepository.countByCarStatus(Status.ACTIVE);</span>
+<span class="nc" id="L242">        return new CarResponseDto&lt;&gt;(&quot;Cars with status PENDING or ACTIVE&quot;, dtos, null, totalCars);</span>
+    }
+
+    @Override
+    public CarResponseDto&lt;List&lt;CarDto&gt;&gt; getCarsWithoutPaginationOnlyActivePending(Status status) {
+<span class="nc" id="L247">        List&lt;Status&gt; allowedStatuses = List.of(Status.PENDING, Status.ACTIVE);</span>
+
+        // Validate input status if provided
+<span class="nc bnc" id="L250" title="All 4 branches missed.">        if (status != null &amp;&amp; !allowedStatuses.contains(status)) {</span>
+<span class="nc" id="L251">            throw new InvalidStatusException(&quot;Invalid status: &quot; + status + &quot;. Allowed: PENDING, ACTIVE&quot;);</span>
+        }
+
+        // Build list based on input
+<span class="nc bnc" id="L255" title="All 2 branches missed.">        List&lt;Status&gt; statusesToFetch = (status != null)</span>
+<span class="nc" id="L256">                ? List.of(status)  // if status is provided, fetch only that</span>
+<span class="nc" id="L257">                : allowedStatuses; // otherwise fetch PENDING + ACTIVE</span>
+
+<span class="nc" id="L259">        List&lt;Car&gt; cars = carRepository.findByCarStatusIn(statusesToFetch);</span>
+
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        if (cars.isEmpty()) {</span>
+<span class="nc" id="L262">            throw new CarNotFoundException(&quot;No cars found with status &quot; +</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">                    (status != null ? status : &quot;PENDING or ACTIVE&quot;));</span>
+        }
+
+<span class="nc" id="L266">        List&lt;CarDto&gt; dtos = cars.stream().map(carMapper::toDto).toList();</span>
+<span class="nc bnc" id="L267" title="All 2 branches missed.">        return new CarResponseDto&lt;&gt;(&quot;Cars with status &quot; + (status != null ? status : &quot;PENDING or ACTIVE&quot;),</span>
+<span class="nc" id="L268">                dtos, null, cars.size());</span>
+    }
+
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

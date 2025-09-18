@@ -7,7 +7,6 @@ public class PremiumCarPhotoDto {
     private Long id;
     private int carId;            // Instead of full Car object
     private String docType;
-    private String fileName;
     private long fileSize;
     private String contentType;
     private String fileUrl;
@@ -22,9 +21,6 @@ public class PremiumCarPhotoDto {
 
     public String getDocType() { return docType; }
     public void setDocType(String docType) { this.docType = docType; }
-
-    public String getFileName() { return fileName; }
-    public void setFileName(String fileName) { this.fileName = fileName; }
 
     public long getFileSize() { return fileSize; }
     public void setFileSize(long fileSize) { this.fileSize = fileSize; }

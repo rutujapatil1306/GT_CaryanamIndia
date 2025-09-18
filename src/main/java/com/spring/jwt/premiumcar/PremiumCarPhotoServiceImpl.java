@@ -34,7 +34,6 @@ public class PremiumCarPhotoServiceImpl implements PremiumCarPhotoService {
         PremiumCarPhoto photo = new PremiumCarPhoto();
         photo.setCar(car);
         photo.setDocType(DocType.valueOf(docType));
-        photo.setFileName(file.getOriginalFilename());
         photo.setFileSize(file.getSize());
         photo.setContentType(file.getContentType());
         photo.setUploadedAt(LocalDateTime.now());
@@ -54,7 +53,6 @@ public class PremiumCarPhotoServiceImpl implements PremiumCarPhotoService {
 
         if (file != null && !file.isEmpty()) {
             String fileUrl = cloudinaryService.uploadFile(file, "premiumcars");
-            photo.setFileName(file.getOriginalFilename());
             photo.setFileSize(file.getSize());
             photo.setContentType(file.getContentType());
             photo.setFileUrl(fileUrl);

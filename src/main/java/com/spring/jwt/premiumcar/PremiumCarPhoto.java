@@ -22,8 +22,6 @@ public class PremiumCarPhoto {
     @Column(name = "doc_type", nullable = false)
     private DocType docType;
 
-    @Column(name = "file_name", nullable = false)
-    private String fileName;
 
     @Column(name = "file_size")
     private Long fileSize;
@@ -47,8 +45,6 @@ public class PremiumCarPhoto {
     public void setCar(Car car) { this.car = car; }
     public DocType getDocType() { return docType; }
     public void setDocType(DocType docType) { this.docType = docType; }
-    public String getFileName() { return fileName; }
-    public void setFileName(String fileName) { this.fileName = fileName; }
     public Long getFileSize() { return fileSize; }
     public void setFileSize(Long fileSize) { this.fileSize = fileSize; }
     public String getContentType() { return contentType; }

@@ -11,7 +11,6 @@ public class PremiumCarPhotoMapper {
         dto.setId(photo.getPhotoId());
         dto.setCarId(photo.getCar().getId()); // Only carId, not full Car object
         dto.setDocType(photo.getDocType().name());
-        dto.setFileName(photo.getFileName());
         dto.setFileSize(photo.getFileSize());
         dto.setContentType(photo.getContentType());
         dto.setFileUrl(photo.getFileUrl());
