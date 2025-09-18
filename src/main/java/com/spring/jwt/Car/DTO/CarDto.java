@@ -1,8 +1,11 @@
 package com.spring.jwt.Car.DTO;
+
+
 import com.spring.jwt.Car.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 
@@ -10,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarDto {
-    private int id;
+    private Integer id;
     private Boolean airbag;
     private Boolean abs;
     private Boolean buttonStart;
@@ -25,27 +28,28 @@ public class CarDto {
     private String carInsuranceDate;
     private String carInsuranceType;
     private Status carStatus;
-    private boolean pendingApproval;
+    private Boolean pendingApproval;
     private String city;
     private String color;
     private String description;
     private String fuelType;
-    private int kmDriven;
+    private Integer kmDriven;
     private String model;
-    private int ownerSerial;
+    private Integer ownerSerial;
     private Boolean powerWindowFeature;
-    private int price;
+    private Integer price;
     private Boolean rearParkingCameraFeature;
     private String registration;
     private String title;
     private String transmission;
-    private int year;
+    private Integer year;
     private LocalDate date;
-    private int dealerId;
-    private long carPhotoId;
+    private Integer dealerId;
+    private Long carPhotoId;
     private String mainCarId;
     private String carType;
     //private long totalNoOfCars;
+
    // private Set<PendingBooking> pendingBookings = new LinkedHashSet<>(); }
 
 }
