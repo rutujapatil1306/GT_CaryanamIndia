@@ -25,7 +25,7 @@ public class CarDto {
     private String variant;
     private String brand;
     private Boolean carInsurance;
-    private String carInsuranceDate;
+    private LocalDate carInsuranceDate;
     private String carInsuranceType;
     private Status carStatus;
     private Boolean pendingApproval;
