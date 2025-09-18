@@ -33,7 +33,6 @@ public class PremiumCarPhotoController {
         return ResponseEntity.ok(dto);
     }
 
-    // Update Photo
     @PatchMapping("{photoId}")
     public ResponseEntity<PremiumCarPhotoDto> updatePhoto(
             @PathVariable Long photoId,
