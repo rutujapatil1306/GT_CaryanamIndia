@@ -14,6 +14,11 @@ public interface PremiumCarPhotoService {
     PremiumCarPhotoDto updatePhoto(Long photoId, String docType, MultipartFile file) throws IOException;
     Optional<PremiumCarPhotoDto> getPhotoById(Long photoId);
     List<PremiumCarPhotoDto> getPhotosByCar(int carId);
+
+    List<PremiumCarPhotoDto> getPhotosByCarAndDocType(int carId, String docType);
+
+    void deletePhotoById(Long photoId);
+    void deletePhotosByCar(int carId);
 }
 
 

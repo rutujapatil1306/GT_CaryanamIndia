@@ -11,4 +11,9 @@ public interface PremiumCarPhotoRepository extends JpaRepository<PremiumCarPhoto
 
     List<PremiumCarPhoto> findByCar(Car car);
 
+    List<PremiumCarPhoto> findByCarAndDocType(Car car, DocType docType);
+
+    void deleteByCar(Car car);
+
+
 }

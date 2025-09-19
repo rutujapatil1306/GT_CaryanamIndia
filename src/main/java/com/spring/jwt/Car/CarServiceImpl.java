@@ -209,11 +209,80 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public CarResponseDto<List<CarDto>> getCarsWithPaginationOnlyActivePending(int page, int size, Status status) {
-        return null;
+        // ✅ Validate pagination
+        if (page < 0 || size <= 0) {
+            throw new PageNotFoundException("Page must be >= 0 and size must be > 0");
+        }
+
+        // ✅ Allowed statuses
+        List<Status> allowedStatuses = List.of(Status.PENDING, Status.ACTIVE);
+
+        // ✅ Validate input status
+        if (status != null && !allowedStatuses.contains(status)) {
+            throw new com.spring.jwt.Car.Exception.InvalidStatusException(
+                    "Status must be either PENDING or ACTIVE. Provided: " + status);
+        }
+
+        // ✅ Build status list to fetch
+        List<Status> statusesToFetch = (status != null) ? List.of(status) : allowedStatuses;
+
+        // ✅ Fetch cars with pagination
+        Pageable pageable = PageRequest.of(page, size);
+        var carPage = carRepository.findByCarStatusIn(statusesToFetch, pageable);
+        List<Car> cars = carPage.getContent();
+
+        // ✅ If no cars found
+        if (cars.isEmpty()) {
+            throw new CarNotFoundException("No cars found for status: "
+                    + (status != null ? status : "PENDING or ACTIVE") + " on page " + page);
+        }
+
+        // ✅ Map to DTOs
+        List<CarDto> dtos = cars.stream().map(carMapper::toDto).toList();
+
+        // ✅ Count total cars for pagination info
+        long totalCars = carRepository.countByCarStatusIn(statusesToFetch);
+
+        return new CarResponseDto<>(
+                "Cars with status " + (status != null ? status : "PENDING/ACTIVE"),
+                dtos,
+                null,
+                totalCars
+        );
     }
 
     @Override
     public CarResponseDto<List<CarDto>> getCarsWithoutPaginationOnlyActivePending(Status status) {
-        return null;
+        // ✅ Allowed statuses
+        List<Status> allowedStatuses = List.of(Status.PENDING, Status.ACTIVE);
+
+        // ✅ Validate input status
+        if (status != null && !allowedStatuses.contains(status)) {
+            throw new com.spring.jwt.Car.Exception.InvalidStatusException(
+                    "Invalid status: " + status + ". Allowed: PENDING, ACTIVE");
+        }
+
+        // ✅ Build status list to fetch
+        List<Status> statusesToFetch = (status != null) ? List.of(status) : allowedStatuses;
+
+        // ✅ Fetch cars without pagination
+        List<Car> cars = carRepository.findByCarStatusIn(statusesToFetch);
+
+        if (cars.isEmpty()) {
+            throw new CarNotFoundException("No cars found with status "
+                    + (status != null ? status : "PENDING or ACTIVE"));
+        }
+
+        // ✅ Map to DTOs
+        List<CarDto> dtos = cars.stream().map(carMapper::toDto).toList();
+
+        long totalCars = cars.size();
+
+        return new CarResponseDto<>(
+                "Cars with status " + (status != null ? status : "PENDING or ACTIVE"),
+                dtos,
+                null,
+                totalCars
+        );
     }
 }
