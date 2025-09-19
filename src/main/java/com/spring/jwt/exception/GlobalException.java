@@ -1,19 +1,19 @@
 package com.spring.jwt.exception;
 import com.spring.jwt.BrandData.Exception.BrandAlreadyExistsException;
 import com.spring.jwt.BrandData.Exception.BrandNotFoundException;
-import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
-import com.spring.jwt.Car.Exception.CarNotFoundException;
-import com.spring.jwt.Car.Exception.InvalidStatusException;
-import com.spring.jwt.Car.Exception.StatusNotFoundException;
-import com.spring.jwt.PremiumCarBrandData.SubVariantNotFoundException;
-import com.spring.jwt.PremiumCarBrandData.VariantNotFoundException;
+import com.spring.jwt.BrandData.Exception.SubVariantNotFoundException;
+import com.spring.jwt.BrandData.Exception.VariantNotFoundException;
+import com.spring.jwt.Car.Exception.*;
+import com.spring.jwt.CarPhoto.Exception.DuplicatePhotoException;
+import com.spring.jwt.CarPhoto.Exception.InvalidFileException;
+import com.spring.jwt.CarPhoto.Exception.PhotoNotFoundException;
 import com.spring.jwt.dealer.DTO.DealerResponseDto;
 import com.spring.jwt.dealer.exception.DealerNotFoundException;
 import com.spring.jwt.dealer.exception.InvalidDealerDataException;
-import com.spring.jwt.premiumcar.exceptions.CarsNotFoundException;
-import com.spring.jwt.premiumcar.exceptions.DuplicatePhotoException;
-import com.spring.jwt.premiumcar.exceptions.InvalidFileException;
-import com.spring.jwt.premiumcar.exceptions.PhotoNotFoundException;
+import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
+import com.spring.jwt.Car.Exception.CarNotFoundException;
+import com.spring.jwt.Car.Exception.StatusNotFoundException;
+import com.spring.jwt.utils.BaseResponseDTO;
 import com.spring.jwt.utils.ErrorResponseDto;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import com.spring.jwt.utils.BaseResponseDTO;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -113,6 +112,30 @@ public class GlobalException extends ResponseEntityExceptionHandler {
                 LocalDateTime.now()
         );
         return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidFileException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidFileException(InvalidFileException exception, WebRequest webRequest){
+        log.error("Invalid File: {}", exception.getMessage());
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DuplicatePhotoException.class)
+    public ResponseEntity<ErrorResponseDto> handleDuplicatePhotoException(DuplicatePhotoException exception, WebRequest webRequest){
+        log.error("Duplicate Photo Exception: {}", exception.getMessage());
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.CONFLICT,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(OtpExpiredException.class)
@@ -307,6 +330,16 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         error.put("message", ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(PhotoNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handlePhotoNotFound(PhotoNotFoundException ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("timestamp", LocalDateTime.now());
+        error.put("status", HttpStatus.BAD_REQUEST.value());
+        error.put("error", "Photo Not Found");
+        error.put("message", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleAllUncaughtException(Exception exception, WebRequest webRequest) {
@@ -420,53 +453,7 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(PhotoNotFoundException.class)
-    public ResponseEntity<Object> handlePhotoNotFound(PhotoNotFoundException ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.NOT_FOUND.value());
-        body.put("error", "Photo Not Found");
-        body.put("message", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
 
-    @ExceptionHandler(InvalidFileException.class)
-    public ResponseEntity<Object> handleInvalidFile(InvalidFileException ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST.value());
-        body.put("error", "Invalid Input");
-        body.put("message", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(DuplicatePhotoException.class)
-    public ResponseEntity<Object> handleDuplicatePhoto(DuplicatePhotoException ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.CONFLICT.value());
-        body.put("error", "Duplicate Photo");
-        body.put("message", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
-    }
-    @ExceptionHandler(CarsNotFoundException.class)
-    public ResponseEntity<Object> handleCarsNotFoundException(CarsNotFoundException ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.NOT_FOUND.value());
-        body.put("error", "Cars Not Found");
-        body.put("message", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
-    @ExceptionHandler(InvalidStatusException.class)
-    public ResponseEntity<Map<String, Object>> handleInvalidStatus(InvalidStatusException ex) {
-        Map<String, Object> error = new HashMap<>();
-        error.put("timestamp", LocalDateTime.now());
-        error.put("status", HttpStatus.BAD_REQUEST.value());
-        error.put("error", "Invalid Car Status");
-        error.put("message", ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
 
 
 

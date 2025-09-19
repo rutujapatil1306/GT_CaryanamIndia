@@ -21,17 +21,17 @@ public class BrandData {
     private Integer brandDataId;
 
     @NotBlank(message = "Brand name cannot be empty")
-    @Pattern(regexp = "^[A-Za-z][A-Za-z\\s-]{1,49}$", message = "Brand must contain only letters, spaces, or hyphens")
+    @Pattern(regexp = "^[A-Za-z ]{1,49}$", message = "Brand must contain only letters, spaces")
     @Column(name = "brand")
     private String brand;
 
     @NotBlank(message = "Variant name cannot be empty")
-    @Pattern(regexp = "^[A-Za-z0-9][A-Za-z0-9\\s-]{0,49}$", message = "Variant must contain only letters, numbers, spaces, or hyphens")
+    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9\\s-]{0,49}$", message = "Variant must contain only letters, numbers, spaces")
     @Column(name = "variant")
     private String variant;
 
     @NotBlank(message = "SubVariant name cannot be empty")
-    @Pattern(regexp = "^[A-Za-z0-9][A-Za-z0-9\\s.-]{0,49}$", message = "SubVariant must contain only letters, numbers, spaces, dots, or hyphens")
+    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9\\s.-]{0,49}$", message = "SubVariant must contain only letters, numbers, spaces")
     @Column(name = "subVariant")
     private String subVariant;
 

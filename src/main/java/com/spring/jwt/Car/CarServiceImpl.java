@@ -73,7 +73,19 @@ public class CarServiceImpl implements CarService{
     @Override
     public CarDto updateCar(CarDto carDto, int id) {
         Car car = carRepository.findById(id).orElseThrow(()-> new CarNotFoundException("Car Not Found At Id: " + id));
+// Check for duplicate carInsuranceDate
+        if (carDto.getCarInsuranceDate() != null &&
+                carDto.getCarInsuranceDate().equals(car.getCarInsuranceDate())) {
+            throw new IllegalArgumentException(
+                    "Car insurance date " + carDto.getCarInsuranceDate() + " is already set for this car");
+        }
 
+        // Check for duplicate price
+        if (carDto.getPrice() != null &&
+                carDto.getPrice().equals(car.getPrice())) {
+            throw new IllegalArgumentException(
+                    "Price " + carDto.getPrice() + " is already set for this car");
+        }
         carMapper.updateCarFromDto(car, carDto);
 
 
