@@ -1,9 +1,6 @@
-package com.spring.jwt.CarPhoto;
+package com.spring.jwt.CarPhoto.DTO;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.spring.jwt.CarPhoto.DocType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
