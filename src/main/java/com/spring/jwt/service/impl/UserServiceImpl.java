@@ -1,6 +1,7 @@
 package com.spring.jwt.service.impl;
 
 import com.spring.jwt.dealer.DealerStatus;
+import com.spring.jwt.dto.DealerDTO;
 import com.spring.jwt.dto.*;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.Role;
@@ -152,6 +153,21 @@ public class UserServiceImpl implements UserService {
                     if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
                         throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Password is required");
                     }
+                    Dealer dealer = new Dealer();
+                    dealer.setUser(user);
+                    dealer.setEmail(userDTO.getEmail());
+                    dealer.setFirstname(userDTO.getFirstName());
+                    dealer.setLastName(userDTO.getLastName());
+                    dealer.setMobileNo(String.valueOf(userDTO.getMobileNumber()));
+                    dealer.setShopName(userDTO.getShopName());
+                    dealer.setAddress(userDTO.getAddress());
+                    dealer.setArea(userDTO.getArea());
+                    dealer.setCity(userDTO.getCity());
+                    dealer.setSalesPersonId(userDTO.getSalesPersonId());
+                    dealer.setDealerDocumentPhoto(userDTO.getDealerDocumentPhoto());
+                    dealer.setStatus(DealerStatus.ACTIVE);  // ✅
+                    dealer.setUser(user);
+                    dealerRepository.save(dealer); //  Dealer entity saved
                     break;
                 default:
                     break;
@@ -160,6 +176,7 @@ public class UserServiceImpl implements UserService {
 
         return user;
     }
+
     
     private void createUserProfile(User user, UserDTO userDTO) {
         UserProfile student = new UserProfile();
