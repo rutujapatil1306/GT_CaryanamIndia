@@ -94,5 +94,25 @@ public class CarController {
         return ResponseEntity.ok(CarResponseDto2.response("Fetched Car By MainCarId " + mainCarId, car));
     }
 
+    @GetMapping("/filter")
+    public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsWithPagination(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Status status) {
 
+        CarResponseDto<List<CarDto>> response =
+                carService.getCarsWithPaginationOnlyActivePending(page, size, status);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/filter/all")
+    public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsWithoutPagination(
+            @RequestParam(required = false) Status status) {
+
+        CarResponseDto<List<CarDto>> response =
+                carService.getCarsWithoutPaginationOnlyActivePending(status);
+
+        return ResponseEntity.ok(response);
+    }
 }

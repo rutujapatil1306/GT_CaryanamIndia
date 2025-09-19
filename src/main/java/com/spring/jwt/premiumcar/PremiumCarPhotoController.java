@@ -6,6 +6,7 @@ import com.spring.jwt.premiumcar.PremiumCarPhoto;
 import com.spring.jwt.premiumcar.DocType;
 import com.spring.jwt.premiumcar.PremiumCarPhotoService;
 import com.spring.jwt.entity.Car;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,5 +58,29 @@ public class PremiumCarPhotoController {
         List<PremiumCarPhotoDto> dtos = photoService.getPhotosByCar(carId);
         return ResponseEntity.ok(dtos);
     }
+
+    @GetMapping("/byCarAndType")
+    public ResponseEntity<List<PremiumCarPhotoDto>> getPhotosByCarAndType(
+            @RequestParam int carId,
+            @RequestParam String docType) {
+
+        List<PremiumCarPhotoDto> dtos = photoService.getPhotosByCarAndDocType(carId, docType);
+        return ResponseEntity.ok(dtos);
+    }
+
+    @DeleteMapping("/{photoId}")
+    public ResponseEntity<String> deletePhotoById(@PathVariable Long photoId) {
+        photoService.deletePhotoById(photoId);
+        return ResponseEntity.ok("Photo deleted successfully");
+    }
+
+    // Delete all photos by carId
+    @DeleteMapping("/byCar/{carId}")
+    public ResponseEntity<String> deletePhotosByCar(@PathVariable int carId) {
+        photoService.deletePhotosByCar(carId);
+        return ResponseEntity.ok("All photos for car deleted successfully");
+    }
+
+
 }
 
