@@ -4,13 +4,12 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.spring.jwt.Car.CarRepository;
 import com.spring.jwt.Car.Exception.CarNotFoundException;
+import com.spring.jwt.CarPhoto.DTO.CarPhotoDto;
 import com.spring.jwt.CarPhoto.Exception.DuplicatePhotoException;
 import com.spring.jwt.CarPhoto.Exception.InvalidFileException;
 import com.spring.jwt.CarPhoto.Exception.PhotoNotFoundException;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.CarPhoto;
-import jakarta.mail.Multipart;
-import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -82,5 +81,12 @@ public class CarPhotoServiceImpl implements CarPhotoService {
                 .orElseThrow(() -> new PhotoNotFoundException("Car Photo not found for ID: " + id));
 
         return carPhotoMapper.toDto(carPhoto);
+    }
+
+    @Override
+    public CarPhotoDto getCarPhotoByCarId(Integer carId) {
+        CarPhoto photo = carPhotoRepository.findByCarId(carId).orElseThrow(()-> new PhotoNotFoundException("Car Photo not found for CarId: " + carId));
+
+        return carPhotoMapper.toDto(photo);
     }
 }
