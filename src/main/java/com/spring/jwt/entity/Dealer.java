@@ -36,6 +36,7 @@ public class Dealer {
     private String city;
 
     @Column(name = "firstname", length = 45)
+    @NotBlank(message = "Dealer name cannot be empty")
     private String firstname;
 
     @Column(name = "last_name", length = 45)
@@ -59,7 +60,7 @@ public class Dealer {
     private long dealerDocumentPhoto;
 
 //    private Boolean status;
-     @Enumerated(EnumType.STRING) // Stores as "ACTIVE", "DEACTIVE", "BLOCKED"
+     @Enumerated(EnumType.STRING)
      @Column(name = "status", nullable = false)
      private DealerStatus status;
 

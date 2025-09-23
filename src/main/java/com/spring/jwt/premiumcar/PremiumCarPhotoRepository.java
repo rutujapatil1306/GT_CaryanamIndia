@@ -16,4 +16,6 @@ public interface PremiumCarPhotoRepository extends JpaRepository<PremiumCarPhoto
     void deleteByCar(Car car);
 
 
+    boolean existsByCarIdAndDocType(int carId, DocType docType);
+
 }

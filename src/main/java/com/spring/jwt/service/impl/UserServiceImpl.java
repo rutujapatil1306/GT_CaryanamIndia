@@ -153,6 +153,17 @@ public class UserServiceImpl implements UserService {
                     if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
                         throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Password is required");
                     }
+                    if (userDTO.getDealerDocumentPhoto() == 0L) {
+                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Dealer Document Photo is required");
+                    }
+                    if (userDTO.getCity() == null || userDTO.getCity().isEmpty()) {
+                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "City is required");
+                    }
+                    if (dealerRepository.existsBySalesPersonId(userDTO.getSalesPersonId())) {
+                        throw new BaseException(String.valueOf(HttpStatus.CONFLICT.value()),
+                                "Salesperson already registered");
+                    }
+
                     Dealer dealer = new Dealer();
                     dealer.setUser(user);
                     dealer.setEmail(userDTO.getEmail());
