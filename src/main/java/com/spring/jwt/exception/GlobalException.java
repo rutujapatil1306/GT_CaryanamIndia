@@ -5,6 +5,8 @@ import com.spring.jwt.PremiumCarBrandData.PremiumBrandNotFoundException;
 import com.spring.jwt.PremiumCarBrandData.SubVariantNotFoundException;
 import com.spring.jwt.PremiumCarBrandData.VariantNotFoundException;
 import com.spring.jwt.PremiumCarData.PremiumCarNotFoundException;
+import com.spring.jwt.dealer.DTO.DealerResponseDto;
+import com.spring.jwt.dealer.exception.DealerNotFoundException;
 import com.spring.jwt.dto.ResponseDto;
 import com.spring.jwt.utils.BaseResponseDTO;
 import com.spring.jwt.utils.ErrorResponseDto;
@@ -319,6 +321,15 @@ public class GlobalException extends ResponseEntityExceptionHandler {
     public ResponseEntity<ResponseDto> handleCarNotFound(PremiumCarNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ResponseDto("error", ex.getMessage(), null));
+    }
+
+    @ExceptionHandler(DealerNotFoundException.class)
+    public ResponseEntity<DealerResponseDto> handleDealerNotFound(DealerNotFoundException ex) {
+        DealerResponseDto response = DealerResponseDto.error(
+                "Dealer Not Found",
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
 
