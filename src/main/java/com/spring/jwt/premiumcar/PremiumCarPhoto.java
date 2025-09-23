@@ -19,7 +19,7 @@ public class PremiumCarPhoto {
     private Car car;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "doc_type", nullable = false)
+    @Column(name = "doc_type", length = 50, nullable = false)
     private DocType docType;
 
 

@@ -4,6 +4,8 @@ public enum DocType {
     FRONT_VIEW,
     SIDE_VIEW,
     BACK_VIEW,
+    RC_BOOK,
+    INSURANCE
 
 }
 

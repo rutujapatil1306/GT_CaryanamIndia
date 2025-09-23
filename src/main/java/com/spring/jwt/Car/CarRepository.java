@@ -30,4 +30,16 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     Page<Car> findByCarStatusIn(List<Status> statuses, Pageable pageable); // For pagination
     long countByCarStatusIn(List<Status> statuses); // For counting
 
+    List<Car> findByCarStatusInAndBrandContainingIgnoreCase(List<Status> statuses, String brand);
+
+    List<Car> findByCarStatusInAndModelContainingIgnoreCase(List<Status> statuses, String model);
+
+    List<Car> findByCarStatusInAndCityContainingIgnoreCase(List<Status> statuses, String city);
+
+    List<Car> findByCarStatusInAndFuelTypeContainingIgnoreCase(List<Status> statuses, String fuelType);
+
+    List<Car> findByCarStatusInAndTransmissionContainingIgnoreCase(List<Status> statuses, String transmission);
+
+    List<Car> findByCarStatusInAndPriceBetween(List<Status> statuses, Integer minPrice, Integer maxPrice);
+
 }
