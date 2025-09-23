@@ -12,35 +12,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class PremiumCarDTO {
-
     private Integer premiumCarId;
-
-//    @NotNull(message = "Brand is required")
-//    @Size(min = 2, max = 50, message = "Brand must be between 2 and 50 characters")
     private String brand;
-
-//    @NotBlank(message = "Variant is required")
     private String variant;
-
-//    @NotNull(message = "Price cannot be null")
-//    @Positive(message = "Price must be greater than 0")
     private Integer price;
-
-  //  @NotNull(message = "Year is required")
-  //  @Min(value = 2000, message = "Year must be >= 2000")
     private Integer year;
-
-  //  @FutureOrPresent(message = "Insurance date must be today or in the future")
     private LocalDate carInsuranceDate;
-
-   // @NotNull(message = "Status is required")
     private Status carstatus;
-
-  //  @NotBlank(message = "City cannot be blank")
     private String city;
-
-
-
     private Boolean airbag;
     private Boolean ABS;
     private Boolean buttonStart;

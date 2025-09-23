@@ -52,19 +52,8 @@ public ResponseEntity<PremiumResponseDTO> patchPremiumCar(
         return ResponseEntity.ok(new PremiumResponseDTO("success", "Car fetched successfully", car));
     }
 
-//    @DeleteMapping("/{carId}")
-//    public ResponseEntity<PremiumResponseDTO> deleteCar(
-//            @PathVariable Integer carId,
-//            @RequestParam(defaultValue = "soft") String type) {
-//
-//        premiumCarService.deletePremiumCar(carId, type);
-//
-//        return ResponseEntity.ok(
-//                new PremiumResponseDTO("success",
-//                        "Car with ID " + carId + (type.equalsIgnoreCase("soft") ? " deactivated" : " deleted") + " successfully")
-//        );
-//    }
-   @DeleteMapping("/{carId}")
+
+   @DeleteMapping("/deletecar")
    public ResponseEntity<PremiumResponseDTO> deleteCar(
         @RequestParam Integer carId,
         @RequestParam(defaultValue = "soft") String type) {
@@ -74,43 +63,14 @@ public ResponseEntity<PremiumResponseDTO> patchPremiumCar(
     return ResponseEntity.ok(
             new PremiumResponseDTO(
                     "success",
-                    "Car with ID " + carId + (type.equalsIgnoreCase("soft") ? " deactivated" : " deleted") + " successfully"
+                    "Car with ID " + carId + (type.equalsIgnoreCase("soft") ? " deactivate" : " deleted") + " successfully"
             )
     );
 }
 
-//    @DeleteMapping("/deleteCar/{carId}")
-//    public ResponseEntity<PremiumResponseDTO> deleteCar(@PathVariable Integer carId) {
-//
-//        premiumCarService.deletePremiumCar(carId);
-//
-//        return ResponseEntity.ok(
-//                new PremiumResponseDTO("deleted", "Car deleted successfully")
-//        );
-//    }
-
-//    @GetMapping("/car/dealer")
-//    public ResponseEntity<Page<PremiumCarDTO>> getCarsByDealer(
-//            @RequestParam Long dealerId,
-//            @RequestParam(required = false) Status status,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "10") int size,
-//            @RequestParam(defaultValue = "premiumCarId") String sortBy,
-//            @RequestParam(defaultValue = "asc") String sortDir
-//    ) {
-//        Sort sort = sortDir.equalsIgnoreCase("asc") ?
-//                Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-//
-//        Pageable pageable = PageRequest.of(page, size, sort);
-//
-//        Page<PremiumCarDTO> cars = premiumCarService.getCarsByDealerAndStatus(dealerId, status, pageable);
-//
-//        return ResponseEntity.ok(cars);
-//    }
-
-    @GetMapping("/dealer/{dealerId}")
+    @GetMapping("/dealer/status")
     public ResponseEntity<PremiumResponseDTO> getCarsByDealerAndStatus(
-            @PathVariable Long dealerId,
+            @RequestParam Long dealerId,
             @RequestParam(required = false) Status status,
             Pageable pageable) {
 
@@ -130,19 +90,21 @@ public ResponseEntity<PremiumResponseDTO> patchPremiumCar(
     public ResponseEntity<Page<PremiumCarDTO>> getCarsByStatus(
             @RequestParam Status status,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "1") int size,
             @RequestParam(defaultValue = "premiumCarId") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir
     ) {
         Page<PremiumCarDTO> cars = premiumCarService.getCarsByStatus(status, page, size, sortBy, sortDir);
         return ResponseEntity.ok(cars);
     }
-//
-//    @GetMapping("/main/{mainCarId}")
-//    public ResponseEntity<PremiumCarDTO> getCarByMainCarId(@PathVariable String mainCarId) {
-//        PremiumCarDTO car = premiumCarService.getCarByMainCarId(mainCarId);
-//        return ResponseEntity.ok(car);
-//    }
+
+    @GetMapping("/main")
+    public ResponseEntity<PremiumResponseDTO> getCarByMainCarId(@RequestParam String mainCarId) {
+        PremiumCarDTO car = premiumCarService.getCarByMainCarId(mainCarId);
+        return ResponseEntity.ok(new PremiumResponseDTO("success", "Car fetched successfully", car));
+    }
+
+
 
 
 }
