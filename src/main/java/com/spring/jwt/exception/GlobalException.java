@@ -2,8 +2,8 @@ package com.spring.jwt.exception;
 
 
 import com.spring.jwt.PremiumCarBrandData.PremiumBrandNotFoundException;
-import com.spring.jwt.PremiumCarBrandData.SubVariantNotFoundException;
-import com.spring.jwt.PremiumCarBrandData.VariantNotFoundException;
+import com.spring.jwt.PremiumCarBrandData.SubVariantNotFoundExceptions;
+import com.spring.jwt.PremiumCarBrandData.VariantNotFoundExceptions;
 import com.spring.jwt.PremiumCarData.PremiumCarNotFoundException;
 import com.spring.jwt.dealer.DTO.DealerResponseDto;
 import com.spring.jwt.dealer.exception.DealerNotFoundException;
@@ -301,16 +301,16 @@ public class GlobalException extends ResponseEntityExceptionHandler {
                 HttpStatus.NOT_FOUND
         );
     }
-    @ExceptionHandler(VariantNotFoundException.class)
-    public ResponseEntity<ResponseDto<Object>> handleVariantNotFound(VariantNotFoundException ex) {
+    @ExceptionHandler(VariantNotFoundExceptions.class)
+    public ResponseEntity<ResponseDto<Object>> handlePremiumCarVariantNotFound(VariantNotFoundExceptions ex) {
         return new ResponseEntity<>(
                 ResponseDto.error("Variant not found", ex.getMessage()),
                 HttpStatus.NOT_FOUND
         );
     }
 
-    @ExceptionHandler(SubVariantNotFoundException.class)
-    public ResponseEntity<ResponseDto<Object>> handleSubVariantNotFound(SubVariantNotFoundException ex) {
+    @ExceptionHandler(SubVariantNotFoundExceptions.class)
+    public ResponseEntity<ResponseDto<Object>> handlePremiumCarSubVariantNotFound(SubVariantNotFoundExceptions ex) {
         return new ResponseEntity<>(
                 ResponseDto.error("Sub-variant not found", ex.getMessage()),
                 HttpStatus.NOT_FOUND

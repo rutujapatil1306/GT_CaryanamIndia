@@ -48,15 +48,15 @@ public class DealerServiceImpl implements DealerService {
             }
             dealer.setShopName(dealerDTO.getShopName());
         }
-        if (dealerDTO.getMobileNo() != null) {
-            if (dealerDTO.getMobileNo().isBlank()) {
-                throw new IllegalArgumentException("Mobile number cannot be blank");
-            }
-            if (!dealerDTO.getMobileNo().matches("\\d{10}")) {
-                throw new IllegalArgumentException("Mobile number must be 10 digits");
-            }
-            dealer.setMobileNo(dealerDTO.getMobileNo());
-        }
+//        if (dealerDTO.getMobileNo() != null) {
+//            if (dealerDTO.getMobileNo().isBlank()) {
+//                throw new IllegalArgumentException("Mobile number cannot be blank");
+//            }
+//            if (!dealerDTO.getMobileNo().matches("\\d{10}")) {
+//                throw new IllegalArgumentException("Mobile number must be 10 digits");
+//            }
+//            dealer.setMobileNo(dealerDTO.getMobileNo());
+//        }
         if (dealerDTO.getLastName() != null) {
             if (dealerDTO.getLastName().isBlank()) {
                 throw new IllegalArgumentException("Last name cannot be blank");

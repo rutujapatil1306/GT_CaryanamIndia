@@ -116,7 +116,7 @@ public class CarController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/filter")
+    @GetMapping("/filters")
     public CarResponseDto<List<CarDto>> filterCars(
             @RequestParam(required = false) Status status,
             @RequestParam(required = false) String brand,

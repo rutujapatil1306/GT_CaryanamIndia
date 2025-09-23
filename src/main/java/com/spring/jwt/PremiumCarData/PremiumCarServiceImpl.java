@@ -1,6 +1,6 @@
 package com.spring.jwt.PremiumCarData;
 
-import com.spring.jwt.dealer.DealerNotFoundException;
+//import com.spring.jwt.dealer.DealerNotFoundException;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.Status;
 import com.spring.jwt.repository.DealerRepository;

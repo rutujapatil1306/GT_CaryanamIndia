@@ -49,4 +49,7 @@ public class DealerDTO {
 
     @NotBlank(message = "User last name cannot be blank")
     private String userLastName;
+
+    public void setId(Integer id) {
+    }
 }
