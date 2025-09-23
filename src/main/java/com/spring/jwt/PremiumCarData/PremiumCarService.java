@@ -11,11 +11,10 @@ public interface PremiumCarService {
    PremiumCarDTO updatePremiumCar(Integer id, PremiumCarDTO dto);
     PremiumCarDTO getPremiumCarById(Integer id);
     void deletePremiumCar(Integer carId, String type);
-  //  void deletePremiumCar(Integer carId);
+
     Page<PremiumCarDTO> getCarsByDealerAndStatus(Long dealerId, Status status, Pageable pageable);
     Page<PremiumCarDTO> getCarsByStatus(Status status, int page, int size, String sortBy, String sortDir);
 
-//    PremiumCarDTO getCarByMainCarId(String mainCarId);
-
+    PremiumCarDTO getCarByMainCarId(String mainCarId);
 
 }

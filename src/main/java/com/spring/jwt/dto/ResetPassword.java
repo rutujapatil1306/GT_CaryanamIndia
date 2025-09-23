@@ -24,7 +24,7 @@ public class ResetPassword {
     )
     private String password;
 
-    @NotBlank(message = "Confirm password is required")
+
     @Schema(
             description = "Match it with Password Entered for Resetting ", example = "Pass@1234"
     )

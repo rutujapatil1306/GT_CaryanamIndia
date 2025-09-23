@@ -18,8 +18,8 @@ public interface PremiumCarRepository extends JpaRepository<PremiumCar, Integer>
     Page<PremiumCar> findByDealerId(Long dealerId, Pageable pageable);
 
     Page<PremiumCar> findByCarstatus(Status status, Pageable pageable);
-//    Optional<PremiumCar> findByMainCarId(String mainCarId);
 
+    Optional<PremiumCar> findByMainCarId(String mainCarId);
 
 
 

@@ -1,5 +1,6 @@
 package com.spring.jwt.PremiumCarBrandData;
 
+import com.spring.jwt.utils.BaseResponseDTO;
 import com.spring.jwt.utils.ResponseDto;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.springframework.web.servlet.function.ServerResponse.ok;
@@ -26,20 +27,45 @@ import static org.springframework.web.servlet.function.ServerResponse.status;
 
 
 
-    @PostMapping("/add")
-    public ResponseEntity<ResponseDto> create(@RequestBody PremiumBrandDTO Dto)
-{
-    PremiumBrandDTO addedBrand =premiumCarBrandService.save(Dto);
-    return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto("success","PremiumCar Add Successfully"));
 
-}
-    @PatchMapping("/{brandId}")
-    public ResponseEntity<ResponseDto> updateBrandById(
-            @RequestBody PremiumBrandDTO dto,
-            @PathVariable Integer brandId) {
-        PremiumBrandDTO updatedBrand = premiumCarBrandService.updateBrandById(dto, brandId);
-        return ResponseEntity.ok(new ResponseDto("success", "updated successfully"));
+    @PostMapping("/add")
+    public ResponseEntity<PremiumBrandResponseDto<PremiumBrandDTO>> create(@Valid @RequestBody PremiumBrandDTO dto) {
+        PremiumBrandDTO addedBrand = premiumCarBrandService.save(dto);
+
+        PremiumBrandResponseDto<PremiumBrandDTO> response = new PremiumBrandResponseDto<>(
+                "success",
+                HttpStatus.CREATED.value(),
+                "PremiumCar added successfully",
+                null,
+                LocalDateTime.now()
+
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+
+
+
+
+    @PatchMapping("/{brandId}")
+    public ResponseEntity<PremiumBrandResponseDto> updateBrandById(
+             @RequestBody PremiumBrandDTO dto,
+            @PathVariable Integer brandId) {
+
+        premiumCarBrandService.updateBrandById(dto, brandId);
+
+        PremiumBrandResponseDto response = new PremiumBrandResponseDto(
+                "success",
+                HttpStatus.OK.value(),
+                "Brand updated successfully",
+                null,
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
 
     @DeleteMapping("/{brandId}")
     public ResponseEntity<ResponseDto> deletePremiumBrand(@PathVariable Integer brandId) {
@@ -74,13 +100,13 @@ import static org.springframework.web.servlet.function.ServerResponse.status;
         return ResponseEntity.ok(AllBrandDTO.success("List of Unique brands", uniqueBrands));
     }
     @GetMapping("/variants")
-    public ResponseEntity<AllBrandDTO> getVariantsByBrand(@RequestParam String brandName) {
+    public ResponseEntity<AllBrandDTO> getVariantsByBrand(@Valid @RequestParam String brandName) {
         List<String> variants = premiumCarBrandService.getVariantsByBrand(brandName);
         return ResponseEntity.ok(AllBrandDTO.success("Fetched list of Variants by brand",variants));
     }
 
     @GetMapping("/subvariants")
-    public ResponseEntity<AllBrandDTO> getSubVariants(
+    public ResponseEntity<AllBrandDTO> getSubVariants(@Valid
             @RequestParam String brandName,
             @RequestParam String variantName) {
 

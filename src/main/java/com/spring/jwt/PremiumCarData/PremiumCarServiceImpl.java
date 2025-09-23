@@ -78,15 +78,7 @@ public class PremiumCarServiceImpl implements PremiumCarService {
 
     @Override
     public void deletePremiumCar(Integer carId, String type) {
-//        PremiumCar car = premiumCarRepository.findById(carId)
-//                .orElseThrow(() -> new PremiumCarNotFoundException("Car with ID " + carId + " not found"));
-//
-//        if ("soft".equalsIgnoreCase(type)) {
-//            car.setCarstatus(Status.DEACTIVATE); // mark as deactivated
-//            premiumCarRepository.save(car);
-//        } else {
-//            premiumCarRepository.delete(car); // hard delete
-//        }
+
         PremiumCar car = premiumCarRepository.findById(carId)
                 .orElseThrow(() -> new PremiumCarNotFoundException("Car not found with ID: " + carId));
 
@@ -103,29 +95,10 @@ public class PremiumCarServiceImpl implements PremiumCarService {
     }
 
 
-//    @Override
-//    public void deletePremiumCar(Integer carId) {
-//
-//            if (!premiumCarRepository.existsById(carId)) {
-//                throw new RuntimeException("User with ID " + carId + " not found!");
-//            }
-//            premiumCarRepository.deleteById(carId);
-//
-//    }
 
 
     @Override
-//    public Page<PremiumCarDTO> getCarsByDealerAndStatus(Long dealerId, Status status, Pageable pageable) {
-//        Page<PremiumCar> cars;
-//
-//        if (status != null) {
-//            cars = premiumCarRepository.findByDealerIdAndCarstatus(dealerId, status, pageable);
-//        } else {
-//            cars = premiumCarRepository.findByDealerId(dealerId, pageable);
-//        }
-//
-//        return cars.map(PremiumCarMapper::toDTO);
-//    }
+
     public Page<PremiumCarDTO> getCarsByDealerAndStatus(Long dealerId, Status status, Pageable pageable) {
         Page<PremiumCar> cars;
 
@@ -143,15 +116,7 @@ public class PremiumCarServiceImpl implements PremiumCarService {
         return cars.map(PremiumCarMapper::toDTO);
     }
 
-//    @Override
-//    public Page<PremiumCarDTO> getCarsByStatus(Status status, int page, int size, String sortBy, String sortDir) {
-//        Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-//        Pageable pageable = PageRequest.of(page, size, sort);
-//
-//        Page<PremiumCar> cars = premiumCarRepository.findByCarstatus(status, pageable);
-//
-//        return cars.map(PremiumCarMapper::toDTO); // convert Entity → DTO
-//    }
+
 
 
     public Page<PremiumCarDTO> getCarsByStatus(Status status, int page, int size, String sortBy, String sortDir) {
@@ -172,16 +137,13 @@ public class PremiumCarServiceImpl implements PremiumCarService {
         //  Convert entity -> DTO
         return cars.map(PremiumCarMapper::toDTO);
     }
-//
-//    @Override
-//    public PremiumCarDTO getCarByMainCarId(String mainCarId) {
-//        PremiumCar premiumCar = premiumCarRepository.findByMainCarId(mainCarId)
-//                .orElseThrow(() -> new PremiumCarNotFoundException("Car not found with mainCarId: " + mainCarId));
-//
-//        return PremiumCarMapper.toDTO(premiumCar);
-//    }
 
-
+    @Override
+    public PremiumCarDTO getCarByMainCarId(String mainCarId) {
+        PremiumCar car = premiumCarRepository.findByMainCarId(mainCarId)
+                .orElseThrow(() -> new PremiumCarNotFoundException("Car not found with mainCarId: " + mainCarId));
+        return PremiumCarMapper.toDTO(car);
+    }
 
 
 

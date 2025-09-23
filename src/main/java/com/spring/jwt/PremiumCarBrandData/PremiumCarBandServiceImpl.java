@@ -3,6 +3,7 @@ package com.spring.jwt.PremiumCarBrandData;
 import com.spring.jwt.dto.ResponseDto;
 import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.exception.ResourceNotFoundException;
+import com.spring.jwt.utils.BaseResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
