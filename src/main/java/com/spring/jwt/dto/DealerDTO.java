@@ -9,7 +9,7 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DealerDTO {
 
-    private Integer id; // Add this field
+    private Integer id;
 
     @NotBlank(message = "Address cannot be blank")
     private String address;

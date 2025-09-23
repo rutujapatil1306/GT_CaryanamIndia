@@ -23,8 +23,6 @@ public class DealerServiceImpl implements DealerService {
 
     private final DealerRepository dealerRepository;
 
-
-
     @Override
     public DealerResponseDto updateDealer(Integer dealerId, DealerDTO dealerDTO) {
         Dealer dealer = dealerRepository.findById(dealerId)
