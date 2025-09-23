@@ -12,4 +12,12 @@ public interface CarPhotoService {
 
 
     CarPhotoDto getCarPhotoByCarId(Integer carId);
+
+    CarPhotoDto updateCarPhotoById(Integer id, MultipartFile imageFile, DocType type);
+
+    CarPhotoDto updateCarPhotoByCarId(Integer carId, MultipartFile imageFile, DocType type);
+
+    void deleteCarPhoto(Integer id, boolean hardDelete);
+
+    void deleteCarPhotoByCarId(Integer carId, DocType type, boolean hardDelete);
 }

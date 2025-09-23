@@ -1,6 +1,7 @@
 package com.spring.jwt.entity;
 
 
+import com.spring.jwt.CarPhoto.CarPhotoStatus;
 import com.spring.jwt.CarPhoto.DocType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -54,6 +55,12 @@ public class CarPhoto {
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Photo type is required")
-    @Column(name = "PhotoType", nullable = false)
+    @Column(name = "PhotoType", nullable = false, length = 50)
     private DocType type;
+
+    @Column(name = "hash", nullable = false)
+    private String hash;
+
+    @Enumerated(EnumType.STRING)
+    private CarPhotoStatus status;
 }

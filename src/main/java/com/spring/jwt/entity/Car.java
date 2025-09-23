@@ -1,6 +1,7 @@
 package com.spring.jwt.entity;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.spring.jwt.Car.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -44,6 +45,7 @@ public class Car {
     @Column(name = "ac_feature")
     private Boolean acFeature;
 
+    @NotNull(message = "Music feature is required")
     @Column(name = "music_feature")
     private Boolean musicFeature;
 
@@ -100,6 +102,7 @@ public class Car {
     @Size(max = 5000, message = "Description cannot exceed 5000 characters")
     private String description;
 
+    @NotBlank(message = "Fuel Type is Mandatory")
     @Size(max = 45, message = "Fuel type cannot exceed 45 characters")
     @Column(name = "fuel_type", length = 45)
     private String fuelType;
@@ -119,7 +122,8 @@ public class Car {
     @Column(name = "power_window_feature")
     private Boolean powerWindowFeature;
 
-    @Min(value = 1000, message = "Price must be greater than 1000")
+    @NotNull(message = "Price is required")
+    @Positive(message = "Price must be greater than 0")
     @Column(name = "price", length = 45)
     private Integer price;
 
