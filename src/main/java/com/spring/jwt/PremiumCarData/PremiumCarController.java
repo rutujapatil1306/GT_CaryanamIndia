@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/premiums")
-public class PremiumCarController {
+public class
+
+PremiumCarController {
 
     @Autowired
     private PremiumCarService premiumCarService;
