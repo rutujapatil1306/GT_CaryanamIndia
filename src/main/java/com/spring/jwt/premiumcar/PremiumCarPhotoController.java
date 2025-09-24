@@ -26,16 +26,18 @@ public class PremiumCarPhotoController {
 
     private final PremiumCarPhotoService photoService;
 
+    // Create photo
     @PostMapping("/create")
     public ResponseEntity<ApiResponseDto> createPhoto(
-            @RequestParam int carId,
+            @RequestParam int premiumCarId,     // ✅ changed
             @RequestParam String docType,
             @RequestParam MultipartFile file) throws IOException {
 
-        ApiResponseDto response = photoService.createPhoto(carId, docType, file);
+        ApiResponseDto response = photoService.createPhoto(premiumCarId, docType, file);
         return ResponseEntity.status(response.getCode()).body(response);
     }
 
+    // Update photo
     @PatchMapping("/update")
     public ResponseEntity<ApiResponseDto> updatePhoto(
             @RequestParam Long photoId,
@@ -45,6 +47,7 @@ public class PremiumCarPhotoController {
         ApiResponseDto response = photoService.updatePhoto(photoId, docType, file);
         return ResponseEntity.status(response.getCode()).body(response);
     }
+
     // Get Photo by ID
     @GetMapping("/{photoId}")
     public ResponseEntity<PremiumCarPhotoDto> getPhotoById(@PathVariable Long photoId) {
@@ -53,35 +56,36 @@ public class PremiumCarPhotoController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Get Photos by Car ID
-    @GetMapping("/byCarId/{carId}")
-    public ResponseEntity<List<PremiumCarPhotoDto>> getPhotosByCar(@PathVariable int carId) {
-        List<PremiumCarPhotoDto> dtos = photoService.getPhotosByCar(carId);
+    // Get Photos by PremiumCar ID
+    @GetMapping("/byCarId/{premiumCarId}")     // ✅ changed
+    public ResponseEntity<List<PremiumCarPhotoDto>> getPhotosByCar(@PathVariable int premiumCarId) {
+        List<PremiumCarPhotoDto> dtos = photoService.getPhotosByCar(premiumCarId);
         return ResponseEntity.ok(dtos);
     }
-    // Get Photos by Car ID and docType
+
+    // Get Photos by PremiumCar ID and docType
     @GetMapping("/byCarAndType")
     public ResponseEntity<List<PremiumCarPhotoDto>> getPhotosByCarAndType(
-            @RequestParam int carId,
+            @RequestParam int premiumCarId,     // ✅ changed
             @RequestParam String docType) {
 
-        List<PremiumCarPhotoDto> dtos = photoService.getPhotosByCarAndDocType(carId, docType);
+        List<PremiumCarPhotoDto> dtos = photoService.getPhotosByCarAndDocType(premiumCarId, docType);
         return ResponseEntity.ok(dtos);
     }
-    // Delete Photos by photo ID
+
+    // Delete Photo by ID
     @DeleteMapping("/{photoId}")
     public ResponseEntity<String> deletePhotoById(@PathVariable Long photoId) {
         photoService.deletePhotoById(photoId);
         return ResponseEntity.ok("Photo deleted successfully");
     }
 
-    // Delete all photos by carId
-    @DeleteMapping("/byCarId/{carId}")
-    public ResponseEntity<String> deletePhotosByCar(@PathVariable int carId) {
-        photoService.deletePhotosByCar(carId);
-        return ResponseEntity.ok("All photos for car deleted successfully");
+    // Delete all Photos by PremiumCar ID
+    @DeleteMapping("/byCarId/{premiumCarId}")   // ✅ changed
+    public ResponseEntity<String> deletePhotosByCar(@PathVariable int premiumCarId) {
+        photoService.deletePhotosByCar(premiumCarId);
+        return ResponseEntity.ok("All photos for premium car deleted successfully");
     }
-
-
 }
+
 

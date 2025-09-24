@@ -128,4 +128,5 @@ public class CarController {
     ) {
         return carService.filterCars(status, brand, model, city, fuelType, transmission, minPrice, maxPrice);
     }
+
 }

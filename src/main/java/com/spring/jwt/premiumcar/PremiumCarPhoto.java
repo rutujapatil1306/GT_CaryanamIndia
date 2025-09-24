@@ -2,6 +2,7 @@ package com.spring.jwt.premiumcar;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.spring.jwt.entity.Car; // existing Car entity
+import com.spring.jwt.entity.PremiumCar;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -14,9 +15,10 @@ public class PremiumCarPhoto {
     @Column(name = "photo_id")
     private Long photoId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "car_id", nullable = false)
-    private Car car;
+    @ManyToOne
+    @JoinColumn(name = "premium_car_id", nullable = false)
+    private PremiumCar premiumCar;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "doc_type", length = 50, nullable = false)
@@ -41,8 +43,15 @@ public class PremiumCarPhoto {
 
     public Long getPhotoId() { return photoId; }
     public void setPhotoId(Long photoId) { this.photoId = photoId; }
-    public Car getCar() { return car; }
-    public void setCar(Car car) { this.car = car; }
+
+    public PremiumCar getPremiumCar() {
+        return premiumCar;
+    }
+
+    public void setPremiumCar(PremiumCar premiumCar) {
+        this.premiumCar = premiumCar;
+    }
+
     public DocType getDocType() { return docType; }
     public void setDocType(DocType docType) { this.docType = docType; }
     public Long getFileSize() { return fileSize; }

@@ -158,14 +158,6 @@ public class DealerServiceImpl implements DealerService {
 
 
 
-
-    @Override
-    public Page<Dealer> getDealersWithPagination(Pageable pageable)
-    {
-        return dealerRepository.findAll(pageable);
-    }
-
-
     @Override
     public DealerResponseDto updateDealerStatus(Integer dealerId, DealerStatus status) {
         Dealer dealer = dealerRepository.findById(dealerId)

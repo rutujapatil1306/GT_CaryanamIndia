@@ -1,12 +1,10 @@
 package com.spring.jwt.entity;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spring.jwt.entity.Status;
-
+import com.spring.jwt.premiumcar.PremiumCarPhoto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -16,12 +14,12 @@ import java.util.Set;
 @AllArgsConstructor
 
 @NoArgsConstructor
-@Table(name = "premiumCar")
+@Table(name = "premium_car")
 public class PremiumCar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "premiumCar", nullable = false)
+    @Column(name = "premium_car_id", nullable = false)
     private Integer premiumCarId;
 
     @Column(name = "airbag")
@@ -128,6 +126,9 @@ public class PremiumCar {
 
     @OneToMany(mappedBy = "premiumCarCar")
     private Set<PremiumCarPendingBooking> pendingBookings = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "premiumCar")
+    private Set<PremiumCarPhoto> photos = new LinkedHashSet<>();
 
 
 }

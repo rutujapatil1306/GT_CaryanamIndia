@@ -9,7 +9,7 @@ public class PremiumCarPhotoMapper {
     public static PremiumCarPhotoDto toDto(PremiumCarPhoto photo) {
         PremiumCarPhotoDto dto = new PremiumCarPhotoDto();
         dto.setId(photo.getPhotoId());
-        dto.setCarId(photo.getCar().getId()); // Only carId, not full Car object
+        dto.setPremiumCarId(photo.getPremiumCar().getPremiumCarId());
         dto.setDocType(photo.getDocType().name());
         dto.setFileSize(photo.getFileSize());
         dto.setContentType(photo.getContentType());
