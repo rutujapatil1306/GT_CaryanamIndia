@@ -1,25 +1,35 @@
 package com.spring.jwt.premiumcar;
-
 import com.spring.jwt.entity.PremiumCar;
 import com.spring.jwt.premiumcar.exceptions.CarsNotFoundException;
 import com.spring.jwt.premiumcar.exceptions.DuplicatePhotosException;
 import com.spring.jwt.premiumcar.exceptions.InvalidCarFileExceptions;
 import com.spring.jwt.premiumcar.exceptions.PhotosNotFoundException;
+import com.spring.jwt.Car.CarRepository;
+import com.spring.jwt.entity.Car;
+import com.spring.jwt.premiumcar.exceptions.CarsNotFoundException;
+import com.spring.jwt.premiumcar.exceptions.DuplicatePhotoException;
+import com.spring.jwt.premiumcar.exceptions.InvalidFileException;
+import com.spring.jwt.premiumcar.exceptions.PhotoNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.Arrays;
+
 
 @Service
 @RequiredArgsConstructor
 public class PremiumCarPhotoServiceImpl implements PremiumCarPhotoService {
 
     private final PremiumCarPhotoRepository repository;
-    private final PremiumCarsRepository premiumCarsRepository; // ✅ Changed from CarRepository
+    private final PremiumCarsRepository premiumCarsRepository; //Changed from CarRepository
     private final CloudinaryService cloudinaryService;
 
     @Override
@@ -163,6 +173,3 @@ public class PremiumCarPhotoServiceImpl implements PremiumCarPhotoService {
         repository.deleteByPremiumCar(premiumCar);
     }
 }
-
-
-

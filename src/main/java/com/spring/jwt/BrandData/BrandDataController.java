@@ -16,14 +16,22 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/brands")
 @Slf4j
+<<<<<<< HEAD
 public class  BrandDataController {
+=======
+public class BrandDataController {
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
 
     @Autowired
     BrandDataService brandDataService;
 
     // API To Create Brand
 
+<<<<<<< HEAD
     @PostMapping("/create")
+=======
+    @PostMapping
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
     public ResponseEntity<ResponseDto> createBrand(@Valid @RequestBody BrandDataDto brandDataDto)
     {
 
@@ -34,7 +42,11 @@ public class  BrandDataController {
 
     // API To Get Brand By Id
 
+<<<<<<< HEAD
     @GetMapping("/getBrand")
+=======
+    @GetMapping("/{brandId}")
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
     public ResponseEntity<BrandResponseDto> getBrandById(@RequestParam Integer brandId)
     {
 
@@ -45,7 +57,11 @@ public class  BrandDataController {
 
     // API TO Update Brand
 
+<<<<<<< HEAD
     @PatchMapping("/update")
+=======
+    @PatchMapping
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
     public ResponseEntity<BrandResponseDto> updateBrandById(@Valid @RequestBody BrandDataDto brandDataDto, @RequestParam Integer brandId)
     {
         try {
@@ -59,7 +75,11 @@ public class  BrandDataController {
         }
     }
 
+<<<<<<< HEAD
     @DeleteMapping("/delete")
+=======
+    @DeleteMapping
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
     public ResponseEntity<ApiResponse<Void>> deleteBrand(@RequestParam Integer brandId)
     {
         brandDataService.deleteBrand(brandId);
@@ -78,7 +98,11 @@ public class  BrandDataController {
     }
 
 
+<<<<<<< HEAD
     @GetMapping("/uniqueBrands")
+=======
+    @GetMapping
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
     public ResponseEntity<BrandResponseDto<List<String>>> getUniqueBrands()
     {
         List<String> uniqueBrands = brandDataService.getUniqueBrands();

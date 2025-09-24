@@ -38,7 +38,11 @@ public class CarServiceImpl implements CarService{
     public CarDto addCar(CarDto cardto) {
 
         Dealer dealer = dealerRepository.findById(cardto.getDealerId())
+<<<<<<< HEAD
                 .orElseThrow(() -> new DealerNotFoundException("Dealer not found with id: " + cardto.getDealerId()));
+=======
+                .orElseThrow(() -> new com.spring.jwt.dealer.exception.DealerNotFoundException("Dealer not found with id: " + cardto.getDealerId()));
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
 
         Car car = carMapper.toEntity(cardto);
         car.setDealer(dealer);
@@ -92,7 +96,11 @@ public class CarServiceImpl implements CarService{
 
         if (carDto.getDealerId() != null) {
             Dealer dealer = dealerRepository.findById(carDto.getDealerId())
+<<<<<<< HEAD
                     .orElseThrow(() -> new DealerNotFoundException("Dealer Not Found At Id: " + carDto.getDealerId()));
+=======
+                    .orElseThrow(() -> new com.spring.jwt.dealer.exception.DealerNotFoundException("Dealer Not Found At Id: " + carDto.getDealerId()));
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
             car.setDealer(dealer);
         }
 
@@ -300,6 +308,10 @@ public class CarServiceImpl implements CarService{
     }
 
     public CarResponseDto<List<CarDto>> filterCars(Status status, String brand, String model, String city, String fuelType, String transmission, Integer minPrice, Integer maxPrice) {
+<<<<<<< HEAD
+=======
+        // Allowed statuses
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
         List<Status> allowedStatuses = List.of(Status.PENDING, Status.ACTIVE);
 
         if (status != null && !allowedStatuses.contains(status)) {
@@ -333,6 +345,10 @@ public class CarServiceImpl implements CarService{
         if (maxPrice != null) {
             cars = cars.stream().filter(c -> c.getPrice() <= maxPrice).toList();
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
         if (cars.isEmpty()) {
             throw new CarNotFoundException("No cars found with the given filters");
         }
@@ -342,4 +358,7 @@ public class CarServiceImpl implements CarService{
         return new CarResponseDto<>("Cars fetched successfully with filters", dtos, null, cars.size());
     }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> f6478de2863350de09dee9e4d298974975739906

@@ -94,7 +94,11 @@ public class CarController {
         return ResponseEntity.ok(CarResponseDto2.response("Fetched Car By MainCarId " + mainCarId, car));
     }
 
+<<<<<<< HEAD
     @GetMapping("/filterbypage")
+=======
+    @GetMapping("/filter")
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
     public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsWithPagination(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -115,7 +119,12 @@ public class CarController {
 
         return ResponseEntity.ok(response);
     }
+<<<<<<< HEAD
     @GetMapping("/filter")
+=======
+
+    @GetMapping("/filters")
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
     public CarResponseDto<List<CarDto>> filterCars(
             @RequestParam(required = false) Status status,
             @RequestParam(required = false) String brand,
@@ -128,5 +137,8 @@ public class CarController {
     ) {
         return carService.filterCars(status, brand, model, city, fuelType, transmission, minPrice, maxPrice);
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
 }

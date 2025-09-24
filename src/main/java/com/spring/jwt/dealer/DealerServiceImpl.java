@@ -23,6 +23,11 @@ public class DealerServiceImpl implements DealerService {
 
     private final DealerRepository dealerRepository;
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
     @Override
     public DealerResponseDto updateDealer(Integer dealerId, DealerDTO dealerDTO) {
         Dealer dealer = dealerRepository.findById(dealerId)
@@ -46,6 +51,7 @@ public class DealerServiceImpl implements DealerService {
             }
             dealer.setShopName(dealerDTO.getShopName());
         }
+<<<<<<< HEAD
         if (dealerDTO.getMobileNo() != null) {
             if (dealerDTO.getMobileNo().isBlank()) {
                 throw new IllegalArgumentException("Mobile number cannot be blank");
@@ -55,6 +61,17 @@ public class DealerServiceImpl implements DealerService {
             }
             dealer.setMobileNo(dealerDTO.getMobileNo());
         }
+=======
+//        if (dealerDTO.getMobileNo() != null) {
+//            if (dealerDTO.getMobileNo().isBlank()) {
+//                throw new IllegalArgumentException("Mobile number cannot be blank");
+//            }
+//            if (!dealerDTO.getMobileNo().matches("\\d{10}")) {
+//                throw new IllegalArgumentException("Mobile number must be 10 digits");
+//            }
+//            dealer.setMobileNo(dealerDTO.getMobileNo());
+//        }
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
         if (dealerDTO.getLastName() != null) {
             if (dealerDTO.getLastName().isBlank()) {
                 throw new IllegalArgumentException("Last name cannot be blank");
@@ -158,6 +175,17 @@ public class DealerServiceImpl implements DealerService {
 
 
 
+<<<<<<< HEAD
+=======
+
+    @Override
+    public Page<Dealer> getDealersWithPagination(Pageable pageable)
+    {
+        return dealerRepository.findAll(pageable);
+    }
+
+
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
     @Override
     public DealerResponseDto updateDealerStatus(Integer dealerId, DealerStatus status) {
         Dealer dealer = dealerRepository.findById(dealerId)

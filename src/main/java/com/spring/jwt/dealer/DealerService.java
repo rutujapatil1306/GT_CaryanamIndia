@@ -19,6 +19,10 @@ public interface DealerService {
     DealerResponseDto getAllDealers();
     DealerResponseDto getDealersByStatus(DealerStatus status);
     DealerResponseDto getDealersByUserId(Long userId);
+<<<<<<< HEAD
+=======
+    Page<Dealer> getDealersWithPagination(Pageable pageable);
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
 
     DealerResponseDto updateDealerStatus(Integer dealerId, DealerStatus status);
     DealerResponseDto getDealersWithPagination(int page, int size, String sortBy, String sortDir);

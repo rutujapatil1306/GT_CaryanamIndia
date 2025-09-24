@@ -1,5 +1,9 @@
 package com.spring.jwt.CarPhoto;
 
+<<<<<<< HEAD
+=======
+import com.spring.jwt.CarPhoto.DTO.CarPhotoDto;
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
 import com.spring.jwt.entity.CarPhoto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

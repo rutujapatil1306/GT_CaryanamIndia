@@ -1,6 +1,4 @@
 package com.spring.jwt.premiumcar;
-
-
 import com.spring.jwt.Car.CarRepository;
 import com.spring.jwt.premiumcar.PremiumCarPhoto;
 import com.spring.jwt.premiumcar.DocType;
@@ -17,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -87,5 +86,4 @@ public class PremiumCarPhotoController {
         return ResponseEntity.ok("All photos for premium car deleted successfully");
     }
 }
-
 

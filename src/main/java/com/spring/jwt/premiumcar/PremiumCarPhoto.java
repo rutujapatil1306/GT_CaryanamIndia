@@ -22,6 +22,12 @@ public class PremiumCarPhoto {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "doc_type", length = 50, nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "car_id", nullable = false)
+    private Car car;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "doc_type", nullable = false)
     private DocType docType;
 
 
@@ -43,15 +49,14 @@ public class PremiumCarPhoto {
 
     public Long getPhotoId() { return photoId; }
     public void setPhotoId(Long photoId) { this.photoId = photoId; }
-
     public PremiumCar getPremiumCar() {
         return premiumCar;
     }
-
     public void setPremiumCar(PremiumCar premiumCar) {
         this.premiumCar = premiumCar;
     }
-
+    public Car getCar() { return car; }
+    public void setCar(Car car) { this.car = car; }
     public DocType getDocType() { return docType; }
     public void setDocType(DocType docType) { this.docType = docType; }
     public Long getFileSize() { return fileSize; }

@@ -100,6 +100,10 @@ public class Car {
     @Size(max = 5000, message = "Description cannot exceed 5000 characters")
     private String description;
 
+<<<<<<< HEAD
+=======
+    @NotBlank(message = "Fuel Type is Mandatory")
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
     @Size(max = 45, message = "Fuel type cannot exceed 45 characters")
     @Column(name = "fuel_type", length = 45)
     private String fuelType;

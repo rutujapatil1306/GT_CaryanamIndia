@@ -1,6 +1,10 @@
 package com.spring.jwt.entity;
 
 
+<<<<<<< HEAD
+=======
+import com.spring.jwt.CarPhoto.CarPhotoStatus;
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
 import com.spring.jwt.CarPhoto.DocType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -21,8 +25,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "car_photo",
         uniqueConstraints = {
+<<<<<<< HEAD
         @UniqueConstraint(name = "UK_car_photo", columnNames = {"car_id", "photo_type"})
     })
+=======
+                @UniqueConstraint(name = "UK_car_photo", columnNames = {"car_id", "photo_type"})
+        })
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
 
 public class CarPhoto {
     @Id
@@ -54,6 +63,17 @@ public class CarPhoto {
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Photo type is required")
+<<<<<<< HEAD
     @Column(name = "PhotoType", nullable = false)
     private DocType type;
+=======
+    @Column(name = "PhotoType", nullable = false, length = 50)
+    private DocType type;
+
+    @Column(name = "hash", nullable = false)
+    private String hash;
+
+    @Enumerated(EnumType.STRING)
+    private CarPhotoStatus status;
+>>>>>>> f6478de2863350de09dee9e4d298974975739906
 }
