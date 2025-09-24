@@ -4,6 +4,7 @@ import com.spring.jwt.BrandData.DTO.BrandDataDto;
 import com.spring.jwt.BrandData.DTO.BrandResponseDto;
 import com.spring.jwt.utils.ApiResponse;
 import com.spring.jwt.utils.ResponseDto;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+///////////////////////////////////////////////////////////////////////////////////
+//
+//      File Name    : BrandDataController
+//      Description  : Used to perform BrandData operations
+//      Author       : Kashnoor Kotwal
+//      Date         : 12/09/2025
+//
+//////////////////////////////////////////////////////////////////////////////////
+@Tag(
+        name = "BrandData Management API",
+        description = "APIs for CRUD Operations For BranData and Advance Operations On BrandData"
+)
 
 @RestController
 @RequestMapping("/api/brands")
@@ -35,7 +49,7 @@ public class  BrandDataController {
     // API To Get Brand By Id
 
     @GetMapping("/getBrand")
-    public ResponseEntity<BrandResponseDto> getBrandById(@RequestParam Integer brandId)
+   public ResponseEntity<BrandResponseDto> getBrandById(@RequestParam Integer brandId)
     {
 
             BrandDataDto brand = brandDataService.getBrandById(brandId);

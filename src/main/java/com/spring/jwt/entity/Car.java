@@ -70,7 +70,6 @@ public class Car {
     private Boolean carInsurance;
 
     @NotNull(message = "carInsuranceDate is Required")
-    @PastOrPresent(message = "Car insurance date cannot be in the future")
     @Column(name = "car_insurance_date")
     private LocalDate carInsuranceDate;
 
@@ -79,6 +78,7 @@ public class Car {
     @Size(max = 100, message = "Car insurance type cannot exceed 100 characters")
     @Column(name = "carInsuranceType")
     private String carInsuranceType;
+
 
     @Enumerated(EnumType.STRING)
     private Status carStatus;
@@ -107,6 +107,7 @@ public class Car {
     @Column(name = "fuel_type", length = 45)
     private String fuelType;
 
+    @NotNull(message = "kmDriven can not be empty")
     @Min(value = 0, message = "Kilometers driven cannot be negative")
     @Column(name = "km_driven", length = 50)
     private Integer kmDriven;
@@ -132,6 +133,10 @@ public class Car {
 
     @NotBlank(message = "Registration is Required")
     @Size(max = 45, message = "Registration cannot exceed 45 characters")
+    @Pattern(
+            regexp = "^[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{1,4}$",
+            message = "Invalid registration number format"
+    )
     @Column(name = "registration", length = 45)
     private String registration;
 

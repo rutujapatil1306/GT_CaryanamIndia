@@ -4,6 +4,7 @@ import com.spring.jwt.Car.DTO.CarDto;
 import com.spring.jwt.Car.DTO.CarResponseDto;
 import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
 import com.spring.jwt.Car.Exception.CarNotFoundException;
+import com.spring.jwt.Car.Exception.InvalidStatusException;
 import com.spring.jwt.Car.Exception.StatusNotFoundException;
 //import com.spring.jwt.dealer.DealerNotFoundException;
 import com.spring.jwt.dealer.exception.DealerNotFoundException;
@@ -36,9 +37,21 @@ public class CarServiceImpl implements CarService{
     @Override
     public CarDto addCar(CarDto cardto) {
 
+        if (cardto.getDealerId() == null) {
+            throw new IllegalArgumentException("DealerId is required for adding a car");
+        }
         Dealer dealer = dealerRepository.findById(cardto.getDealerId())
                 .orElseThrow(() -> new DealerNotFoundException("Dealer not found with id: " + cardto.getDealerId()));
 
+        if (cardto.getCarStatus() == null) {
+            throw new IllegalArgumentException("Car status is required");
+        }
+        Status status;
+        try {
+            status = Status.valueOf(cardto.getCarStatus().toString().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new InvalidStatusException("Invalid car status: " + cardto.getCarStatus());
+        }
         Car car = carMapper.toEntity(cardto);
         car.setDealer(dealer);
 
@@ -81,23 +94,15 @@ public class CarServiceImpl implements CarService{
             if (!carDto.getPrice().equals(car.getPrice())) {
                 car.setPrice(carDto.getPrice());
             }
-        } else {
-            throw new IllegalArgumentException("Price cannot be empty");
         }
-
-        if (carDto.getCarInsuranceDate() != null &&
-                carDto.getCarInsuranceDate().equals(car.getCarInsuranceDate())) {
-            throw new IllegalArgumentException(
-                    "Car insurance date " + carDto.getCarInsuranceDate() + " is already set for this car");
-        }
-        else {
+        if (carDto.getCarInsuranceDate() != null) {
+            if (carDto.getCarInsuranceDate().equals(car.getCarInsuranceDate())) {
+                throw new IllegalArgumentException(
+                        "Car insurance date " + carDto.getCarInsuranceDate() + " is already set for this car");
+            }
             car.setCarInsuranceDate(carDto.getCarInsuranceDate());
         }
 
-        if (carDto.getPrice().equals(car.getPrice())) {
-            throw new IllegalArgumentException(
-                    "Price " + carDto.getPrice() + " is already set for this car");
-        }
 
         carMapper.updateCarFromDto(car, carDto);
 
