@@ -300,7 +300,6 @@ public class CarServiceImpl implements CarService{
     }
 
     public CarResponseDto<List<CarDto>> filterCars(Status status, String brand, String model, String city, String fuelType, String transmission, Integer minPrice, Integer maxPrice) {
-        // Allowed statuses
         List<Status> allowedStatuses = List.of(Status.PENDING, Status.ACTIVE);
 
         if (status != null && !allowedStatuses.contains(status)) {
@@ -334,7 +333,6 @@ public class CarServiceImpl implements CarService{
         if (maxPrice != null) {
             cars = cars.stream().filter(c -> c.getPrice() <= maxPrice).toList();
         }
-
         if (cars.isEmpty()) {
             throw new CarNotFoundException("No cars found with the given filters");
         }
