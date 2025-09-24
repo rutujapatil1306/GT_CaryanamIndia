@@ -1,6 +1,7 @@
 package com.spring.jwt.entity;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.spring.jwt.Car.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -44,6 +45,7 @@ public class Car {
     @Column(name = "ac_feature")
     private Boolean acFeature;
 
+    @NotNull(message = "Music feature is required")
     @Column(name = "music_feature")
     private Boolean musicFeature;
 
@@ -68,7 +70,6 @@ public class Car {
     private Boolean carInsurance;
 
     @NotNull(message = "carInsuranceDate is Required")
-    @PastOrPresent(message = "Car insurance date cannot be in the future")
     @Column(name = "car_insurance_date")
     private LocalDate carInsuranceDate;
 
@@ -77,6 +78,7 @@ public class Car {
     @Size(max = 100, message = "Car insurance type cannot exceed 100 characters")
     @Column(name = "carInsuranceType")
     private String carInsuranceType;
+
 
     @Enumerated(EnumType.STRING)
     private Status carStatus;
@@ -105,6 +107,7 @@ public class Car {
     @Column(name = "fuel_type", length = 45)
     private String fuelType;
 
+    @NotNull(message = "kmDriven can not be empty")
     @Min(value = 0, message = "Kilometers driven cannot be negative")
     @Column(name = "km_driven", length = 50)
     private Integer kmDriven;
@@ -120,7 +123,8 @@ public class Car {
     @Column(name = "power_window_feature")
     private Boolean powerWindowFeature;
 
-    @Min(value = 1000, message = "Price must be greater than 1000")
+    @NotNull(message = "Price is required")
+    @Positive(message = "Price must be greater than 0")
     @Column(name = "price", length = 45)
     private Integer price;
 
@@ -129,6 +133,10 @@ public class Car {
 
     @NotBlank(message = "Registration is Required")
     @Size(max = 45, message = "Registration cannot exceed 45 characters")
+    @Pattern(
+            regexp = "^[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{1,4}$",
+            message = "Invalid registration number format"
+    )
     @Column(name = "registration", length = 45)
     private String registration;
 

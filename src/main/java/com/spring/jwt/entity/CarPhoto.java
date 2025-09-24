@@ -22,8 +22,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "car_photo",
         uniqueConstraints = {
-                @UniqueConstraint(name = "UK_car_photo", columnNames = {"car_id", "photo_type"})
-        })
+        @UniqueConstraint(name = "UK_car_photo", columnNames = {"car_id", "photo_type"})
+    })
 
 public class CarPhoto {
     @Id

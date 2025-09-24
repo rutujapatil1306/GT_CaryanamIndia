@@ -115,18 +115,4 @@ public class CarController {
 
         return ResponseEntity.ok(response);
     }
-
-    @GetMapping("/filters")
-    public CarResponseDto<List<CarDto>> filterCars(
-            @RequestParam(required = false) Status status,
-            @RequestParam(required = false) String brand,
-            @RequestParam(required = false) String model,
-            @RequestParam(required = false) String city,
-            @RequestParam(required = false) String fuelType,
-            @RequestParam(required = false) String transmission,
-            @RequestParam(required = false) Integer minPrice,
-            @RequestParam(required = false) Integer maxPrice
-    ) {
-        return carService.filterCars(status, brand, model, city, fuelType, transmission, minPrice, maxPrice);
-    }
 }

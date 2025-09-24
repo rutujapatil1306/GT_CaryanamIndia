@@ -1,11 +1,15 @@
 package com.spring.jwt.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spring.jwt.dealer.DealerStatus;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DealerDTO {
+
+    private Integer id; // Add this field
 
     @NotBlank(message = "Address cannot be blank")
     private String address;
@@ -24,7 +28,7 @@ public class DealerDTO {
 
     @NotNull(message = "Mobile number cannot be null")
     @Pattern(regexp = "\\d{10}", message = "Mobile number must be 10 digits")
-    private Long mobileNo;
+    private String mobileNo;
 
     @NotBlank(message = "Shop name cannot be blank")
     private String shopName;
@@ -37,19 +41,8 @@ public class DealerDTO {
     @NotNull(message = "Dealer status cannot be null")
     private DealerStatus status;
 
-    // For User entity creation
-    @NotBlank(message = "User email cannot be blank")
-    private String userEmail;
-
-    @NotBlank(message = "User password cannot be blank")
-    private String userPassword;
-
-    @NotBlank(message = "User first name cannot be blank")
     private String userFirstName;
-
-    @NotBlank(message = "User last name cannot be blank")
     private String userLastName;
-
-    public void setId(Integer id) {
-    }
+    private String userEmail;
+    private String userMobileNumber;
 }

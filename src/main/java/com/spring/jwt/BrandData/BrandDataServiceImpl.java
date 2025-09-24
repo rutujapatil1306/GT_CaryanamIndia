@@ -29,14 +29,22 @@ public class BrandDataServiceImpl implements BrandDataService {
 
     @Override
     public BrandDataDto createBrand(BrandDataDto brandDataDto) {
-       BrandData existing =  brandDataRepository.findByBrandAndVariantAndSubVariant(brandDataDto.getBrand(), brandDataDto.getVariant(), brandDataDto.getSubVariant());
-        if(existing != null)
-        {
-            throw new BrandAlreadyExistsException("BrandData Already Exists");
-        }
-        BrandData brandData = brandDataRepository.save(brandMapper.toEntity(brandDataDto));
+        try {
+            BrandData existing = brandDataRepository.findByBrandAndVariantAndSubVariant(brandDataDto.getBrand(), brandDataDto.getVariant(), brandDataDto.getSubVariant());
+            if (existing != null) {
+                throw new BrandAlreadyExistsException("BrandData Already Exists");
+            }
+            BrandData brandData = brandDataRepository.save(brandMapper.toEntity(brandDataDto));
 
-        return brandMapper.toDto(brandData);
+            return brandMapper.toDto(brandData);
+        }
+        catch(BrandAlreadyExistsException e)
+        {
+            throw e;
+        }
+        catch(Exception e){
+            throw new RuntimeException("Internal Server Error occurred while creating Brand", e);
+        }
     }
 
     //Get brand By id
@@ -81,6 +89,10 @@ public class BrandDataServiceImpl implements BrandDataService {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("brandDataId").descending());
         Page<BrandData> brandDataPage = brandDataRepository.findAll(pageable);
+
+        if (page >= brandDataPage.getTotalPages()) {
+            throw new PageNotFoundException("Page " + page + " not found. Total pages: " + brandDataPage.getTotalPages());
+        }
         return brandDataPage.getContent().stream()
                 .map(brandData -> brandMapper.toDto(brandData)).toList();
 
