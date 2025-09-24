@@ -1,13 +1,18 @@
 package com.spring.jwt.exception;
-
-
-import com.spring.jwt.PremiumCarBrandData.PremiumBrandNotFoundException;
-import com.spring.jwt.PremiumCarBrandData.SubVariantNotFoundExceptions;
-import com.spring.jwt.PremiumCarBrandData.VariantNotFoundExceptions;
-import com.spring.jwt.PremiumCarData.PremiumCarNotFoundException;
+import com.spring.jwt.BrandData.Exception.BrandAlreadyExistsException;
+import com.spring.jwt.BrandData.Exception.BrandNotFoundException;
+import com.spring.jwt.BrandData.Exception.SubVariantNotFoundException;
+import com.spring.jwt.BrandData.Exception.VariantNotFoundException;
+import com.spring.jwt.Car.Exception.*;
+import com.spring.jwt.CarPhoto.Exception.DuplicatePhotoException;
+import com.spring.jwt.CarPhoto.Exception.InvalidFileException;
+import com.spring.jwt.CarPhoto.Exception.PhotoNotFoundException;
 import com.spring.jwt.dealer.DTO.DealerResponseDto;
 import com.spring.jwt.dealer.exception.DealerNotFoundException;
-import com.spring.jwt.dto.ResponseDto;
+import com.spring.jwt.dealer.exception.InvalidDealerDataException;
+import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
+import com.spring.jwt.Car.Exception.CarNotFoundException;
+import com.spring.jwt.Car.Exception.StatusNotFoundException;
 import com.spring.jwt.utils.BaseResponseDTO;
 import com.spring.jwt.utils.ErrorResponseDto;
 import jakarta.validation.ConstraintViolationException;
@@ -30,7 +35,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -107,6 +112,30 @@ public class GlobalException extends ResponseEntityExceptionHandler {
                 LocalDateTime.now()
         );
         return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidFileException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidFileException(InvalidFileException exception, WebRequest webRequest){
+        log.error("Invalid File: {}", exception.getMessage());
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DuplicatePhotoException.class)
+    public ResponseEntity<ErrorResponseDto> handleDuplicatePhotoException(DuplicatePhotoException exception, WebRequest webRequest){
+        log.error("Duplicate Photo Exception: {}", exception.getMessage());
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.CONFLICT,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(OtpExpiredException.class)
@@ -248,6 +277,69 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         body.put("message", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(BrandNotFoundException.class)
+    public ResponseEntity<Object> handleBrandNotFound(BrandNotFoundException ex){
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("error", "Brand Not Found");
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(VariantNotFoundException.class)
+    public ResponseEntity<Object> handleVariantNotFound(VariantNotFoundException ex){
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("error", "Variant Not Found for given brand");
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(SubVariantNotFoundException.class)
+    public ResponseEntity<Object> handleSubVariantNotFound(SubVariantNotFoundException ex){
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("error", "SubVariant Not Found for given Brand and Variant");
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(CarNotFoundException.class)
+    public ResponseEntity<Object> handleCarNotFound(CarNotFoundException ex){
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("error", "Car Not Found");
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+
+    @ExceptionHandler(StatusNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleStatusNotFound(StatusNotFoundException ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("timestamp", LocalDateTime.now());
+        error.put("status", HttpStatus.BAD_REQUEST.value());
+        error.put("error", "Invalid Car Status");
+        error.put("message", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(PhotoNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handlePhotoNotFound(PhotoNotFoundException ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("timestamp", LocalDateTime.now());
+        error.put("status", HttpStatus.BAD_REQUEST.value());
+        error.put("error", "Photo Not Found");
+        error.put("message", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleAllUncaughtException(Exception exception, WebRequest webRequest) {
@@ -292,36 +384,33 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         body.put("message", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(BrandAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> handleBrandAlreadyExistsException(BrandAlreadyExistsException ex, WebRequest webRequest)
+    {
 
+        log.error("Brand Already Exists: {}", ex.getMessage());
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                LocalDateTime.now());
 
-    @ExceptionHandler(PremiumBrandNotFoundException.class)
-    public ResponseEntity<ResponseDto<Object>> handlePremiumBrandNotFound(PremiumBrandNotFoundException ex) {
-        return new ResponseEntity<>(
-                ResponseDto.error("Premium brand not found", ex.getMessage()),
-                HttpStatus.NOT_FOUND
-        );
-    }
-    @ExceptionHandler(VariantNotFoundExceptions.class)
-    public ResponseEntity<ResponseDto<Object>> handlePremiumCarVariantNotFound(VariantNotFoundExceptions ex) {
-        return new ResponseEntity<>(
-                ResponseDto.error("Variant not found", ex.getMessage()),
-                HttpStatus.NOT_FOUND
-        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(SubVariantNotFoundExceptions.class)
-    public ResponseEntity<ResponseDto<Object>> handlePremiumCarSubVariantNotFound(SubVariantNotFoundExceptions ex) {
-        return new ResponseEntity<>(
-                ResponseDto.error("Sub-variant not found", ex.getMessage()),
-                HttpStatus.NOT_FOUND
-        );
+    @ExceptionHandler(CarAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> handleCarAlreadyExists(CarAlreadyExistsException ex, WebRequest webRequest)
+    {
+        log.error("Car Already Exists: {}", ex.getMessage());
+
+        ErrorResponseDto errorResponse = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                LocalDateTime.now());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(PremiumCarNotFoundException.class)
-    public ResponseEntity<ResponseDto> handleCarNotFound(PremiumCarNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ResponseDto("error", ex.getMessage(), null));
-    }
 
     @ExceptionHandler(DealerNotFoundException.class)
     public ResponseEntity<DealerResponseDto> handleDealerNotFound(DealerNotFoundException ex) {
@@ -331,6 +420,39 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         );
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(InvalidDealerDataException.class)
+    public ResponseEntity<DealerResponseDto> handleInvalidDealerData(InvalidDealerDataException ex) {
+        DealerResponseDto response = DealerResponseDto.error(
+                "Invalid Dealer Data",
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<ErrorResponseDto> handleIOException(IOException ex, WebRequest webRequest) {
+        log.error("I/O error occurred: {}", ex.getMessage());
+        ErrorResponseDto error = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "File processing error: " + ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponseDto> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest webRequest) {
+        log.error("Invalid argument: {}", ex.getMessage());
+        ErrorResponseDto error = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
 
 
 

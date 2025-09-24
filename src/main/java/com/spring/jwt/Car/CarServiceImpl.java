@@ -37,9 +37,21 @@ public class CarServiceImpl implements CarService{
     @Override
     public CarDto addCar(CarDto cardto) {
 
+        if (cardto.getDealerId() == null) {
+            throw new IllegalArgumentException("DealerId is required for adding a car");
+        }
         Dealer dealer = dealerRepository.findById(cardto.getDealerId())
-                .orElseThrow(() -> new com.spring.jwt.dealer.exception.DealerNotFoundException("Dealer not found with id: " + cardto.getDealerId()));
+                .orElseThrow(() -> new DealerNotFoundException("Dealer not found with id: " + cardto.getDealerId()));
 
+        if (cardto.getCarStatus() == null) {
+            throw new IllegalArgumentException("Car status is required");
+        }
+        Status status;
+        try {
+            status = Status.valueOf(cardto.getCarStatus().toString().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new InvalidStatusException("Invalid car status: " + cardto.getCarStatus());
+        }
         Car car = carMapper.toEntity(cardto);
         car.setDealer(dealer);
 
@@ -74,31 +86,35 @@ public class CarServiceImpl implements CarService{
     @Override
     public CarDto updateCar(CarDto carDto, int id) {
         Car car = carRepository.findById(id).orElseThrow(()-> new CarNotFoundException("Car Not Found At Id: " + id));
-// Check for duplicate carInsuranceDate
-        if (carDto.getCarInsuranceDate() != null &&
-                carDto.getCarInsuranceDate().equals(car.getCarInsuranceDate())) {
-            throw new IllegalArgumentException(
-                    "Car insurance date " + carDto.getCarInsuranceDate() + " is already set for this car");
+
+        if (carDto.getPrice() != null) {
+            if (carDto.getPrice() <= 0) {
+                throw new IllegalArgumentException("Price must be greater than 0");
+            }
+            if (!carDto.getPrice().equals(car.getPrice())) {
+                car.setPrice(carDto.getPrice());
+            }
+        }
+        if (carDto.getCarInsuranceDate() != null) {
+            if (carDto.getCarInsuranceDate().equals(car.getCarInsuranceDate())) {
+                throw new IllegalArgumentException(
+                        "Car insurance date " + carDto.getCarInsuranceDate() + " is already set for this car");
+            }
+            car.setCarInsuranceDate(carDto.getCarInsuranceDate());
         }
 
-        // Check for duplicate price
-        if (carDto.getPrice() != null &&
-                carDto.getPrice().equals(car.getPrice())) {
-            throw new IllegalArgumentException(
-                    "Price " + carDto.getPrice() + " is already set for this car");
-        }
+
         carMapper.updateCarFromDto(car, carDto);
 
 
         if (carDto.getDealerId() != null) {
             Dealer dealer = dealerRepository.findById(carDto.getDealerId())
-                    .orElseThrow(() -> new com.spring.jwt.dealer.exception.DealerNotFoundException("Dealer Not Found At Id: " + carDto.getDealerId()));
+                    .orElseThrow(() -> new DealerNotFoundException("Dealer Not Found At Id: " + carDto.getDealerId()));
             car.setDealer(dealer);
         }
 
          Car updatedCar = carRepository.save(car);
          return carMapper.toDto(updatedCar);
-
 
     }
 
@@ -165,7 +181,7 @@ public class CarServiceImpl implements CarService{
         Pageable pageable = PageRequest.of(page, size, Sort.by("dealerId").descending());
 
         Dealer dealer = dealerRepository.findById(id)
-                .orElseThrow(() -> new com.spring.jwt.dealer.exception.DealerNotFoundException("Dealer with ID " + id + " not found"));
+                .orElseThrow(() -> new DealerNotFoundException("Dealer with ID " + id + " not found"));
 
         long totalNoOfCars = carRepository.countByDealerIdAndCarStatus(id, status);
         int totalPages = (int) Math.ceil((double) totalNoOfCars / size);
@@ -192,7 +208,7 @@ public class CarServiceImpl implements CarService{
     public long getNumberOfCarsByDealerIdAndStatus(Integer id, String carStatus) {
 
         Dealer dealer = dealerRepository.findById(id)
-                .orElseThrow(() -> new com.spring.jwt.dealer.exception.DealerNotFoundException("Dealer with ID " + id + " not found"));
+                .orElseThrow(() -> new DealerNotFoundException("Dealer with ID " + id + " not found"));
         Status status;
 
         try {
@@ -232,7 +248,7 @@ public class CarServiceImpl implements CarService{
 
         // Validate input status
         if (status != null && !allowedStatuses.contains(status)) {
-            throw new com.spring.jwt.Car.Exception.InvalidStatusException(
+            throw new InvalidStatusException(
                     "Status must be either PENDING or ACTIVE. Provided: " + status);
         }
 
@@ -271,7 +287,7 @@ public class CarServiceImpl implements CarService{
 
         // Validate input status
         if (status != null && !allowedStatuses.contains(status)) {
-            throw new com.spring.jwt.Car.Exception.InvalidStatusException(
+            throw new InvalidStatusException(
                     "Invalid status: " + status + ". Allowed: PENDING, ACTIVE");
         }
 
@@ -297,50 +313,5 @@ public class CarServiceImpl implements CarService{
                 null,
                 totalCars
         );
-    }
-
-    public CarResponseDto<List<CarDto>> filterCars(Status status, String brand, String model, String city, String fuelType, String transmission, Integer minPrice, Integer maxPrice) {
-        // Allowed statuses
-        List<Status> allowedStatuses = List.of(Status.PENDING, Status.ACTIVE);
-
-        if (status != null && !allowedStatuses.contains(status)) {
-            throw new InvalidStatusException("Invalid status: " + status);
-        }
-
-        List<Status> statusesToFetch = (status != null) ? List.of(status) : allowedStatuses;
-
-        // Fetch initial list by status
-        List<Car> cars = carRepository.findByCarStatusIn(statusesToFetch);
-
-        // Apply filters one by one
-        if (brand != null && !brand.isEmpty()) {
-            cars = cars.stream().filter(c -> c.getBrand().toLowerCase().contains(brand.toLowerCase())).toList();
-        }
-        if (model != null && !model.isEmpty()) {
-            cars = cars.stream().filter(c -> c.getModel().toLowerCase().contains(model.toLowerCase())).toList();
-        }
-        if (city != null && !city.isEmpty()) {
-            cars = cars.stream().filter(c -> c.getCity().toLowerCase().contains(city.toLowerCase())).toList();
-        }
-        if (fuelType != null && !fuelType.isEmpty()) {
-            cars = cars.stream().filter(c -> c.getFuelType().toLowerCase().contains(fuelType.toLowerCase())).toList();
-        }
-        if (transmission != null && !transmission.isEmpty()) {
-            cars = cars.stream().filter(c -> c.getTransmission().toLowerCase().contains(transmission.toLowerCase())).toList();
-        }
-        if (minPrice != null) {
-            cars = cars.stream().filter(c -> c.getPrice() >= minPrice).toList();
-        }
-        if (maxPrice != null) {
-            cars = cars.stream().filter(c -> c.getPrice() <= maxPrice).toList();
-        }
-
-        if (cars.isEmpty()) {
-            throw new CarNotFoundException("No cars found with the given filters");
-        }
-
-        List<CarDto> dtos = cars.stream().map(carMapper::toDto).toList();
-
-        return new CarResponseDto<>("Cars fetched successfully with filters", dtos, null, cars.size());
     }
 }

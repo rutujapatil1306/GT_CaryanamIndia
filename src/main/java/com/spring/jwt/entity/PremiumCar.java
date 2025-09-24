@@ -1,10 +1,10 @@
-package com.spring.jwt.PremiumCarData;
+package com.spring.jwt.entity;
 
-import com.spring.jwt.entity.PremiumCarPendingBooking;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spring.jwt.entity.Status;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -14,9 +14,11 @@ import java.util.Set;
 @Getter
 @Entity
 @AllArgsConstructor
+
 @NoArgsConstructor
 @Table(name = "premiumCar")
 public class PremiumCar {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "premiumCar", nullable = false)
@@ -46,32 +48,27 @@ public class PremiumCar {
     @Column(name = "area", length = 45)
     private String area;
 
-    @NotBlank(message = "Variant is required")
     @Column(name = "variant", length = 45)
     private String variant;
 
-    @NotNull(message = "Brand is required")
-    @Size(min = 2, max = 50, message = "Brand must be between 2 and 50 characters")
     @Column(name = "brand", nullable = false, length = 45)
     private String brand;
 
     @Column(name = "car_insurance")
     private Boolean carInsurance;
 
-    @FutureOrPresent(message = "Insurance date must be today or in the future")
     @Column(name = "car_insurance_date")
-    private LocalDate carInsuranceDate;
+    private String carInsuranceDate;
 
     @Column(name = "carInsuranceType")
     private String carInsuranceType;
 
-    @NotNull(message = "Status is required")
     @Enumerated(EnumType.STRING)
-    private Status carstatus;
+    private Status carStatus;
 
     @Column(name = "pending_approval", nullable = false)
     private boolean pendingApproval;
-    @NotBlank(message = "City cannot be blank")
+
     @Column(name = "city", length = 50)
     private String city;
 
@@ -97,8 +94,6 @@ public class PremiumCar {
     @Column(name = "power_window_feature")
     private Boolean powerWindowFeature;
 
-    @NotNull(message = "Price cannot be null")
-    @Positive(message = "Price must be greater than 0")
     @Column(name = "price", length = 45)
     private Integer price;
 
@@ -114,8 +109,6 @@ public class PremiumCar {
     @Column(name = "transmission", length = 45)
     private String transmission;
 
-    @NotNull(message = "Year is required")
-    @Min(value = 2000, message = "Year must be >= 2000")
     @Column(name = "year")
     private Integer year;
 
@@ -127,11 +120,11 @@ public class PremiumCar {
 
     private long carPhotoId;
 
-    @Column(name = "main_car_id",unique = true, nullable = false)
+    @Column(name = "main_car_id", nullable = false)
     private String mainCarId;
 
-   @Column(name = "carType", nullable = false)
-   private String carType;
+//    @Column(name = "carType", nullable = false)
+//    private String carType;
 
     @OneToMany(mappedBy = "premiumCarCar")
     private Set<PremiumCarPendingBooking> pendingBookings = new LinkedHashSet<>();

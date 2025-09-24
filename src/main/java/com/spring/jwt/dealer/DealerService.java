@@ -24,5 +24,6 @@ public interface DealerService {
     DealerResponseDto updateDealerStatus(Integer dealerId, DealerStatus status);
     DealerResponseDto getDealersWithPagination(int page, int size, String sortBy, String sortDir);
 
+    Dealer createDealerForUser(User user, DealerDTO dealerDTO);
 }
 
