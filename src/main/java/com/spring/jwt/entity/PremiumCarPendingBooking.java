@@ -1,6 +1,7 @@
 package com.spring.jwt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.spring.jwt.PremiumCarData.PremiumCar;
 import jakarta.persistence.*;
 import lombok.*;
 
