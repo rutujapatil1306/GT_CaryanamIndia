@@ -1,6 +1,4 @@
 package com.spring.jwt.entity;
-
-
 import com.spring.jwt.CarPhoto.CarPhotoStatus;
 import com.spring.jwt.CarPhoto.DocType;
 import jakarta.persistence.*;
@@ -21,9 +19,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "car_photo",
-        uniqueConstraints = {
-        @UniqueConstraint(name = "UK_car_photo", columnNames = {"car_id", "photo_type"})
+        uniqueConstraints = {@UniqueConstraint(name = "UK_car_photo", columnNames = {"car_id", "photo_type"})
     })
+
 
 public class CarPhoto {
     @Id
@@ -55,6 +53,7 @@ public class CarPhoto {
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Photo type is required")
+
     @Column(name = "PhotoType", nullable = false, length = 50)
     private DocType type;
 
@@ -63,4 +62,5 @@ public class CarPhoto {
 
     @Enumerated(EnumType.STRING)
     private CarPhotoStatus status;
+
 }

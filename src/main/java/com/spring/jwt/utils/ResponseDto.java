@@ -14,7 +14,5 @@ public class ResponseDto {
         this.status=status;
         this.message=message;
     }
-    public ResponseDto() {
 
-    }
 }

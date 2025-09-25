@@ -1,6 +1,7 @@
 package com.spring.jwt.entity;
-
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,10 @@ public class BrandData {
     @Pattern(regexp = "^[A-Za-z][A-Za-z0-9\\s-]{0,49}$", message = "Variant must contain only letters, numbers, spaces")
     @Column(name = "variant")
     private String variant;
+
+    @NotBlank(message = "SubVariant name cannot be empty")
+    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9\\s.-]{0,49}$", message = "SubVariant must contain only letters, numbers, spaces")
+
 
     @NotBlank(message = "SubVariant name cannot be empty")
     @Pattern(regexp = "^[A-Za-z][A-Za-z0-9\\s.-]{0,49}$", message = "SubVariant must contain only letters, numbers, spaces")

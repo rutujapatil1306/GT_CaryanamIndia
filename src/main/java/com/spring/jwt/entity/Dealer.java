@@ -1,14 +1,10 @@
 package com.spring.jwt.entity;
-
-
-
 import com.spring.jwt.dealer.DealerStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +32,7 @@ public class Dealer {
     private String city;
 
     @Column(name = "firstname", length = 45)
+    @NotBlank(message = "Dealer name cannot be empty")
     private String firstname;
 
     @Column(name = "last_name", length = 45)
@@ -49,6 +46,8 @@ public class Dealer {
     @Column(name = "mobile_no", nullable = false, length = 45)
     private String mobileNo;
 
+
+
     @Column(name = "shop_name", nullable = false, length = 250)
     private String shopName;
 
@@ -60,17 +59,15 @@ public class Dealer {
 
 //    private Boolean status;
      @Enumerated(EnumType.STRING) // Stores as "ACTIVE", "DEACTIVE", "BLOCKED"
+
      @Column(name = "status", nullable = false)
      private DealerStatus status;
 
     @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
-
     @OneToMany(mappedBy = "dealer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Car> cars = new ArrayList<>();
-
-
 
 //    @OneToMany(mappedBy = "dealerVendor")
 //    private Set<Car> cars = new LinkedHashSet<>();

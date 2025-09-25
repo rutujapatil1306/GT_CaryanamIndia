@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BrandMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JWT-with-Spring-Security</a> &gt; <a href="index.source.html" class="el_package">com.spring.jwt.BrandData</a> &gt; <span class="el_source">BrandMapper.java</span></div><h1>BrandMapper.java</h1><pre class="source lang-java linenums">package com.spring.jwt.BrandData;
+
+import com.spring.jwt.BrandData.DTO.BrandDataDto;
+import com.spring.jwt.entity.BrandData;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+<span class="nc" id="L8">@Slf4j</span>
+@Component
+<span class="nc" id="L10">public class BrandMapper {</span>
+
+    public BrandDataDto toDto(BrandData brandData)
+    {
+<span class="nc bnc" id="L14" title="All 2 branches missed.">        if(brandData == null)</span>
+        {
+<span class="nc" id="L16">            return null;</span>
+        }
+
+        try
+        {
+<span class="nc" id="L21">            BrandDataDto brandDataDto = new BrandDataDto();</span>
+<span class="nc" id="L22">            brandDataDto.setBrandDataId(brandData.getBrandDataId());</span>
+<span class="nc" id="L23">            brandDataDto.setBrand(brandData.getBrand());</span>
+<span class="nc" id="L24">            brandDataDto.setVariant(brandData.getVariant());</span>
+<span class="nc" id="L25">            brandDataDto.setSubVariant(brandData.getSubVariant());</span>
+
+<span class="nc" id="L27">            log.debug(&quot;Mapped brand Data to DTO - brand: {}, variant: {}, sub-variant: {}&quot;,</span>
+<span class="nc" id="L28">                    brandDataDto.getBrand(), brandDataDto.getVariant(), brandDataDto.getSubVariant());</span>
+<span class="nc" id="L29">            return brandDataDto;</span>
+        }
+<span class="nc" id="L31">        catch(Exception ex)</span>
+        {
+<span class="nc" id="L33">            log.error(&quot;Error Converting BrandData To Dto: {}&quot;, ex.getMessage(),ex);</span>
+<span class="nc" id="L34">            throw new RuntimeException(&quot;Error converting BrandData to DTO&quot;, ex);</span>
+        }
+
+    }
+
+    public BrandData toEntity(BrandDataDto brandDataDto)
+    {
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if(brandDataDto == null)</span>
+        {
+<span class="nc" id="L43">            return null;</span>
+        }
+
+        try
+        {
+<span class="nc" id="L48">            BrandData brandData = new BrandData();</span>
+<span class="nc" id="L49">            brandData.setBrandDataId(brandDataDto.getBrandDataId());</span>
+<span class="nc" id="L50">            brandData.setBrand(brandDataDto.getBrand());</span>
+<span class="nc" id="L51">            brandData.setVariant(brandDataDto.getVariant());</span>
+<span class="nc" id="L52">            brandData.setSubVariant(brandDataDto.getSubVariant());</span>
+
+<span class="nc" id="L54">            log.debug(&quot;Mapped Dto to Brand Data - brand: {}, variant: {}, subVariant: {}&quot;,</span>
+<span class="nc" id="L55">                    brandData.getBrand(), brandData.getVariant(), brandData.getSubVariant());</span>
+<span class="nc" id="L56">            return  brandData;</span>
+        }
+<span class="nc" id="L58">        catch(Exception ex)</span>
+        {
+<span class="nc" id="L60">            log.error(&quot;Error Converting Dto to BrandData: {}&quot;, ex.getMessage(),ex);</span>
+<span class="nc" id="L61">            throw new RuntimeException(&quot;Error converting Dto to Brand Data&quot;, ex);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

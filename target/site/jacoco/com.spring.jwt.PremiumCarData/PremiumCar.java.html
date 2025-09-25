@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PremiumCar.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JWT-with-Spring-Security</a> &gt; <a href="index.source.html" class="el_package">com.spring.jwt.PremiumCarData</a> &gt; <span class="el_source">PremiumCar.java</span></div><h1>PremiumCar.java</h1><pre class="source lang-java linenums">package com.spring.jwt.PremiumCarData;
+
+import com.spring.jwt.entity.PremiumCarPendingBooking;
+import com.spring.jwt.entity.Status;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
+<span class="nc" id="L13">@Setter</span>
+@Getter
+@Entity
+<span class="nc" id="L16">@AllArgsConstructor</span>
+<span class="nc" id="L17">@NoArgsConstructor</span>
+@Table(name = &quot;premiumCar&quot;)
+public class PremiumCar {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = &quot;premiumCar&quot;, nullable = false)
+<span class="nc" id="L23">    private Integer premiumCarId;</span>
+
+    @Column(name = &quot;airbag&quot;)
+<span class="nc" id="L26">    private Boolean airbag;</span>
+
+    @Column(name = &quot;ABS&quot;)
+<span class="nc" id="L29">    private Boolean ABS;</span>
+
+    @Column(name = &quot;button_start&quot;)
+<span class="nc" id="L32">    private Boolean buttonStart;</span>
+
+    @Column(name = &quot;sunroof&quot;)
+<span class="nc" id="L35">    private Boolean sunroof;</span>
+
+    @Column(name = &quot;child_safety_locks&quot;)
+<span class="nc" id="L38">    private Boolean childSafetyLocks;</span>
+
+    @Column(name = &quot;ac_feature&quot;)
+<span class="nc" id="L41">    private Boolean acFeature;</span>
+
+    @Column(name = &quot;music_feature&quot;)
+<span class="nc" id="L44">    private Boolean musicFeature;</span>
+
+    @Column(name = &quot;area&quot;, length = 45)
+<span class="nc" id="L47">    private String area;</span>
+
+    @NotBlank(message = &quot;Variant is required&quot;)
+    @Column(name = &quot;variant&quot;, length = 45)
+<span class="nc" id="L51">    private String variant;</span>
+
+    @NotNull(message = &quot;Brand is required&quot;)
+    @Size(min = 2, max = 50, message = &quot;Brand must be between 2 and 50 characters&quot;)
+    @Column(name = &quot;brand&quot;, nullable = false, length = 45)
+<span class="nc" id="L56">    private String brand;</span>
+
+    @Column(name = &quot;car_insurance&quot;)
+<span class="nc" id="L59">    private Boolean carInsurance;</span>
+
+    @FutureOrPresent(message = &quot;Insurance date must be today or in the future&quot;)
+    @Column(name = &quot;car_insurance_date&quot;)
+<span class="nc" id="L63">    private LocalDate carInsuranceDate;</span>
+
+    @Column(name = &quot;carInsuranceType&quot;)
+<span class="nc" id="L66">    private String carInsuranceType;</span>
+
+    @NotNull(message = &quot;Status is required&quot;)
+    @Enumerated(EnumType.STRING)
+<span class="nc" id="L70">    private Status carstatus;</span>
+
+    @Column(name = &quot;pending_approval&quot;, nullable = false)
+<span class="nc" id="L73">    private boolean pendingApproval;</span>
+    @NotBlank(message = &quot;City cannot be blank&quot;)
+    @Column(name = &quot;city&quot;, length = 50)
+<span class="nc" id="L76">    private String city;</span>
+
+    @Column(name = &quot;color&quot;, length = 45)
+<span class="nc" id="L79">    private String color;</span>
+
+    @Column(name = &quot;description&quot;, length = 5000)
+    @Size(max = 5000, message = &quot;Description cannot exceed 5000 characters&quot;)
+<span class="nc" id="L83">    private String description;</span>
+
+    @Column(name = &quot;fuel_type&quot;, length = 45)
+<span class="nc" id="L86">    private String fuelType;</span>
+
+    @Column(name = &quot;km_driven&quot;, length = 50)
+<span class="nc" id="L89">    private Integer kmDriven;</span>
+
+    @Column(name = &quot;model&quot;, length = 45)
+<span class="nc" id="L92">    private String model;</span>
+
+    @Column(name = &quot;owner_serial&quot;)
+<span class="nc" id="L95">    private Integer ownerSerial;</span>
+
+    @Column(name = &quot;power_window_feature&quot;)
+<span class="nc" id="L98">    private Boolean powerWindowFeature;</span>
+
+    @NotNull(message = &quot;Price cannot be null&quot;)
+    @Positive(message = &quot;Price must be greater than 0&quot;)
+    @Column(name = &quot;price&quot;, length = 45)
+<span class="nc" id="L103">    private Integer price;</span>
+
+    @Column(name = &quot;rear_parking_camera_feature&quot;)
+<span class="nc" id="L106">    private Boolean rearParkingCameraFeature;</span>
+
+    @Column(name = &quot;registration&quot;, length = 45)
+<span class="nc" id="L109">    private String registration;</span>
+
+    @Column(name = &quot;title&quot;, length = 250)
+<span class="nc" id="L112">    private String title;</span>
+
+    @Column(name = &quot;transmission&quot;, length = 45)
+<span class="nc" id="L115">    private String transmission;</span>
+
+    @NotNull(message = &quot;Year is required&quot;)
+    @Min(value = 2000, message = &quot;Year must be &gt;= 2000&quot;)
+    @Column(name = &quot;year&quot;)
+<span class="nc" id="L120">    private Integer year;</span>
+
+    @Column(name = &quot;date&quot;)
+<span class="nc" id="L123">    private LocalDate date;</span>
+
+    @Column(name = &quot;dealer_id&quot;)
+<span class="nc" id="L126">    private Integer dealerId;</span>
+
+<span class="nc" id="L128">    private long carPhotoId;</span>
+
+    @Column(name = &quot;main_car_id&quot;,unique = true, nullable = false)
+<span class="nc" id="L131">    private String mainCarId;</span>
+
+   @Column(name = &quot;carType&quot;, nullable = false)
+<span class="nc" id="L134">   private String carType;</span>
+
+<span class="nc" id="L136">    @OneToMany(mappedBy = &quot;premiumCarCar&quot;)</span>
+<span class="nc" id="L137">    private Set&lt;PremiumCarPendingBooking&gt; pendingBookings = new LinkedHashSet&lt;&gt;();</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

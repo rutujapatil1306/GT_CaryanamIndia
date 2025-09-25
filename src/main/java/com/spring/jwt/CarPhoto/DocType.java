@@ -7,4 +7,5 @@ public enum DocType {
     RC_BOOK,
     INSURANCE,
     SIDE_VIEW
+
 }

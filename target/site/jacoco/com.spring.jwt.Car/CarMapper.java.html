@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CarMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JWT-with-Spring-Security</a> &gt; <a href="index.source.html" class="el_package">com.spring.jwt.Car</a> &gt; <span class="el_source">CarMapper.java</span></div><h1>CarMapper.java</h1><pre class="source lang-java linenums">package com.spring.jwt.Car;
+
+import com.spring.jwt.Car.DTO.CarDto;
+import com.spring.jwt.entity.Car;
+import com.spring.jwt.entity.Dealer;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+<span class="nc" id="L9">@Slf4j</span>
+@Component
+<span class="nc" id="L11">public class CarMapper {</span>
+
+    public CarDto toDto(Car car)
+    {
+<span class="nc bnc" id="L15" title="All 2 branches missed.">        if(car == null)</span>
+        {
+<span class="nc" id="L17">            return null;</span>
+        }
+
+        try
+        {
+<span class="nc" id="L22">            CarDto dto = new CarDto();</span>
+
+<span class="nc" id="L24">            dto.setId(car.getId());</span>
+<span class="nc" id="L25">            dto.setAbs(car.getAbs());</span>
+<span class="nc" id="L26">            dto.setArea(car.getArea());</span>
+<span class="nc" id="L27">            dto.setBrand(car.getBrand());</span>
+<span class="nc" id="L28">            dto.setAirbag(car.getAirbag());</span>
+<span class="nc" id="L29">            dto.setCarInsurance(car.getCarInsurance());</span>
+<span class="nc" id="L30">            dto.setAcFeature(car.getAcFeature());</span>
+<span class="nc" id="L31">            dto.setButtonStart(car.getButtonStart());</span>
+<span class="nc" id="L32">            dto.setCity(car.getCity());</span>
+<span class="nc" id="L33">            dto.setDate(car.getDate());</span>
+<span class="nc" id="L34">            dto.setCarPhotoId(car.getCarPhotoId());</span>
+<span class="nc" id="L35">            dto.setCarInsuranceDate(car.getCarInsuranceDate());</span>
+<span class="nc" id="L36">            dto.setCarType(car.getCarType());</span>
+<span class="nc" id="L37">            dto.setChildSafetyLocks(car.getChildSafetyLocks());</span>
+<span class="nc" id="L38">            dto.setCarInsuranceType(car.getCarInsuranceType());</span>
+<span class="nc" id="L39">            dto.setColor(car.getColor());</span>
+            //dto.setDealerId(car.getDealerId());
+<span class="nc" id="L41">            dto.setDescription(car.getDescription());</span>
+<span class="nc" id="L42">            dto.setFuelType(car.getFuelType());</span>
+<span class="nc" id="L43">            dto.setKmDriven(car.getKmDriven());</span>
+<span class="nc" id="L44">            dto.setMainCarId(car.getMainCarId());</span>
+<span class="nc" id="L45">            dto.setModel(car.getModel());</span>
+<span class="nc" id="L46">            dto.setMusicFeature(car.getMusicFeature());</span>
+<span class="nc" id="L47">            dto.setOwnerSerial(car.getOwnerSerial());</span>
+<span class="nc" id="L48">            dto.setPendingApproval(car.getPendingApproval());</span>
+<span class="nc" id="L49">            dto.setPowerWindowFeature(car.getPowerWindowFeature());</span>
+<span class="nc" id="L50">            dto.setPrice(car.getPrice());</span>
+<span class="nc" id="L51">            dto.setRearParkingCameraFeature(car.getRearParkingCameraFeature());</span>
+<span class="nc" id="L52">            dto.setRegistration(car.getRegistration());</span>
+<span class="nc" id="L53">            dto.setSunroof(car.getSunroof());</span>
+<span class="nc" id="L54">            dto.setTitle(car.getTitle());</span>
+<span class="nc" id="L55">            dto.setTransmission(car.getTransmission());</span>
+<span class="nc" id="L56">            dto.setVariant(car.getVariant());</span>
+<span class="nc" id="L57">            dto.setYear(car.getYear());</span>
+<span class="nc" id="L58">            dto.setCarStatus(car.getCarStatus());</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">            if (car.getDealer() != null) {</span>
+<span class="nc" id="L60">                dto.setDealerId(car.getDealer().getId());</span>
+            }
+<span class="nc" id="L62">            log.debug(&quot;Mapped Car To DTO: {}&quot;, dto);</span>
+<span class="nc" id="L63">            return dto;</span>
+
+        }
+<span class="nc" id="L66">        catch(Exception ex)</span>
+        {
+<span class="nc" id="L68">            log.error(&quot;Error Converting Car To Dto: {}&quot;, ex.getMessage(),ex);</span>
+<span class="nc" id="L69">            throw new RuntimeException(&quot;Error converting Car to DTO&quot;, ex);</span>
+        }
+    }
+
+    public Car toEntity(CarDto carDto)
+    {
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if(carDto == null)</span>
+        {
+<span class="nc" id="L77">            return null;</span>
+        }
+
+        try
+        {
+<span class="nc" id="L82">            Car car = new Car();</span>
+
+<span class="nc" id="L84">            car.setId(carDto.getId());</span>
+<span class="nc" id="L85">            car.setAbs(carDto.getAbs());</span>
+<span class="nc" id="L86">            car.setArea(carDto.getArea());</span>
+<span class="nc" id="L87">            car.setBrand(carDto.getBrand());</span>
+<span class="nc" id="L88">            car.setAirbag(carDto.getAirbag());</span>
+<span class="nc" id="L89">            car.setCarInsurance(carDto.getCarInsurance());</span>
+<span class="nc" id="L90">            car.setAcFeature(carDto.getAcFeature());</span>
+<span class="nc" id="L91">            car.setButtonStart(carDto.getButtonStart());</span>
+<span class="nc" id="L92">            car.setCity(carDto.getCity());</span>
+<span class="nc" id="L93">            car.setDate(carDto.getDate());</span>
+<span class="nc" id="L94">            car.setCarPhotoId(carDto.getCarPhotoId());</span>
+<span class="nc" id="L95">            car.setCarInsuranceDate(carDto.getCarInsuranceDate());</span>
+<span class="nc" id="L96">            car.setCarType(carDto.getCarType());</span>
+<span class="nc" id="L97">            car.setChildSafetyLocks(carDto.getChildSafetyLocks());</span>
+<span class="nc" id="L98">            car.setCarInsuranceType(carDto.getCarInsuranceType());</span>
+<span class="nc" id="L99">            car.setColor(carDto.getColor());</span>
+            //car.setDealerId(carDto.getDealerId());
+<span class="nc" id="L101">            car.setDescription(carDto.getDescription());</span>
+<span class="nc" id="L102">            car.setFuelType(carDto.getFuelType());</span>
+<span class="nc" id="L103">            car.setKmDriven(carDto.getKmDriven());</span>
+<span class="nc" id="L104">            car.setMainCarId(carDto.getMainCarId());</span>
+<span class="nc" id="L105">            car.setModel(carDto.getModel());</span>
+<span class="nc" id="L106">            car.setMusicFeature(carDto.getMusicFeature());</span>
+<span class="nc" id="L107">            car.setOwnerSerial(carDto.getOwnerSerial());</span>
+<span class="nc" id="L108">            car.setPendingApproval(carDto.getPendingApproval());</span>
+
+<span class="nc" id="L110">            car.setPowerWindowFeature(carDto.getPowerWindowFeature());</span>
+<span class="nc" id="L111">            car.setPrice(carDto.getPrice());</span>
+<span class="nc" id="L112">            car.setRearParkingCameraFeature(carDto.getRearParkingCameraFeature());</span>
+<span class="nc" id="L113">            car.setRegistration(carDto.getRegistration());</span>
+<span class="nc" id="L114">            car.setSunroof(carDto.getSunroof());</span>
+<span class="nc" id="L115">            car.setTitle(carDto.getTitle());</span>
+<span class="nc" id="L116">            car.setTransmission(carDto.getTransmission());</span>
+<span class="nc" id="L117">            car.setVariant(carDto.getVariant());</span>
+<span class="nc" id="L118">            car.setYear(carDto.getYear());</span>
+<span class="nc" id="L119">            car.setCarStatus(carDto.getCarStatus());</span>
+
+<span class="nc" id="L121">            return car;</span>
+<span class="nc" id="L122">        } catch (Exception ex) {</span>
+<span class="nc" id="L123">            log.error(&quot;Error Converting Dto to Car: {}&quot;, ex.getMessage(),ex);</span>
+<span class="nc" id="L124">            throw new RuntimeException(&quot;Error converting Dto to Car&quot;, ex);</span>
+        }
+    }
+
+    public Car updateCarFromDto(Car car, CarDto carDto)
+    {
+        //Update Fields
+
+
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (carDto.getAirbag() != null) car.setAirbag(carDto.getAirbag());</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        if (carDto.getAbs() != null) car.setAbs(carDto.getAbs());</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        if (carDto.getButtonStart() != null) car.setButtonStart(carDto.getButtonStart());</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        if (carDto.getSunroof() != null) car.setSunroof(carDto.getSunroof());</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (carDto.getChildSafetyLocks() != null) car.setChildSafetyLocks(carDto.getChildSafetyLocks());</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if (carDto.getAcFeature() != null) car.setAcFeature(carDto.getAcFeature());</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        if (carDto.getMusicFeature() != null) car.setMusicFeature(carDto.getMusicFeature());</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">        if (carDto.getArea() != null) car.setArea(carDto.getArea());</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        if (carDto.getVariant() != null) car.setVariant(carDto.getVariant());</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (carDto.getBrand() != null) car.setBrand(carDto.getBrand());</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        if (carDto.getCarInsurance() != null) car.setCarInsurance(carDto.getCarInsurance());</span>
+        //if (carDto.getCarInsuranceDate() != null) car.setCarInsuranceDate(carDto.getCarInsuranceDate());
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if (carDto.getCarInsuranceType() != null) car.setCarInsuranceType(carDto.getCarInsuranceType());</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        if (carDto.getCarStatus() != null) car.setCarStatus(carDto.getCarStatus());</span>
+
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        if (carDto.getPendingApproval() != null) car.setPendingApproval(carDto.getPendingApproval());</span>
+
+<span class="nc bnc" id="L150" title="All 2 branches missed.">        if (carDto.getCity() != null) car.setCity(carDto.getCity());</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        if (carDto.getColor() != null) car.setColor(carDto.getColor());</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if (carDto.getDescription() != null) car.setDescription(carDto.getDescription());</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">        if (carDto.getFuelType() != null) car.setFuelType(carDto.getFuelType());</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        if (carDto.getKmDriven() != null) car.setKmDriven(carDto.getKmDriven());</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        if (carDto.getModel() != null) car.setModel(carDto.getModel());</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        if (carDto.getOwnerSerial() != null) car.setOwnerSerial(carDto.getOwnerSerial());</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">        if (carDto.getPowerWindowFeature() != null) car.setPowerWindowFeature(carDto.getPowerWindowFeature());</span>
+        //if (carDto.getPrice() != null) car.setPrice(carDto.getPrice());
+<span class="nc bnc" id="L159" title="All 2 branches missed.">        if (carDto.getRearParkingCameraFeature() != null) car.setRearParkingCameraFeature(carDto.getRearParkingCameraFeature());</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        if (carDto.getRegistration() != null) car.setRegistration(carDto.getRegistration());</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">        if (carDto.getTitle() != null) car.setTitle(carDto.getTitle());</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">        if (carDto.getTransmission() != null) car.setTransmission(carDto.getTransmission());</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">        if (carDto.getYear() != null) car.setYear(carDto.getYear());</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        if (carDto.getDate() != null) car.setDate(carDto.getDate());</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if (carDto.getCarPhotoId() != null) car.setCarPhotoId(carDto.getCarPhotoId());</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">        if (carDto.getMainCarId() != null) car.setMainCarId(carDto.getMainCarId());</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">        if (carDto.getCarType() != null) car.setCarType(carDto.getCarType());</span>
+
+
+
+<span class="nc" id="L171">        return car;</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

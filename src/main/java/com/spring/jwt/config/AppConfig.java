@@ -119,6 +119,11 @@ public class AppConfig {
                     "/api/v1/users/register/dealer",
                     "/dealer/**", // add
                     "/premiumcars/photos/**",
+                    "/dealer/**",
+                    "/premiumbrands/**",
+                    "/premiums/**",// add
+                    "/dealer/**", // add
+                    "/premiumcars/photos/**",
                 jwtConfig.getUrl(),
                 jwtConfig.getRefreshUrl()
             )
@@ -145,6 +150,21 @@ public class AppConfig {
                 .requestMatchers(HttpMethod.POST, "/dealer").permitAll()  // added
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/v1/users/register").permitAll()
+                .requestMatchers("/api/v1/users/register/dealer").permitAll()// add
+                .requestMatchers("/api/v1/users/password/**").permitAll()
+                .requestMatchers("/api/v1/exam/**").permitAll()
+                .requestMatchers("/api/v1/**").permitAll()
+                .requestMatchers("/api/brands/**").permitAll()
+                .requestMatchers("/api/cars/**").permitAll()
+                .requestMatchers("/api/car_photo/**").permitAll()
+                .requestMatchers("/cars/filter/**").permitAll()//add
+                .requestMatchers("/premiumcars/photos/**").permitAll()
+                .requestMatchers("/api/v1/users/register/dealer").permitAll() // add
+                .requestMatchers("/api/v1/users/password/**").permitAll()
+                .requestMatchers("/api/v1/exam/**").permitAll()
+                .requestMatchers("/api/v1/**").permitAll()
+                .requestMatchers("/premiumbrands/**").permitAll()
+                .requestMatchers("/premiums/**").permitAll()
                 .requestMatchers("/api/v1/users/register/dealer").permitAll()// add
                 .requestMatchers("/api/v1/users/password/**").permitAll()
                 .requestMatchers("/api/v1/exam/**").permitAll()
@@ -191,10 +211,12 @@ public class AppConfig {
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/v1/users/password/**"),
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/brands/**"),
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/cars/**"),
+                    new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/car_photo/**"),
+                    new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/cars/filter/**"),//add
+                    new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/premiumcars/photos/**"),
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/carPhotos/**"),
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/cars/filter/**"),//add
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/premiumcars/photos/**"),
-
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/v2/api-docs/**"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/v3/api-docs/**"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/swagger-resources/**"),
@@ -203,6 +225,9 @@ public class AppConfig {
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/webjars/**"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/swagger-ui.html"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/user/**"),
+                new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/premiumbrands/**"),
+                new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/premiums/**"),
+
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(jwtConfig.getUrl()),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(jwtConfig.getRefreshUrl())
             );
