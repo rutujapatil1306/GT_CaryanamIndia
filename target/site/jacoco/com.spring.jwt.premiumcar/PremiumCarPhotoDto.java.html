@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 <span class="nc" id="L5">public class PremiumCarPhotoDto {</span>
 
     private Long id;
-    private int carId;            // Instead of full Car object
+    private int premiumCarId;            // Instead of full Car object
     private String docType;
     private long fileSize;
     private String contentType;
@@ -15,23 +15,25 @@ import java.time.LocalDateTime;
     // Getters &amp; Setters
 <span class="nc" id="L16">    public Long getId() { return id; }</span>
 <span class="nc" id="L17">    public void setId(Long id) { this.id = id; }</span>
+    public int getPremiumCarId() {
+<span class="nc" id="L19">        return premiumCarId;</span>
+    }
+    public void setPremiumCarId(int premiumCarId) {
+<span class="nc" id="L22">        this.premiumCarId = premiumCarId;</span>
+<span class="nc" id="L23">    }</span>
+<span class="nc" id="L24">    public String getDocType() { return docType; }</span>
+<span class="nc" id="L25">    public void setDocType(String docType) { this.docType = docType; }</span>
 
-<span class="nc" id="L19">    public int getCarId() { return carId; }</span>
-<span class="nc" id="L20">    public void setCarId(int carId) { this.carId = carId; }</span>
+<span class="nc" id="L27">    public long getFileSize() { return fileSize; }</span>
+<span class="nc" id="L28">    public void setFileSize(long fileSize) { this.fileSize = fileSize; }</span>
 
-<span class="nc" id="L22">    public String getDocType() { return docType; }</span>
-<span class="nc" id="L23">    public void setDocType(String docType) { this.docType = docType; }</span>
+<span class="nc" id="L30">    public String getContentType() { return contentType; }</span>
+<span class="nc" id="L31">    public void setContentType(String contentType) { this.contentType = contentType; }</span>
 
-<span class="nc" id="L25">    public long getFileSize() { return fileSize; }</span>
-<span class="nc" id="L26">    public void setFileSize(long fileSize) { this.fileSize = fileSize; }</span>
+<span class="nc" id="L33">    public String getFileUrl() { return fileUrl; }</span>
+<span class="nc" id="L34">    public void setFileUrl(String fileUrl) { this.fileUrl = fileUrl; }</span>
 
-<span class="nc" id="L28">    public String getContentType() { return contentType; }</span>
-<span class="nc" id="L29">    public void setContentType(String contentType) { this.contentType = contentType; }</span>
-
-<span class="nc" id="L31">    public String getFileUrl() { return fileUrl; }</span>
-<span class="nc" id="L32">    public void setFileUrl(String fileUrl) { this.fileUrl = fileUrl; }</span>
-
-<span class="nc" id="L34">    public LocalDateTime getUploadedAt() { return uploadedAt; }</span>
-<span class="nc" id="L35">    public void setUploadedAt(LocalDateTime uploadedAt) { this.uploadedAt = uploadedAt; }</span>
+<span class="nc" id="L36">    public LocalDateTime getUploadedAt() { return uploadedAt; }</span>
+<span class="nc" id="L37">    public void setUploadedAt(LocalDateTime uploadedAt) { this.uploadedAt = uploadedAt; }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -71,7 +71,6 @@ public class UserController {
     
     @Value(&quot;${app.url.password-reset}&quot;)
     private String passwordResetUrl;
-
 ///////////////////////////////////////////////////////////////////////////////////
 //
 //      File Name    : UserController
@@ -107,8 +106,8 @@ public class UserController {
     })
     @PostMapping(&quot;/register&quot;)
     public ResponseEntity&lt;BaseResponseDTO&gt; registerUser(@Valid @RequestBody UserDTO userDTO) {
-<span class="nc" id="L110">        BaseResponseDTO response = userService.registerAccount(userDTO);</span>
-<span class="nc" id="L111">        return ResponseEntity.status(HttpStatus.CREATED).body(response);</span>
+<span class="nc" id="L109">        BaseResponseDTO response = userService.registerAccount(userDTO);</span>
+<span class="nc" id="L110">        return ResponseEntity.status(HttpStatus.CREATED).body(response);</span>
     }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -150,8 +149,8 @@ public class UserController {
             @RequestParam @Email(message = &quot;Invalid email format&quot;) @NotBlank(message = &quot;Email is required&quot;) String email,
             HttpServletRequest request) {
         
-<span class="nc" id="L153">        ResponseDto response = userService.handleForgotPassword(email, request.getServerName());</span>
-<span class="nc" id="L154">        return ResponseEntity.ok(response);</span>
+<span class="nc" id="L152">        ResponseDto response = userService.handleForgotPassword(email, request.getServerName());</span>
+<span class="nc" id="L153">        return ResponseEntity.ok(response);</span>
     }
 
     @Operation(
@@ -187,16 +186,16 @@ public class UserController {
     public ResponseEntity&lt;String&gt; getResetPasswordPage(
             @RequestParam @NotBlank(message = &quot;Token is required&quot;) String token) {
         try {
-<span class="nc bnc" id="L190" title="All 2 branches missed.">            if (!userService.validateResetToken(token)) {</span>
-<span class="nc" id="L191">                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(&quot;Invalid or expired token&quot;);</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">            if (!userService.validateResetToken(token)) {</span>
+<span class="nc" id="L190">                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(&quot;Invalid or expired token&quot;);</span>
             }
             
-<span class="nc" id="L194">            ClassPathResource resource = new ClassPathResource(&quot;templates/reset-password.html&quot;);</span>
-<span class="nc" id="L195">            String htmlContent = Files.readString(Paths.get(resource.getURI()), StandardCharsets.UTF_8);</span>
-<span class="nc" id="L196">            return ResponseEntity.ok().contentType(MediaType.TEXT_HTML).body(htmlContent);</span>
-<span class="nc" id="L197">        } catch (IOException e) {</span>
-<span class="nc" id="L198">            log.error(&quot;Error loading reset password template&quot;, e);</span>
-<span class="nc" id="L199">            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(&quot;Error loading password reset form&quot;);</span>
+<span class="nc" id="L193">            ClassPathResource resource = new ClassPathResource(&quot;templates/reset-password.html&quot;);</span>
+<span class="nc" id="L194">            String htmlContent = Files.readString(Paths.get(resource.getURI()), StandardCharsets.UTF_8);</span>
+<span class="nc" id="L195">            return ResponseEntity.ok().contentType(MediaType.TEXT_HTML).body(htmlContent);</span>
+<span class="nc" id="L196">        } catch (IOException e) {</span>
+<span class="nc" id="L197">            log.error(&quot;Error loading reset password template&quot;, e);</span>
+<span class="nc" id="L198">            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(&quot;Error loading password reset form&quot;);</span>
         }
     }
 
@@ -220,8 +219,8 @@ public class UserController {
     })
     @PostMapping(&quot;/password/reset&quot;)
     public ResponseEntity&lt;ResponseDto&gt; resetPassword(@Valid @RequestBody ResetPassword request) {
-<span class="nc" id="L223">        ResponseDto response = userService.processPasswordUpdate(request);</span>
-<span class="nc" id="L224">        return ResponseEntity.ok(response);</span>
+<span class="nc" id="L222">        ResponseDto response = userService.processPasswordUpdate(request);</span>
+<span class="nc" id="L223">        return ResponseEntity.ok(response);</span>
     }
 
 
@@ -264,36 +263,36 @@ public class UserController {
             @RequestParam(defaultValue = &quot;0&quot;) @Min(value = 0, message = &quot;Page number cannot be negative&quot;) int page,
             @RequestParam(defaultValue = &quot;10&quot;) @Min(value = 1, message = &quot;Page size must be at least 1&quot;) int size) {
         
-<span class="nc" id="L267">        Page&lt;UserDTO&gt; userPage = userService.getAllUsers(page, size);</span>
+<span class="nc" id="L266">        Page&lt;UserDTO&gt; userPage = userService.getAllUsers(page, size);</span>
 
-<span class="nc" id="L269">        List&lt;UserDTO&gt; decryptedUsers = userPage.getContent().stream()</span>
-<span class="nc" id="L270">            .map(user -&gt; {</span>
+<span class="nc" id="L268">        List&lt;UserDTO&gt; decryptedUsers = userPage.getContent().stream()</span>
+<span class="nc" id="L269">            .map(user -&gt; {</span>
                 try {
-<span class="nc bnc" id="L272" title="All 2 branches missed.">                    if (user.getFirstName() != null) {</span>
-<span class="nc" id="L273">                        user.setFirstName(encryptionUtil.decrypt(user.getFirstName()));</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">                    if (user.getFirstName() != null) {</span>
+<span class="nc" id="L272">                        user.setFirstName(encryptionUtil.decrypt(user.getFirstName()));</span>
                     }
-<span class="nc bnc" id="L275" title="All 2 branches missed.">                    if (user.getLastName() != null) {</span>
-<span class="nc" id="L276">                        user.setLastName(encryptionUtil.decrypt(user.getLastName()));</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">                    if (user.getLastName() != null) {</span>
+<span class="nc" id="L275">                        user.setLastName(encryptionUtil.decrypt(user.getLastName()));</span>
                     }
-<span class="nc bnc" id="L278" title="All 2 branches missed.">                    if (user.getAddress() != null) {</span>
-<span class="nc" id="L279">                        user.setAddress(encryptionUtil.decrypt(user.getAddress()));</span>
+<span class="nc bnc" id="L277" title="All 2 branches missed.">                    if (user.getAddress() != null) {</span>
+<span class="nc" id="L278">                        user.setAddress(encryptionUtil.decrypt(user.getAddress()));</span>
                     }
-<span class="nc" id="L281">                } catch (Exception e) {</span>
-<span class="nc" id="L282">                    log.error(&quot;Error decrypting user data: {}&quot;, e.getMessage());</span>
-<span class="nc" id="L283">                }</span>
-<span class="nc" id="L284">                return user;</span>
+<span class="nc" id="L280">                } catch (Exception e) {</span>
+<span class="nc" id="L281">                    log.error(&quot;Error decrypting user data: {}&quot;, e.getMessage());</span>
+<span class="nc" id="L282">                }</span>
+<span class="nc" id="L283">                return user;</span>
             })
-<span class="nc" id="L286">            .toList();</span>
+<span class="nc" id="L285">            .toList();</span>
         
-<span class="nc" id="L288">        ResponseAllUsersDto response = new ResponseAllUsersDto(&quot;success&quot;, decryptedUsers);</span>
-<span class="nc" id="L289">        response.setTotalPages(userPage.getTotalPages());</span>
-<span class="nc" id="L290">        response.setTotalElements(userPage.getTotalElements());</span>
-<span class="nc" id="L291">        response.setPageSize(userPage.getSize());</span>
-<span class="nc" id="L292">        response.setCurrentPage(userPage.getNumber());</span>
-<span class="nc" id="L293">        response.setFirst(userPage.isFirst());</span>
-<span class="nc" id="L294">        response.setLast(userPage.isLast());</span>
+<span class="nc" id="L287">        ResponseAllUsersDto response = new ResponseAllUsersDto(&quot;success&quot;, decryptedUsers);</span>
+<span class="nc" id="L288">        response.setTotalPages(userPage.getTotalPages());</span>
+<span class="nc" id="L289">        response.setTotalElements(userPage.getTotalElements());</span>
+<span class="nc" id="L290">        response.setPageSize(userPage.getSize());</span>
+<span class="nc" id="L291">        response.setCurrentPage(userPage.getNumber());</span>
+<span class="nc" id="L292">        response.setFirst(userPage.isFirst());</span>
+<span class="nc" id="L293">        response.setLast(userPage.isLast());</span>
         
-<span class="nc" id="L296">        return ResponseEntity.ok(response);</span>
+<span class="nc" id="L295">        return ResponseEntity.ok(response);</span>
     }
 
     @Operation(
@@ -326,24 +325,24 @@ public class UserController {
 //    @PreAuthorize(&quot;hasAuthority('STUDENT')&quot;)
     public ResponseEntity&lt;UserDTO&gt; getUserById(
             @PathVariable @Min(value = 1, message = &quot;Invalid user ID&quot;) Long id) {
-<span class="nc" id="L329">        UserDTO user = userService.getUserById(id);</span>
+<span class="nc" id="L328">        UserDTO user = userService.getUserById(id);</span>
         
         try {
-<span class="nc bnc" id="L332" title="All 2 branches missed.">            if (user.getFirstName() != null) {</span>
-<span class="nc" id="L333">                user.setFirstName(encryptionUtil.decrypt(user.getFirstName()));</span>
+<span class="nc bnc" id="L331" title="All 2 branches missed.">            if (user.getFirstName() != null) {</span>
+<span class="nc" id="L332">                user.setFirstName(encryptionUtil.decrypt(user.getFirstName()));</span>
             }
-<span class="nc bnc" id="L335" title="All 2 branches missed.">            if (user.getLastName() != null) {</span>
-<span class="nc" id="L336">                user.setLastName(encryptionUtil.decrypt(user.getLastName()));</span>
+<span class="nc bnc" id="L334" title="All 2 branches missed.">            if (user.getLastName() != null) {</span>
+<span class="nc" id="L335">                user.setLastName(encryptionUtil.decrypt(user.getLastName()));</span>
             }
-<span class="nc bnc" id="L338" title="All 2 branches missed.">            if (user.getAddress() != null) {</span>
-<span class="nc" id="L339">                user.setAddress(encryptionUtil.decrypt(user.getAddress()));</span>
+<span class="nc bnc" id="L337" title="All 2 branches missed.">            if (user.getAddress() != null) {</span>
+<span class="nc" id="L338">                user.setAddress(encryptionUtil.decrypt(user.getAddress()));</span>
             }
 
-<span class="nc" id="L342">        } catch (Exception e) {</span>
-<span class="nc" id="L343">            log.error(&quot;Error decrypting user data: {}&quot;, e.getMessage());</span>
-<span class="nc" id="L344">        }</span>
+<span class="nc" id="L341">        } catch (Exception e) {</span>
+<span class="nc" id="L342">            log.error(&quot;Error decrypting user data: {}&quot;, e.getMessage());</span>
+<span class="nc" id="L343">        }</span>
         
-<span class="nc" id="L346">        return ResponseEntity.ok(user);</span>
+<span class="nc" id="L345">        return ResponseEntity.ok(user);</span>
     }
 
     @Operation(
@@ -375,26 +374,26 @@ public class UserController {
     @GetMapping(&quot;/profile/{id}&quot;)
     public ResponseEntity&lt;UserProfileDTO&gt; getUserProfile(
             @PathVariable @Min(value = 1, message = &quot;Invalid user ID&quot;) Long id) {
-<span class="nc" id="L378">        UserProfileDTO profile = userService.getUserProfileById(id);</span>
+<span class="nc" id="L377">        UserProfileDTO profile = userService.getUserProfileById(id);</span>
 
         try {
-<span class="nc" id="L381">            UserDTO user = profile.getUser();</span>
-<span class="nc bnc" id="L382" title="All 2 branches missed.">            if (user != null) {</span>
-<span class="nc bnc" id="L383" title="All 2 branches missed.">                if (user.getFirstName() != null) {</span>
-<span class="nc" id="L384">                    user.setFirstName(encryptionUtil.decrypt(user.getFirstName()));</span>
+<span class="nc" id="L380">            UserDTO user = profile.getUser();</span>
+<span class="nc bnc" id="L381" title="All 2 branches missed.">            if (user != null) {</span>
+<span class="nc bnc" id="L382" title="All 2 branches missed.">                if (user.getFirstName() != null) {</span>
+<span class="nc" id="L383">                    user.setFirstName(encryptionUtil.decrypt(user.getFirstName()));</span>
                 }
-<span class="nc bnc" id="L386" title="All 2 branches missed.">                if (user.getLastName() != null) {</span>
-<span class="nc" id="L387">                    user.setLastName(encryptionUtil.decrypt(user.getLastName()));</span>
+<span class="nc bnc" id="L385" title="All 2 branches missed.">                if (user.getLastName() != null) {</span>
+<span class="nc" id="L386">                    user.setLastName(encryptionUtil.decrypt(user.getLastName()));</span>
                 }
-<span class="nc bnc" id="L389" title="All 2 branches missed.">                if (user.getAddress() != null) {</span>
-<span class="nc" id="L390">                    user.setAddress(encryptionUtil.decrypt(user.getAddress()));</span>
+<span class="nc bnc" id="L388" title="All 2 branches missed.">                if (user.getAddress() != null) {</span>
+<span class="nc" id="L389">                    user.setAddress(encryptionUtil.decrypt(user.getAddress()));</span>
                 }
             }
-<span class="nc" id="L393">        } catch (Exception e) {</span>
-<span class="nc" id="L394">            log.error(&quot;Error decrypting user data: {}&quot;, e.getMessage());</span>
-<span class="nc" id="L395">        }</span>
+<span class="nc" id="L392">        } catch (Exception e) {</span>
+<span class="nc" id="L393">            log.error(&quot;Error decrypting user data: {}&quot;, e.getMessage());</span>
+<span class="nc" id="L394">        }</span>
         
-<span class="nc" id="L397">        return ResponseEntity.ok(profile);</span>
+<span class="nc" id="L396">        return ResponseEntity.ok(profile);</span>
     }
     
     @Operation(
@@ -418,26 +417,26 @@ public class UserController {
     })
     @GetMapping(&quot;/profile/me&quot;)
     public ResponseEntity&lt;UserProfileDTO&gt; getCurrentUserProfile() {
-<span class="nc" id="L421">        UserProfileDTO profile = userService.getCurrentUserProfile();</span>
+<span class="nc" id="L420">        UserProfileDTO profile = userService.getCurrentUserProfile();</span>
         
         try {
-<span class="nc" id="L424">            UserDTO user = profile.getUser();</span>
-<span class="nc bnc" id="L425" title="All 2 branches missed.">            if (user != null) {</span>
-<span class="nc bnc" id="L426" title="All 2 branches missed.">                if (user.getFirstName() != null) {</span>
-<span class="nc" id="L427">                    user.setFirstName(encryptionUtil.decrypt(user.getFirstName()));</span>
+<span class="nc" id="L423">            UserDTO user = profile.getUser();</span>
+<span class="nc bnc" id="L424" title="All 2 branches missed.">            if (user != null) {</span>
+<span class="nc bnc" id="L425" title="All 2 branches missed.">                if (user.getFirstName() != null) {</span>
+<span class="nc" id="L426">                    user.setFirstName(encryptionUtil.decrypt(user.getFirstName()));</span>
                 }
-<span class="nc bnc" id="L429" title="All 2 branches missed.">                if (user.getLastName() != null) {</span>
-<span class="nc" id="L430">                    user.setLastName(encryptionUtil.decrypt(user.getLastName()));</span>
+<span class="nc bnc" id="L428" title="All 2 branches missed.">                if (user.getLastName() != null) {</span>
+<span class="nc" id="L429">                    user.setLastName(encryptionUtil.decrypt(user.getLastName()));</span>
                 }
-<span class="nc bnc" id="L432" title="All 2 branches missed.">                if (user.getAddress() != null) {</span>
-<span class="nc" id="L433">                    user.setAddress(encryptionUtil.decrypt(user.getAddress()));</span>
+<span class="nc bnc" id="L431" title="All 2 branches missed.">                if (user.getAddress() != null) {</span>
+<span class="nc" id="L432">                    user.setAddress(encryptionUtil.decrypt(user.getAddress()));</span>
                 }
             }
-<span class="nc" id="L436">        } catch (Exception e) {</span>
-<span class="nc" id="L437">            log.error(&quot;Error decrypting user data: {}&quot;, e.getMessage());</span>
-<span class="nc" id="L438">        }</span>
+<span class="nc" id="L435">        } catch (Exception e) {</span>
+<span class="nc" id="L436">            log.error(&quot;Error decrypting user data: {}&quot;, e.getMessage());</span>
+<span class="nc" id="L437">        }</span>
         
-<span class="nc" id="L440">        return ResponseEntity.ok(profile);</span>
+<span class="nc" id="L439">        return ResponseEntity.ok(profile);</span>
     }
 
     @Operation(
@@ -477,8 +476,8 @@ public class UserController {
     public ResponseEntity&lt;UserDTO&gt; updateUser(
             @PathVariable @Min(value = 1, message = &quot;Invalid user ID&quot;) Long id,
             @Valid @RequestBody UserUpdateRequest request) {
-<span class="nc" id="L480">        UserDTO updatedUser = userService.updateUser(id, request);</span>
-<span class="nc" id="L481">        return ResponseEntity.ok(updatedUser);</span>
+<span class="nc" id="L479">        UserDTO updatedUser = userService.updateUser(id, request);</span>
+<span class="nc" id="L480">        return ResponseEntity.ok(updatedUser);</span>
     }
 
     @Operation(
@@ -517,51 +516,51 @@ public class UserController {
     @GetMapping(&quot;/security/device-fingerprint&quot;)
     public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; checkDeviceFingerprint(HttpServletRequest request) {
         try {
-<span class="nc" id="L520">            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();</span>
-<span class="nc bnc" id="L521" title="All 6 branches missed.">            if (authentication == null || !authentication.isAuthenticated() || </span>
+<span class="nc" id="L519">            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="nc bnc" id="L520" title="All 6 branches missed.">            if (authentication == null || !authentication.isAuthenticated() || </span>
                     authentication instanceof AnonymousAuthenticationToken) {
-<span class="nc" id="L523">                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)</span>
-<span class="nc" id="L524">                        .body(Map.of(&quot;error&quot;, &quot;User not authenticated&quot;));</span>
+<span class="nc" id="L522">                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)</span>
+<span class="nc" id="L523">                        .body(Map.of(&quot;error&quot;, &quot;User not authenticated&quot;));</span>
             }
             
-<span class="nc" id="L527">            String username = authentication.getName();</span>
-<span class="nc" id="L528">            User user = userRepository.findByEmail(username);</span>
+<span class="nc" id="L526">            String username = authentication.getName();</span>
+<span class="nc" id="L527">            User user = userRepository.findByEmail(username);</span>
 
-<span class="nc bnc" id="L530" title="All 2 branches missed.">            if (user == null) {</span>
-<span class="nc" id="L531">                return ResponseEntity.status(HttpStatus.NOT_FOUND)</span>
-<span class="nc" id="L532">                        .body(Map.of(&quot;error&quot;, &quot;User not found&quot;));</span>
+<span class="nc bnc" id="L529" title="All 2 branches missed.">            if (user == null) {</span>
+<span class="nc" id="L530">                return ResponseEntity.status(HttpStatus.NOT_FOUND)</span>
+<span class="nc" id="L531">                        .body(Map.of(&quot;error&quot;, &quot;User not found&quot;));</span>
             }
 
-<span class="nc" id="L535">            String storedFingerprint = user.getDeviceFingerprint();</span>
-<span class="nc" id="L536">            String currentFingerprint = jwtService.generateDeviceFingerprint(request);</span>
+<span class="nc" id="L534">            String storedFingerprint = user.getDeviceFingerprint();</span>
+<span class="nc" id="L535">            String currentFingerprint = jwtService.generateDeviceFingerprint(request);</span>
             
-<span class="nc" id="L538">            Map&lt;String, Object&gt; result = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L539">            result.put(&quot;email&quot;, user.getEmail());</span>
-<span class="nc" id="L540">            result.put(&quot;lastLogin&quot;, user.getLastLogin());</span>
+<span class="nc" id="L537">            Map&lt;String, Object&gt; result = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L538">            result.put(&quot;email&quot;, user.getEmail());</span>
+<span class="nc" id="L539">            result.put(&quot;lastLogin&quot;, user.getLastLogin());</span>
 
-<span class="nc bnc" id="L542" title="All 2 branches missed.">            if (storedFingerprint != null) {</span>
-<span class="nc" id="L543">                result.put(&quot;storedFingerprint&quot;, storedFingerprint.substring(0, 8) + &quot;...&quot;);</span>
+<span class="nc bnc" id="L541" title="All 2 branches missed.">            if (storedFingerprint != null) {</span>
+<span class="nc" id="L542">                result.put(&quot;storedFingerprint&quot;, storedFingerprint.substring(0, 8) + &quot;...&quot;);</span>
             } else {
-<span class="nc" id="L545">                result.put(&quot;storedFingerprint&quot;, null);</span>
+<span class="nc" id="L544">                result.put(&quot;storedFingerprint&quot;, null);</span>
             }
             
-<span class="nc bnc" id="L548" title="All 2 branches missed.">            if (currentFingerprint != null) {</span>
-<span class="nc" id="L549">                result.put(&quot;currentFingerprint&quot;, currentFingerprint.substring(0, 8) + &quot;...&quot;);</span>
+<span class="nc bnc" id="L547" title="All 2 branches missed.">            if (currentFingerprint != null) {</span>
+<span class="nc" id="L548">                result.put(&quot;currentFingerprint&quot;, currentFingerprint.substring(0, 8) + &quot;...&quot;);</span>
             } else {
-<span class="nc" id="L551">                result.put(&quot;currentFingerprint&quot;, null);</span>
+<span class="nc" id="L550">                result.put(&quot;currentFingerprint&quot;, null);</span>
             }
             
-<span class="nc bnc" id="L554" title="All 4 branches missed.">            boolean fingerprintsMatch = storedFingerprint != null &amp;&amp; </span>
+<span class="nc bnc" id="L553" title="All 4 branches missed.">            boolean fingerprintsMatch = storedFingerprint != null &amp;&amp; </span>
                     currentFingerprint != null &amp;&amp; 
-<span class="nc bnc" id="L556" title="All 2 branches missed.">                    storedFingerprint.equals(currentFingerprint);</span>
+<span class="nc bnc" id="L555" title="All 2 branches missed.">                    storedFingerprint.equals(currentFingerprint);</span>
             
-<span class="nc" id="L558">            result.put(&quot;fingerprintsMatch&quot;, fingerprintsMatch);</span>
+<span class="nc" id="L557">            result.put(&quot;fingerprintsMatch&quot;, fingerprintsMatch);</span>
             
-<span class="nc" id="L560">            return ResponseEntity.ok(result);</span>
-<span class="nc" id="L561">        } catch (Exception e) {</span>
-<span class="nc" id="L562">            log.error(&quot;Error checking device fingerprint: {}&quot;, e.getMessage(), e);</span>
-<span class="nc" id="L563">            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)</span>
-<span class="nc" id="L564">                    .body(Map.of(&quot;error&quot;, &quot;Error checking device fingerprint: &quot; + e.getMessage()));</span>
+<span class="nc" id="L559">            return ResponseEntity.ok(result);</span>
+<span class="nc" id="L560">        } catch (Exception e) {</span>
+<span class="nc" id="L561">            log.error(&quot;Error checking device fingerprint: {}&quot;, e.getMessage(), e);</span>
+<span class="nc" id="L562">            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L563">                    .body(Map.of(&quot;error&quot;, &quot;Error checking device fingerprint: &quot; + e.getMessage()));</span>
         }
     }
 }

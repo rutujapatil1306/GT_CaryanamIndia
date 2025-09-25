@@ -117,14 +117,13 @@ public class AppConfig {
                 "/api/**",
                 "/user/**",
                     "/api/v1/users/register/dealer",
-<<<<<<< HEAD
                     "/dealer/**", // add
                     "/premiumcars/photos/**",
-=======
                     "/dealer/**",
                     "/premiumbrands/**",
                     "/premiums/**",// add
->>>>>>> f6478de2863350de09dee9e4d298974975739906
+                    "/dealer/**", // add
+                    "/premiumcars/photos/**",
                 jwtConfig.getUrl(),
                 jwtConfig.getRefreshUrl()
             )
@@ -151,7 +150,6 @@ public class AppConfig {
                 .requestMatchers(HttpMethod.POST, "/dealer").permitAll()  // added
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/v1/users/register").permitAll()
-<<<<<<< HEAD
                 .requestMatchers("/api/v1/users/register/dealer").permitAll()// add
                 .requestMatchers("/api/v1/users/password/**").permitAll()
                 .requestMatchers("/api/v1/exam/**").permitAll()
@@ -161,14 +159,21 @@ public class AppConfig {
                 .requestMatchers("/api/car_photo/**").permitAll()
                 .requestMatchers("/cars/filter/**").permitAll()//add
                 .requestMatchers("/premiumcars/photos/**").permitAll()
-=======
                 .requestMatchers("/api/v1/users/register/dealer").permitAll() // add
                 .requestMatchers("/api/v1/users/password/**").permitAll()
                 .requestMatchers("/api/v1/exam/**").permitAll()
                 .requestMatchers("/api/v1/**").permitAll()
                 .requestMatchers("/premiumbrands/**").permitAll()
                 .requestMatchers("/premiums/**").permitAll()
->>>>>>> f6478de2863350de09dee9e4d298974975739906
+                .requestMatchers("/api/v1/users/register/dealer").permitAll()// add
+                .requestMatchers("/api/v1/users/password/**").permitAll()
+                .requestMatchers("/api/v1/exam/**").permitAll()
+                .requestMatchers("/api/v1/**").permitAll()
+                .requestMatchers("/api/brands/**").permitAll()
+                .requestMatchers("/api/cars/**").permitAll()
+                .requestMatchers("/api/carPhotos/**").permitAll()
+                .requestMatchers("/cars/filter/**").permitAll()//add
+                .requestMatchers("/premiumcars/photos/**").permitAll()
                 .requestMatchers(jwtConfig.getUrl()).permitAll()
                 .requestMatchers(jwtConfig.getRefreshUrl()).permitAll()
 
@@ -202,7 +207,6 @@ public class AppConfig {
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/v1/users/register/dealer"),// add
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/dealer/**"),// added
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/v1/users/password/**"),
-<<<<<<< HEAD
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/v1/users/password/**"),
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/v1/users/password/**"),
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/brands/**"),
@@ -210,9 +214,9 @@ public class AppConfig {
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/car_photo/**"),
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/cars/filter/**"),//add
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/premiumcars/photos/**"),
-=======
->>>>>>> f6478de2863350de09dee9e4d298974975739906
-
+                    new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/carPhotos/**"),
+                    new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/cars/filter/**"),//add
+                    new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/premiumcars/photos/**"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/v2/api-docs/**"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/v3/api-docs/**"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/swagger-resources/**"),
@@ -221,11 +225,9 @@ public class AppConfig {
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/webjars/**"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/swagger-ui.html"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/user/**"),
-<<<<<<< HEAD
-=======
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/premiumbrands/**"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/premiums/**"),
->>>>>>> f6478de2863350de09dee9e4d298974975739906
+
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(jwtConfig.getUrl()),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(jwtConfig.getRefreshUrl())
             );

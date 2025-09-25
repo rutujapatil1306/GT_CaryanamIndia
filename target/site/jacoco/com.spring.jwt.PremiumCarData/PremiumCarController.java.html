@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PremiumCarController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JWT-with-Spring-Security</a> &gt; <a href="index.source.html" class="el_package">com.spring.jwt.PremiumCarData</a> &gt; <span class="el_source">PremiumCarController.java</span></div><h1>PremiumCarController.java</h1><pre class="source lang-java linenums">package com.spring.jwt.PremiumCarData;
+
+
+import com.spring.jwt.entity.Status;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping(&quot;/premiums&quot;)
+<span class="nc" id="L17">public class</span>
+
+PremiumCarController {
+
+    @Autowired
+    private PremiumCarService premiumCarService;
+
+    @PostMapping(&quot;/add&quot;)
+    public ResponseEntity&lt;PremiumResponseDTO&gt; createCar(@Valid @RequestBody PremiumCarDTO dto) {
+<span class="nc" id="L26">        PremiumCarDTO premiumCarDTO = premiumCarService.createPremiumCar(dto);</span>
+
+<span class="nc" id="L28">        PremiumResponseDTO response = new PremiumResponseDTO(</span>
+                &quot;success&quot;,
+                &quot;Car created successfully&quot;,
+                premiumCarDTO
+        );
+
+<span class="nc" id="L34">        return ResponseEntity.status(HttpStatus.CREATED).body(response);</span>
+    }
+//
+@PatchMapping(&quot;/update&quot;)
+public ResponseEntity&lt;PremiumResponseDTO&gt; patchPremiumCar(
+        @RequestParam Integer id,
+         @RequestBody PremiumCarDTO dto) {
+
+<span class="nc" id="L42">    PremiumCarDTO updatedCar = premiumCarService.updatePremiumCar(id, dto);</span>
+
+<span class="nc" id="L44">    return ResponseEntity.ok(</span>
+            new PremiumResponseDTO(&quot;success&quot;, &quot;Car updated successfully&quot;, updatedCar)
+    );
+}
+
+
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;PremiumResponseDTO&gt; getCarById(@PathVariable Integer id) {
+<span class="nc" id="L53">        PremiumCarDTO car = premiumCarService.getPremiumCarById(id);</span>
+<span class="nc" id="L54">        return ResponseEntity.ok(new PremiumResponseDTO(&quot;success&quot;, &quot;Car fetched successfully&quot;, car));</span>
+    }
+
+
+   @DeleteMapping(&quot;/deletecar&quot;)
+   public ResponseEntity&lt;PremiumResponseDTO&gt; deleteCar(
+        @RequestParam Integer carId,
+        @RequestParam(defaultValue = &quot;soft&quot;) String type) {
+
+<span class="nc" id="L63">    premiumCarService.deletePremiumCar(carId, type);</span>
+
+<span class="nc" id="L65">    return ResponseEntity.ok(</span>
+            new PremiumResponseDTO(
+                    &quot;success&quot;,
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                    &quot;Car with ID &quot; + carId + (type.equalsIgnoreCase(&quot;soft&quot;) ? &quot; deactivate&quot; : &quot; deleted&quot;) + &quot; successfully&quot;</span>
+            )
+    );
+}
+
+    @GetMapping(&quot;/dealer/status&quot;)
+    public ResponseEntity&lt;PremiumResponseDTO&gt; getCarsByDealerAndStatus(
+            @RequestParam Long dealerId,
+            @RequestParam(required = false) Status status,
+            Pageable pageable) {
+
+<span class="nc" id="L79">        Page&lt;PremiumCarDTO&gt; cars = premiumCarService.getCarsByDealerAndStatus(dealerId, status, pageable);</span>
+
+<span class="nc" id="L81">        return ResponseEntity.ok(</span>
+                new PremiumResponseDTO(
+                        &quot;success&quot;,
+                        &quot;Cars fetched successfully for dealerId: &quot; + dealerId +
+<span class="nc bnc" id="L85" title="All 2 branches missed.">                                (status != null ? &quot; with status: &quot; + status : &quot;&quot;),</span>
+                        cars
+                )
+        );
+    }
+
+    @GetMapping(&quot;/car/status&quot;)
+    public ResponseEntity&lt;Page&lt;PremiumCarDTO&gt;&gt; getCarsByStatus(
+            @RequestParam Status status,
+            @RequestParam(defaultValue = &quot;0&quot;) int page,
+            @RequestParam(defaultValue = &quot;1&quot;) int size,
+            @RequestParam(defaultValue = &quot;premiumCarId&quot;) String sortBy,
+            @RequestParam(defaultValue = &quot;asc&quot;) String sortDir
+    ) {
+<span class="nc" id="L99">        Page&lt;PremiumCarDTO&gt; cars = premiumCarService.getCarsByStatus(status, page, size, sortBy, sortDir);</span>
+<span class="nc" id="L100">        return ResponseEntity.ok(cars);</span>
+    }
+
+    @GetMapping(&quot;/main&quot;)
+    public ResponseEntity&lt;PremiumResponseDTO&gt; getCarByMainCarId(@RequestParam String mainCarId) {
+<span class="nc" id="L105">        PremiumCarDTO car = premiumCarService.getCarByMainCarId(mainCarId);</span>
+<span class="nc" id="L106">        return ResponseEntity.ok(new PremiumResponseDTO(&quot;success&quot;, &quot;Car fetched successfully&quot;, car));</span>
+    }
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

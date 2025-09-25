@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DealerResponseDto {
-
     private String message;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -39,19 +39,12 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-<<<<<<< HEAD
-
 		<dependency>
 			<groupId>com.cloudinary</groupId>
 			<artifactId>cloudinary-http44</artifactId>
 			<version>1.36.0</version>
 		</dependency>
 
-
-
-
-		<dependency>
-=======
         <dependency>
             <groupId>com.cloudinary</groupId>
             <artifactId>cloudinary-http44</artifactId>
@@ -59,7 +52,6 @@
         </dependency>
 
         <dependency>
->>>>>>> f6478de2863350de09dee9e4d298974975739906
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
@@ -68,17 +60,9 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-<<<<<<< HEAD
 			<version>1.18.30</version> <!-- or latest -->
 			<scope>provided</scope>
 		</dependency>
-
-
-=======
-			<optional>true</optional>
-		</dependency>
-
->>>>>>> f6478de2863350de09dee9e4d298974975739906
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -204,37 +188,24 @@
 			<version>5.10.1</version>
 			<scope>test</scope>
 		</dependency>
-<<<<<<< HEAD
-=======
-		
->>>>>>> f6478de2863350de09dee9e4d298974975739906
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>5.10.1</version>
 			<scope>test</scope>
 		</dependency>
-<<<<<<< HEAD
-=======
-		
->>>>>>> f6478de2863350de09dee9e4d298974975739906
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-params</artifactId>
 			<version>5.10.1</version>
 			<scope>test</scope>
 		</dependency>
-
-<<<<<<< HEAD
-=======
 		<!-- Spring Boot test starter -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
->>>>>>> f6478de2863350de09dee9e4d298974975739906
 		<!-- TestContainers for testing with real MySQL -->
 		<dependency>
 			<groupId>org.testcontainers</groupId>
@@ -260,7 +231,6 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>5.2.3</version>
 		</dependency>
-<<<<<<< HEAD
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-test</artifactId>
@@ -272,12 +242,6 @@
             <version>2.0.0</version>
         </dependency>
     </dependencies>
-=======
-
-
-	</dependencies>
-
->>>>>>> f6478de2863350de09dee9e4d298974975739906
 	<build>
 		<plugins>
 			<plugin>

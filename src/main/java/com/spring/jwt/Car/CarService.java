@@ -31,17 +31,10 @@ public interface CarService {
     //Get Car By MainCarID
     CarDto getCarByMainCarId(String mainCarId);
 
-<<<<<<< HEAD
+
     CarResponseDto<List<CarDto>> filterCars(Status status, String brand, String model, String city, String fuelType, String transmission,
             Integer minPrice, Integer maxPrice);
     CarResponseDto<List<CarDto>> getCarsWithPaginationOnlyActivePending(int page, int size,Status status);
     CarResponseDto<List<CarDto>> getCarsWithoutPaginationOnlyActivePending(Status status);
 
-=======
-
-    CarResponseDto<List<CarDto>> getCarsWithPaginationOnlyActivePending(int page, int size,Status status);
-    CarResponseDto<List<CarDto>> getCarsWithoutPaginationOnlyActivePending(Status status);
-
-    CarResponseDto<List<CarDto>> filterCars(Status status, String brand, String model, String city, String fuelType, String transmission, Integer minPrice, Integer maxPrice);
->>>>>>> f6478de2863350de09dee9e4d298974975739906
 }

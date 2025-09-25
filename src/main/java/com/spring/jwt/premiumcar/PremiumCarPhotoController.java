@@ -47,6 +47,7 @@ public class PremiumCarPhotoController {
         return ResponseEntity.status(response.getCode()).body(response);
     }
 
+
     // Get Photo by ID
     @GetMapping("/{photoId}")
     public ResponseEntity<PremiumCarPhotoDto> getPhotoById(@PathVariable Long photoId) {

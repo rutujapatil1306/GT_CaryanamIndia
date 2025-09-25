@@ -23,21 +23,10 @@ public class DealerServiceImpl implements DealerService {
 
     private final DealerRepository dealerRepository;
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> f6478de2863350de09dee9e4d298974975739906
     @Override
     public DealerResponseDto updateDealer(Integer dealerId, DealerDTO dealerDTO) {
         Dealer dealer = dealerRepository.findById(dealerId)
                 .orElseThrow(() -> new DealerNotFoundException("Dealer not found with id: " + dealerId));
-        if (dealerDTO.getFirstname() != null) {
-            if (dealerDTO.getFirstname().isBlank()) {
-                throw new IllegalArgumentException("Firstname cannot be blank");
-            }
-            dealer.setFirstname(dealerDTO.getFirstname());
-        }
 
         if (dealerDTO.getAddress() != null) {
             if (dealerDTO.getAddress().isBlank()) {
@@ -51,7 +40,6 @@ public class DealerServiceImpl implements DealerService {
             }
             dealer.setShopName(dealerDTO.getShopName());
         }
-<<<<<<< HEAD
         if (dealerDTO.getMobileNo() != null) {
             if (dealerDTO.getMobileNo().isBlank()) {
                 throw new IllegalArgumentException("Mobile number cannot be blank");
@@ -61,7 +49,6 @@ public class DealerServiceImpl implements DealerService {
             }
             dealer.setMobileNo(dealerDTO.getMobileNo());
         }
-=======
 //        if (dealerDTO.getMobileNo() != null) {
 //            if (dealerDTO.getMobileNo().isBlank()) {
 //                throw new IllegalArgumentException("Mobile number cannot be blank");
@@ -71,7 +58,6 @@ public class DealerServiceImpl implements DealerService {
 //            }
 //            dealer.setMobileNo(dealerDTO.getMobileNo());
 //        }
->>>>>>> f6478de2863350de09dee9e4d298974975739906
         if (dealerDTO.getLastName() != null) {
             if (dealerDTO.getLastName().isBlank()) {
                 throw new IllegalArgumentException("Last name cannot be blank");
@@ -145,10 +131,6 @@ public class DealerServiceImpl implements DealerService {
         return DealerResponseDto.successWithList("Dealers fetched successfully", dealerDTOs);
     }
 
-
-
-
-
     @Override
     public DealerResponseDto getDealersByStatus(DealerStatus status) {
         List<DealerDTO> dealerDTOs = dealerRepository.findAll().stream()
@@ -173,19 +155,12 @@ public class DealerServiceImpl implements DealerService {
                 .orElseThrow(() -> new DealerNotFoundException("No dealer found for userId: " + userId));
     }
 
-
-
-<<<<<<< HEAD
-=======
-
     @Override
     public Page<Dealer> getDealersWithPagination(Pageable pageable)
     {
         return dealerRepository.findAll(pageable);
     }
 
-
->>>>>>> f6478de2863350de09dee9e4d298974975739906
     @Override
     public DealerResponseDto updateDealerStatus(Integer dealerId, DealerStatus status) {
         Dealer dealer = dealerRepository.findById(dealerId)
@@ -214,11 +189,12 @@ public class DealerServiceImpl implements DealerService {
 
         List<DealerDTO> dealerDTOs = dealerPage.getContent()
                 .stream()
-                .map(dealer -> DealerMapper.toDTO(dealer, false))
+                .map(dealer -> DealerMapper.toDTO(dealer, true))
                 .toList();
 
         return DealerResponseDto.successWithList("Dealers fetched successfully", dealerDTOs);
     }
+
 
 
 

@@ -9,7 +9,7 @@ import com.spring.jwt.premiumcar.PremiumCarPhotoDto;
     public static PremiumCarPhotoDto toDto(PremiumCarPhoto photo) {
 <span class="nc" id="L10">        PremiumCarPhotoDto dto = new PremiumCarPhotoDto();</span>
 <span class="nc" id="L11">        dto.setId(photo.getPhotoId());</span>
-<span class="nc" id="L12">        dto.setCarId(photo.getCar().getId()); // Only carId, not full Car object</span>
+<span class="nc" id="L12">        dto.setPremiumCarId(photo.getPremiumCar().getPremiumCarId());</span>
 <span class="nc" id="L13">        dto.setDocType(photo.getDocType().name());</span>
 <span class="nc" id="L14">        dto.setFileSize(photo.getFileSize());</span>
 <span class="nc" id="L15">        dto.setContentType(photo.getContentType());</span>

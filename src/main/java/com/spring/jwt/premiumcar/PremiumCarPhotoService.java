@@ -11,8 +11,8 @@ import java.util.Optional;
 import java.util.Optional;
 
 public interface PremiumCarPhotoService {
-    PremiumCarPhotoDto createPhoto(int carId, String docType, MultipartFile file) throws IOException;
-    PremiumCarPhotoDto updatePhoto(Long photoId, String docType, MultipartFile file) throws IOException;
+    ApiResponseDto createPhoto(int premiumCarId, String docType, MultipartFile file) throws IOException;
+    ApiResponseDto updatePhoto(Long photoId, String docType, MultipartFile file) throws IOException;
     Optional<PremiumCarPhotoDto> getPhotoById(Long photoId);
     List<PremiumCarPhotoDto> getPhotosByCar(int carId);
     List<PremiumCarPhotoDto> getPhotosByCarAndDocType(int carId, String docType);

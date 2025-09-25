@@ -2,7 +2,6 @@ package com.spring.jwt.dealer;
 
 import com.spring.jwt.dealer.DTO.DealerResponseDto;
 import com.spring.jwt.dto.DealerDTO;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +16,14 @@ public class DealerController {
     // added
 
 
-    @PatchMapping("/update")
+    @PatchMapping
     public ResponseEntity<DealerResponseDto> updateDealer(
             @RequestParam Integer dealerId,
             @RequestBody DealerDTO dealerDTO) {
         return ResponseEntity.ok(dealerService.updateDealer(dealerId, dealerDTO));
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public ResponseEntity<DealerResponseDto> deleteDealer(@RequestParam Integer dealerId) {
         return ResponseEntity.ok(dealerService.deleteDealer(dealerId));
     }

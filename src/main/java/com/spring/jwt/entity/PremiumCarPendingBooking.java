@@ -1,10 +1,6 @@
 package com.spring.jwt.entity;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-<<<<<<< HEAD
-=======
 import com.spring.jwt.PremiumCarData.PremiumCar;
->>>>>>> f6478de2863350de09dee9e4d298974975739906
 import jakarta.persistence.*;
 import lombok.*;
 

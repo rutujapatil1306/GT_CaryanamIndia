@@ -1,21 +1,13 @@
 package com.spring.jwt.entity;
-<<<<<<< HEAD
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
-=======
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-
-
->>>>>>> f6478de2863350de09dee9e4d298974975739906
 @Getter
 @Setter
 @Entity

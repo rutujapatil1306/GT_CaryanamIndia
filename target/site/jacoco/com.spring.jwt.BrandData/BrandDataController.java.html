@@ -4,6 +4,7 @@ import com.spring.jwt.BrandData.DTO.BrandDataDto;
 import com.spring.jwt.BrandData.DTO.BrandResponseDto;
 import com.spring.jwt.utils.ApiResponse;
 import com.spring.jwt.utils.ResponseDto;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,57 +14,66 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+///////////////////////////////////////////////////////////////////////////////////
+//
+//      File Name    : BrandDataController
+//      Description  : Used to perform BrandData operations
+//      Author       : Kashnoor Kotwal
+//      Date         : 12/09/2025
+//
+//////////////////////////////////////////////////////////////////////////////////
+@Tag(
+        name = &quot;BrandData Management API&quot;,
+        description = &quot;APIs for CRUD Operations For BranData and Advance Operations On BrandData&quot;
+)
+
 @RestController
 @RequestMapping(&quot;/api/brands&quot;)
-<span class="nc" id="L18">@Slf4j</span>
-<span class="nc" id="L19">public class  BrandDataController {</span>
+<span class="nc" id="L32">@Slf4j</span>
+<span class="nc" id="L33">public class  BrandDataController {</span>
 
     @Autowired
     BrandDataService brandDataService;
-
     // API To Create Brand
-
-    @PostMapping
+    @PostMapping(&quot;/create&quot;)
     public ResponseEntity&lt;ResponseDto&gt; createBrand(@Valid @RequestBody BrandDataDto brandDataDto)
     {
 
-<span class="nc" id="L30">            BrandDataDto addedBrand = brandDataService.createBrand(brandDataDto);</span>
-<span class="nc" id="L31">            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto(&quot;Success&quot;,&quot;Brand added Successfully&quot;));</span>
+<span class="nc" id="L42">            BrandDataDto addedBrand = brandDataService.createBrand(brandDataDto);</span>
+<span class="nc" id="L43">            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto(&quot;Success&quot;,&quot;Brand added Successfully&quot;));</span>
 
     }
 
     // API To Get Brand By Id
+    @GetMapping(&quot;/getBrand&quot;)
+   public ResponseEntity&lt;BrandResponseDto&gt; getBrandById(@RequestParam Integer brandId)
 
-    @GetMapping(&quot;/{brandId}&quot;)
-    public ResponseEntity&lt;BrandResponseDto&gt; getBrandById(@RequestParam Integer brandId)
     {
 
-<span class="nc" id="L41">            BrandDataDto brand = brandDataService.getBrandById(brandId);</span>
-<span class="nc" id="L42">            return ResponseEntity.ok(BrandResponseDto.success(&quot;Brand with given id is found&quot;, brand));</span>
+<span class="nc" id="L53">            BrandDataDto brand = brandDataService.getBrandById(brandId);</span>
+<span class="nc" id="L54">            return ResponseEntity.ok(BrandResponseDto.success(&quot;Brand with given id is found&quot;, brand));</span>
 
     }
 
     // API TO Update Brand
-
-    @PatchMapping
+    @PatchMapping(&quot;/update&quot;)
     public ResponseEntity&lt;BrandResponseDto&gt; updateBrandById(@Valid @RequestBody BrandDataDto brandDataDto, @RequestParam Integer brandId)
     {
         try {
-<span class="nc" id="L52">            BrandDataDto updatedBrand = brandDataService.updateBrandById(brandDataDto, brandId);</span>
-<span class="nc" id="L53">            return ResponseEntity.ok(BrandResponseDto.success(&quot;Brand Updated Successfully&quot;, updatedBrand));</span>
+<span class="nc" id="L63">            BrandDataDto updatedBrand = brandDataService.updateBrandById(brandDataDto, brandId);</span>
+<span class="nc" id="L64">            return ResponseEntity.ok(BrandResponseDto.success(&quot;Brand Updated Successfully&quot;, updatedBrand));</span>
         }
-<span class="nc" id="L55">        catch(Exception ex)</span>
+<span class="nc" id="L66">        catch(Exception ex)</span>
         {
-<span class="nc" id="L57">            log.error(&quot;Error Updating Brand&quot;, ex);</span>
-<span class="nc" id="L58">            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BrandResponseDto.error(&quot;Failed To Update Brand at Given Id&quot;, ex.getMessage()));</span>
+<span class="nc" id="L68">            log.error(&quot;Error Updating Brand&quot;, ex);</span>
+<span class="nc" id="L69">            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BrandResponseDto.error(&quot;Failed To Update Brand at Given Id&quot;, ex.getMessage()));</span>
         }
     }
-
-    @DeleteMapping
+    @DeleteMapping(&quot;/delete&quot;)
     public ResponseEntity&lt;ApiResponse&lt;Void&gt;&gt; deleteBrand(@RequestParam Integer brandId)
     {
-<span class="nc" id="L65">        brandDataService.deleteBrand(brandId);</span>
-<span class="nc" id="L66">        return ResponseEntity.ok(ApiResponse.success(&quot;BrandData deleted Successfully&quot;));</span>
+<span class="nc" id="L75">        brandDataService.deleteBrand(brandId);</span>
+<span class="nc" id="L76">        return ResponseEntity.ok(ApiResponse.success(&quot;BrandData deleted Successfully&quot;));</span>
     }
 
     @GetMapping(&quot;/all&quot;)
@@ -71,27 +81,25 @@ import java.util.List;
             (@RequestParam(defaultValue = &quot;o&quot;) int size,
              @RequestParam(defaultValue = &quot;10&quot;) int page) {
 
-<span class="nc" id="L74">            List&lt;BrandDataDto&gt; response = brandDataService.getAllBrands(page, size);</span>
+<span class="nc" id="L84">            List&lt;BrandDataDto&gt; response = brandDataService.getAllBrands(page, size);</span>
 
-<span class="nc" id="L76">            return ResponseEntity.ok(BrandResponseDto.success(&quot;Brands Retrieved Successfully&quot;, response));</span>
+<span class="nc" id="L86">            return ResponseEntity.ok(BrandResponseDto.success(&quot;Brands Retrieved Successfully&quot;, response));</span>
 
     }
-
-
-    @GetMapping
+    @GetMapping(&quot;/uniqueBrands&quot;)
     public ResponseEntity&lt;BrandResponseDto&lt;List&lt;String&gt;&gt;&gt; getUniqueBrands()
     {
-<span class="nc" id="L84">        List&lt;String&gt; uniqueBrands = brandDataService.getUniqueBrands();</span>
+<span class="nc" id="L92">        List&lt;String&gt; uniqueBrands = brandDataService.getUniqueBrands();</span>
 
-<span class="nc" id="L86">        return ResponseEntity.ok(BrandResponseDto.success(&quot;List of Unique Brands &quot;,uniqueBrands));</span>
+<span class="nc" id="L94">        return ResponseEntity.ok(BrandResponseDto.success(&quot;List of Unique Brands &quot;,uniqueBrands));</span>
     }
 
     @GetMapping(&quot;/variants&quot;)
     public ResponseEntity&lt;BrandResponseDto&lt;List&lt;String&gt;&gt;&gt; getVariantByBrand(@RequestParam String brand)
     {
-<span class="nc" id="L92">        List&lt;String&gt; variants = brandDataService.getVariantsByBrand(brand);</span>
+<span class="nc" id="L100">        List&lt;String&gt; variants = brandDataService.getVariantsByBrand(brand);</span>
 
-<span class="nc" id="L94">        return ResponseEntity.ok(BrandResponseDto.success(&quot;Fetched list of Variants By Brand &quot;,variants));</span>
+<span class="nc" id="L102">        return ResponseEntity.ok(BrandResponseDto.success(&quot;Fetched list of Variants By Brand &quot;,variants));</span>
 
     }
 
@@ -100,9 +108,9 @@ import java.util.List;
 
                                                                                @RequestParam String variant)
     {
-<span class="nc" id="L103">        List&lt;String&gt; subVariants = brandDataService.getSubVariantsByBrandVariant(brand, variant);</span>
+<span class="nc" id="L111">        List&lt;String&gt; subVariants = brandDataService.getSubVariantsByBrandVariant(brand, variant);</span>
 
-<span class="nc" id="L105">        return ResponseEntity.ok(BrandResponseDto.success(&quot;Fetched SubVariants for given Brand and Variant&quot;,subVariants));</span>
+<span class="nc" id="L113">        return ResponseEntity.ok(BrandResponseDto.success(&quot;Fetched SubVariants for given Brand and Variant&quot;,subVariants));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PremiumCarMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JWT-with-Spring-Security</a> &gt; <a href="index.source.html" class="el_package">com.spring.jwt.PremiumCarData</a> &gt; <span class="el_source">PremiumCarMapper.java</span></div><h1>PremiumCarMapper.java</h1><pre class="source lang-java linenums">package com.spring.jwt.PremiumCarData;
+
+<span class="nc" id="L3">public class PremiumCarMapper {</span>
+    public static PremiumCar toEntity(PremiumCarDTO dto) {
+
+
+<span class="nc" id="L7">        PremiumCar entity = new PremiumCar();</span>
+<span class="nc" id="L8">        entity.setPremiumCarId(dto.getPremiumCarId());</span>
+<span class="nc" id="L9">        entity.setAirbag(dto.getAirbag());</span>
+<span class="nc" id="L10">        entity.setABS(dto.getABS());</span>
+<span class="nc" id="L11">        entity.setButtonStart(dto.getButtonStart());</span>
+<span class="nc" id="L12">        entity.setSunroof(dto.getSunroof());</span>
+<span class="nc" id="L13">        entity.setChildSafetyLocks(dto.getChildSafetyLocks());</span>
+<span class="nc" id="L14">        entity.setAcFeature(dto.getAcFeature());</span>
+<span class="nc" id="L15">        entity.setMusicFeature(dto.getMusicFeature());</span>
+<span class="nc" id="L16">        entity.setArea(dto.getArea());</span>
+<span class="nc" id="L17">        entity.setVariant(dto.getVariant());</span>
+<span class="nc" id="L18">        entity.setBrand(dto.getBrand());</span>
+<span class="nc" id="L19">        entity.setCarInsurance(dto.getCarInsurance());</span>
+<span class="nc" id="L20">        entity.setCarInsuranceDate(dto.getCarInsuranceDate());</span>
+<span class="nc" id="L21">        entity.setCarInsuranceType(dto.getCarInsuranceType());</span>
+<span class="nc" id="L22">        entity.setCarstatus(dto.getCarstatus());</span>
+<span class="nc" id="L23">        entity.setPendingApproval(dto.isPendingApproval());</span>
+<span class="nc" id="L24">        entity.setCity(dto.getCity());</span>
+<span class="nc" id="L25">        entity.setColor(dto.getColor());</span>
+<span class="nc" id="L26">        entity.setDescription(dto.getDescription());</span>
+<span class="nc" id="L27">        entity.setFuelType(dto.getFuelType());</span>
+<span class="nc" id="L28">        entity.setKmDriven(dto.getKmDriven());</span>
+<span class="nc" id="L29">        entity.setModel(dto.getModel());</span>
+<span class="nc" id="L30">        entity.setOwnerSerial(dto.getOwnerSerial());</span>
+<span class="nc" id="L31">        entity.setPowerWindowFeature(dto.getPowerWindowFeature());</span>
+<span class="nc" id="L32">        entity.setPrice(dto.getPrice());</span>
+<span class="nc" id="L33">        entity.setRearParkingCameraFeature(dto.getRearParkingCameraFeature());</span>
+<span class="nc" id="L34">        entity.setRegistration(dto.getRegistration());</span>
+<span class="nc" id="L35">        entity.setTitle(dto.getTitle());</span>
+<span class="nc" id="L36">        entity.setTransmission(dto.getTransmission());</span>
+<span class="nc" id="L37">        entity.setYear(dto.getYear());</span>
+<span class="nc" id="L38">        entity.setDate(dto.getDate());</span>
+<span class="nc" id="L39">        entity.setDealerId(dto.getDealerId());</span>
+<span class="nc" id="L40">        entity.setCarPhotoId(dto.getCarPhotoId());</span>
+<span class="nc" id="L41">        entity.setMainCarId(dto.getMainCarId());</span>
+<span class="nc" id="L42">        entity.setCarType(dto.getCarType());</span>
+
+<span class="nc" id="L44">        return entity;</span>
+    }
+
+    // Entity → DTO
+    public static PremiumCarDTO toDTO(PremiumCar entity) {
+<span class="nc bnc" id="L49" title="All 2 branches missed.">        if (entity == null) return null;</span>
+
+<span class="nc" id="L51">        return PremiumCarDTO.builder()</span>
+<span class="nc" id="L52">                .premiumCarId(entity.getPremiumCarId())</span>
+<span class="nc" id="L53">                .airbag(entity.getAirbag())</span>
+<span class="nc" id="L54">                .ABS(entity.getABS())</span>
+<span class="nc" id="L55">                .buttonStart(entity.getButtonStart())</span>
+<span class="nc" id="L56">                .sunroof(entity.getSunroof())</span>
+<span class="nc" id="L57">                .childSafetyLocks(entity.getChildSafetyLocks())</span>
+<span class="nc" id="L58">                .acFeature(entity.getAcFeature())</span>
+<span class="nc" id="L59">                .musicFeature(entity.getMusicFeature())</span>
+<span class="nc" id="L60">                .area(entity.getArea())</span>
+<span class="nc" id="L61">                .variant(entity.getVariant())</span>
+<span class="nc" id="L62">                .brand(entity.getBrand())</span>
+<span class="nc" id="L63">                .carInsurance(entity.getCarInsurance())</span>
+<span class="nc" id="L64">                .carInsuranceDate(entity.getCarInsuranceDate())</span>
+<span class="nc" id="L65">                .carInsuranceType(entity.getCarInsuranceType())</span>
+<span class="nc" id="L66">                .carstatus(entity.getCarstatus())</span>
+<span class="nc" id="L67">                .pendingApproval(entity.isPendingApproval())</span>
+<span class="nc" id="L68">                .city(entity.getCity())</span>
+<span class="nc" id="L69">                .color(entity.getColor())</span>
+<span class="nc" id="L70">                .description(entity.getDescription())</span>
+<span class="nc" id="L71">                .fuelType(entity.getFuelType())</span>
+<span class="nc" id="L72">                .kmDriven(entity.getKmDriven())</span>
+<span class="nc" id="L73">                .model(entity.getModel())</span>
+<span class="nc" id="L74">                .ownerSerial(entity.getOwnerSerial())</span>
+<span class="nc" id="L75">                .powerWindowFeature(entity.getPowerWindowFeature())</span>
+<span class="nc" id="L76">                .price(entity.getPrice())</span>
+<span class="nc" id="L77">                .rearParkingCameraFeature(entity.getRearParkingCameraFeature())</span>
+<span class="nc" id="L78">                .registration(entity.getRegistration())</span>
+<span class="nc" id="L79">                .title(entity.getTitle())</span>
+<span class="nc" id="L80">                .transmission(entity.getTransmission())</span>
+<span class="nc" id="L81">                .year(entity.getYear())</span>
+<span class="nc" id="L82">                .date(entity.getDate())</span>
+<span class="nc" id="L83">                .dealerId(entity.getDealerId())</span>
+<span class="nc" id="L84">                .carPhotoId(entity.getCarPhotoId())</span>
+<span class="nc" id="L85">                .mainCarId(entity.getMainCarId())</span>
+<span class="nc" id="L86">                .carType(entity.getCarType())</span>
+<span class="nc" id="L87">                .build();</span>
+    }
+    }
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

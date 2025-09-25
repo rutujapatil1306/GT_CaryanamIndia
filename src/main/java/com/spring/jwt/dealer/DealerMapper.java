@@ -29,11 +29,9 @@ public class DealerMapper {
             dto.setUserFirstName(dealer.getUser().getFirstName());
             dto.setUserLastName(dealer.getUser().getLastName());
             dto.setUserEmail(dealer.getUser().getEmail());
-<<<<<<< HEAD
             dto.setUserMobileNumber(String.valueOf(dealer.getUser().getMobileNumber()));
-=======
            // dto.setUserMobileNumber(String.valueOf(dealer.getUser().getMobileNumber()));
->>>>>>> f6478de2863350de09dee9e4d298974975739906
+            dto.setUserMobileNumber(String.valueOf(dealer.getUser().getMobileNumber()));
         }
         return dto;
     }

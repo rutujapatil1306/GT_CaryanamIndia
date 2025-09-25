@@ -1,6 +1,6 @@
 package com.spring.jwt.premiumcar;
 
-import com.spring.jwt.entity.PremiumCar;
+import com.spring.jwt.PremiumCarData.PremiumCar;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

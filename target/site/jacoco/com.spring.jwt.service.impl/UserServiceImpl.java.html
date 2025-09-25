@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JWT-with-Spring-Security</a> &gt; <a href="index.source.html" class="el_package">com.spring.jwt.service.impl</a> &gt; <span class="el_source">UserServiceImpl.java</span></div><h1>UserServiceImpl.java</h1><pre class="source lang-java linenums">package com.spring.jwt.service.impl;
-
 import com.spring.jwt.dealer.DealerStatus;
+import com.spring.jwt.dto.DealerDTO;
+import com.spring.jwt.dto.DealerDTO;
 import com.spring.jwt.dto.*;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.Role;
@@ -34,18 +35,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import com.spring.jwt.mapper.UserMapper;
 
 
 
 @Service
-<span class="nc" id="L47">@RequiredArgsConstructor</span>
-<span class="nc" id="L48">@Slf4j</span>
+<span class="nc" id="L46">@RequiredArgsConstructor</span>
+<span class="nc" id="L47">@Slf4j</span>
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -70,294 +69,317 @@ public class UserServiceImpl implements UserService {
     @Value(&quot;${app.url.password-reset}&quot;)
     private String passwordResetUrl;
 
-
     @Override
     @Transactional
     public BaseResponseDTO registerAccount(UserDTO userDTO) {
-<span class="nc" id="L77">        BaseResponseDTO response = new BaseResponseDTO();</span>
+<span class="nc" id="L75">        BaseResponseDTO response = new BaseResponseDTO();</span>
 
-<span class="nc" id="L79">        validateAccount(userDTO);</span>
+<span class="nc" id="L77">        validateAccount(userDTO);</span>
 
-<span class="nc" id="L81">        User user = insertUser(userDTO);</span>
+<span class="nc" id="L79">        User user = insertUser(userDTO);</span>
 
         try {
-<span class="nc" id="L84">            userRepository.save(user);</span>
-<span class="nc" id="L85">            response.setCode(String.valueOf(HttpStatus.OK.value()));</span>
-<span class="nc" id="L86">            response.setMessage(&quot;Account Created Successfully !!&quot;);</span>
-<span class="nc" id="L87">        } catch (Exception e) {</span>
-<span class="nc" id="L88">            log.error(&quot;Error creating account&quot;, e);</span>
-<span class="nc" id="L89">            response.setCode(String.valueOf(HttpStatus.SERVICE_UNAVAILABLE.value()));</span>
-<span class="nc" id="L90">            response.setMessage(&quot;Service unavailable&quot;);</span>
-<span class="nc" id="L91">        }</span>
-<span class="nc" id="L92">        return response;</span>
+<span class="nc" id="L82">            userRepository.save(user);</span>
+<span class="nc" id="L83">            response.setCode(String.valueOf(HttpStatus.OK.value()));</span>
+<span class="nc" id="L84">            response.setMessage(&quot;Account Created Successfully !!&quot;);</span>
+<span class="nc" id="L85">        } catch (Exception e) {</span>
+<span class="nc" id="L86">            log.error(&quot;Error creating account&quot;, e);</span>
+<span class="nc" id="L87">            response.setCode(String.valueOf(HttpStatus.SERVICE_UNAVAILABLE.value()));</span>
+<span class="nc" id="L88">            response.setMessage(&quot;Service unavailable&quot;);</span>
+<span class="nc" id="L89">        }</span>
+<span class="nc" id="L90">        return response;</span>
     }
 
     @Transactional
     private User insertUser(UserDTO userDTO) {
-<span class="nc" id="L97">        Optional&lt;EmailVerification&gt; emailVerificationOpt = emailVerificationRepo.findByEmail(userDTO.getEmail());</span>
+<span class="nc" id="L95">        Optional&lt;EmailVerification&gt; emailVerificationOpt = emailVerificationRepo.findByEmail(userDTO.getEmail());</span>
 
 //        if (emailVerificationOpt.isEmpty() ||
 //                EmailVerification.STATUS_NOT_VERIFIED.equals(emailVerificationOpt.get().getStatus())) {
 //            throw new EmailNotVerifiedException(&quot;Email not verified&quot;);
 //        }
 
-<span class="nc" id="L104">        User user = new User();</span>
-<span class="nc" id="L105">        user.setEmail(userDTO.getEmail());</span>
-<span class="nc bnc" id="L106" title="All 4 branches missed.">        if (userDTO.getPassword() != null &amp;&amp; !userDTO.getPassword().isEmpty()) {</span>
-<span class="nc" id="L107">            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));</span>
+<span class="nc" id="L102">        User user = new User();</span>
+<span class="nc" id="L103">        user.setEmail(userDTO.getEmail());</span>
+<span class="nc bnc" id="L104" title="All 4 branches missed.">        if (userDTO.getPassword() != null &amp;&amp; !userDTO.getPassword().isEmpty()) {</span>
+<span class="nc" id="L105">            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));</span>
         } else {
-<span class="nc" id="L109">            user.setPassword(null);</span>
+<span class="nc" id="L107">            user.setPassword(null);</span>
         }
+<span class="nc" id="L109">        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));</span>
+<span class="nc" id="L110">        user.setFirstName(userDTO.getFirstName());</span>
+<span class="nc" id="L111">        user.setLastName(userDTO.getLastName());</span>
+<span class="nc" id="L112">        user.setMobileNumber(userDTO.getMobileNumber());</span>
+<span class="nc" id="L113">        user.setAddress(userDTO.getAddress());</span>
+<span class="nc" id="L114">        user.setEmailVerified(true);</span>
 
-<span class="nc" id="L112">        user.setFirstName(userDTO.getFirstName());</span>
-<span class="nc" id="L113">        user.setLastName(userDTO.getLastName());</span>
-<span class="nc" id="L114">        user.setMobileNumber(userDTO.getMobileNumber());</span>
-<span class="nc" id="L115">        user.setAddress(userDTO.getAddress());</span>
-<span class="nc" id="L116">        user.setEmailVerified(true);</span>
+<span class="nc" id="L116">        Set&lt;Role&gt; roles = new HashSet&lt;&gt;();</span>
 
-<span class="nc" id="L118">        Set&lt;Role&gt; roles = new HashSet&lt;&gt;();</span>
+<span class="nc" id="L118">        Role role = roleRepository.findByName(userDTO.getRole());</span>
 
-<span class="nc" id="L120">        Role role = roleRepository.findByName(userDTO.getRole());</span>
-
-<span class="nc bnc" id="L122" title="All 2 branches missed.">        if (role != null) {</span>
-<span class="nc" id="L123">            roles.add(role);</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">        if (role != null) {</span>
+<span class="nc" id="L121">            roles.add(role);</span>
         } else {
-<span class="nc" id="L125">            Role defaultRole = roleRepository.findByName(&quot;USER&quot;);</span>
-<span class="nc bnc" id="L126" title="All 2 branches missed.">            if (defaultRole != null) {</span>
-<span class="nc" id="L127">                roles.add(defaultRole);</span>
+<span class="nc" id="L123">            Role defaultRole = roleRepository.findByName(&quot;USER&quot;);</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">            if (defaultRole != null) {</span>
+<span class="nc" id="L125">                roles.add(defaultRole);</span>
             }
         }
 
-<span class="nc" id="L131">        user.setRoles(roles);</span>
+<span class="nc" id="L129">        user.setRoles(roles);</span>
 
-<span class="nc" id="L133">        user = userRepository.save(user);</span>
+<span class="nc" id="L131">        user = userRepository.save(user);</span>
 
-<span class="nc bnc" id="L135" title="All 2 branches missed.">        if (role != null) {</span>
-<span class="nc bnc" id="L136" title="All 3 branches missed.">            switch (role.getName()) {</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (role != null) {</span>
+<span class="nc bnc" id="L134" title="All 3 branches missed.">            switch (role.getName()) {</span>
                 case &quot;USER&quot;:
-<span class="nc" id="L138">                    createUserProfile(user, userDTO);</span>
-<span class="nc" id="L139">                    break;</span>
+<span class="nc" id="L136">                    createUserProfile(user, userDTO);</span>
+<span class="nc" id="L137">                    break;</span>
                 case  &quot;DEALER&quot;:
-<span class="nc bnc" id="L141" title="All 4 branches missed.">                    if (userDTO.getShopName() == null || userDTO.getShopName().isEmpty()) {</span>
-<span class="nc" id="L142">                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Shop name is required&quot;);</span>
+<span class="nc bnc" id="L139" title="All 4 branches missed.">                    if (userDTO.getShopName() == null || userDTO.getShopName().isEmpty()) {</span>
+<span class="nc" id="L140">                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Shop name is required&quot;);</span>
                     }
-<span class="nc bnc" id="L144" title="All 4 branches missed.">                    if (userDTO.getFirstName() == null || userDTO.getFirstName().isEmpty()) {</span>
-<span class="nc" id="L145">                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;First name is required&quot;);</span>
-                    }
-
-<span class="nc bnc" id="L148" title="All 4 branches missed.">                    if (userDTO.getLastName() == null || userDTO.getLastName().isEmpty()) {</span>
-<span class="nc" id="L149">                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Last name is required&quot;);</span>
+<span class="nc bnc" id="L142" title="All 4 branches missed.">                    if (userDTO.getFirstName() == null || userDTO.getFirstName().isEmpty()) {</span>
+<span class="nc" id="L143">                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;First name is required&quot;);</span>
                     }
 
-<span class="nc bnc" id="L152" title="All 4 branches missed.">                    if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {</span>
-<span class="nc" id="L153">                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Password is required&quot;);</span>
+<span class="nc bnc" id="L146" title="All 4 branches missed.">                    if (userDTO.getLastName() == null || userDTO.getLastName().isEmpty()) {</span>
+<span class="nc" id="L147">                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Last name is required&quot;);</span>
                     }
-                    break;
+
+<span class="nc bnc" id="L150" title="All 4 branches missed.">                    if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {</span>
+<span class="nc" id="L151">                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Password is required&quot;);</span>
+                    }
+<span class="nc bnc" id="L153" title="All 2 branches missed.">                    if (userDTO.getDealerDocumentPhoto() == 0L) {</span>
+<span class="nc" id="L154">                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Dealer Document Photo is required&quot;);</span>
+                    }
+<span class="nc bnc" id="L156" title="All 4 branches missed.">                    if (userDTO.getCity() == null || userDTO.getCity().isEmpty()) {</span>
+<span class="nc" id="L157">                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;City is required&quot;);</span>
+                    }
+<span class="nc bnc" id="L159" title="All 2 branches missed.">                    if (dealerRepository.existsBySalesPersonId(userDTO.getSalesPersonId())) {</span>
+<span class="nc" id="L160">                        throw new BaseException(String.valueOf(HttpStatus.CONFLICT.value()),</span>
+                                &quot;Salesperson already registered&quot;);
+                    }
+
+                    // Create Dealer entity for this user
+<span class="nc" id="L165">                    Dealer dealer = new Dealer();</span>
+<span class="nc" id="L166">                    dealer.setUser(user);</span>
+<span class="nc" id="L167">                    dealer.setEmail(userDTO.getEmail());</span>
+<span class="nc" id="L168">                    dealer.setFirstname(userDTO.getFirstName());</span>
+<span class="nc" id="L169">                    dealer.setLastName(userDTO.getLastName());</span>
+<span class="nc" id="L170">                    dealer.setMobileNo(String.valueOf(userDTO.getMobileNumber()));</span>
+<span class="nc" id="L171">                    dealer.setShopName(userDTO.getShopName());</span>
+<span class="nc" id="L172">                    dealer.setAddress(userDTO.getAddress());</span>
+<span class="nc" id="L173">                    dealer.setArea(userDTO.getArea());</span>
+<span class="nc" id="L174">                    dealer.setCity(userDTO.getCity());</span>
+<span class="nc" id="L175">                    dealer.setSalesPersonId(userDTO.getSalesPersonId());</span>
+<span class="nc" id="L176">                    dealer.setDealerDocumentPhoto(userDTO.getDealerDocumentPhoto());</span>
+<span class="nc" id="L177">                    dealer.setStatus(DealerStatus.ACTIVE);  // ✅</span>
+<span class="nc" id="L178">                    dealer.setUser(user);</span>
+<span class="nc" id="L179">                    dealerRepository.save(dealer); //  Dealer entity saved</span>
+<span class="nc" id="L180">                    dealerRepository.save(dealer); //  Dealer entity saved</span>
+<span class="nc" id="L181">                    dealer.setUser(user);</span>
+<span class="nc" id="L182">                    dealerRepository.save(dealer); //  Dealer entity saved</span>
+<span class="nc" id="L183">                    break;</span>
                 default:
                     break;
             }
         }
 
-<span class="nc" id="L161">        return user;</span>
+<span class="nc" id="L189">        return user;</span>
     }
-    
     private void createUserProfile(User user, UserDTO userDTO) {
-<span class="nc" id="L165">        UserProfile student = new UserProfile();</span>
-<span class="nc" id="L166">        student.setName(userDTO.getFirstName());</span>
-<span class="nc" id="L167">        student.setLastName(userDTO.getLastName());</span>
-<span class="nc" id="L168">        student.setDateOfBirth(userDTO.getDateOfBirth());</span>
-<span class="nc" id="L169">        student.setAddress(userDTO.getAddress());</span>
-<span class="nc" id="L170">        student.setStudentcol(userDTO.getStudentcol());</span>
-<span class="nc" id="L171">        student.setStudentcol1(userDTO.getStudentcol1());</span>
-<span class="nc" id="L172">        student.setStudentClass(userDTO.getStudentClass());</span>
-<span class="nc" id="L173">        student.setUserId(user.getId().intValue());</span>
+<span class="nc" id="L192">        UserProfile student = new UserProfile();</span>
+<span class="nc" id="L193">        student.setName(userDTO.getFirstName());</span>
+<span class="nc" id="L194">        student.setLastName(userDTO.getLastName());</span>
+<span class="nc" id="L195">        student.setDateOfBirth(userDTO.getDateOfBirth());</span>
+<span class="nc" id="L196">        student.setAddress(userDTO.getAddress());</span>
+<span class="nc" id="L197">        student.setStudentcol(userDTO.getStudentcol());</span>
+<span class="nc" id="L198">        student.setStudentcol1(userDTO.getStudentcol1());</span>
+<span class="nc" id="L199">        student.setStudentClass(userDTO.getStudentClass());</span>
+<span class="nc" id="L200">        student.setUserId(user.getId().intValue());</span>
         
-<span class="nc" id="L175">        userProfileRepository.save(student);</span>
-<span class="nc" id="L176">        log.info(&quot;Created student profile for user ID: {}&quot;, user.getId());</span>
-<span class="nc" id="L177">    }</span>
-    
-
-    
-
-
+<span class="nc" id="L202">        userProfileRepository.save(student);</span>
+<span class="nc" id="L203">        log.info(&quot;Created student profile for user ID: {}&quot;, user.getId());</span>
+<span class="nc" id="L204">    }</span>
     private void validateAccount(UserDTO userDTO) {
-<span class="nc bnc" id="L184" title="All 2 branches missed.">        if (ObjectUtils.isEmpty(userDTO)) {</span>
-<span class="nc" id="L185">            throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Data must not be empty&quot;);</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">        if (ObjectUtils.isEmpty(userDTO)) {</span>
+<span class="nc" id="L207">            throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Data must not be empty&quot;);</span>
         }
 
-<span class="nc" id="L188">        User user = userRepository.findByEmail(userDTO.getEmail());</span>
-<span class="nc bnc" id="L189" title="All 2 branches missed.">        if (!ObjectUtils.isEmpty(user)) {</span>
-<span class="nc" id="L190">            throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Email is already registered !!&quot;);</span>
+<span class="nc" id="L210">        User user = userRepository.findByEmail(userDTO.getEmail());</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">        if (!ObjectUtils.isEmpty(user)) {</span>
+<span class="nc" id="L212">            throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Email is already registered !!&quot;);</span>
         }
 
-<span class="nc" id="L193">        List&lt;String&gt; roles = roleRepository.findAll().stream().map(Role::getName).toList();</span>
-<span class="nc bnc" id="L194" title="All 2 branches missed.">        if (!roles.contains(userDTO.getRole())) {</span>
-<span class="nc" id="L195">            throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Invalid role&quot;);</span>
+<span class="nc" id="L215">        List&lt;String&gt; roles = roleRepository.findAll().stream().map(Role::getName).toList();</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">        if (!roles.contains(userDTO.getRole())) {</span>
+<span class="nc" id="L217">            throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Invalid role&quot;);</span>
         }
-<span class="nc" id="L197">        Optional&lt;User&gt; mobileNumber= userRepository.findByMobileNumber(userDTO.getMobileNumber());</span>
-<span class="nc bnc" id="L198" title="All 2 branches missed.">        if(!ObjectUtils.isEmpty(mobileNumber)){</span>
-<span class="nc" id="L199">            throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Mobile Number is already registered !!&quot;);</span>
+<span class="nc" id="L219">        Optional&lt;User&gt; mobileNumber= userRepository.findByMobileNumber(userDTO.getMobileNumber());</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">        if(!ObjectUtils.isEmpty(mobileNumber)){</span>
+<span class="nc" id="L221">            throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), &quot;Mobile Number is already registered !!&quot;);</span>
         }
-<span class="nc" id="L201">    }</span>
+<span class="nc" id="L223">    }</span>
 
     @Override
     public ResponseDto forgotPass(String email, String resetPasswordLink, String domain) {
-<span class="nc" id="L205">        User user = userRepository.findByEmail(email);</span>
-<span class="nc bnc" id="L206" title="All 2 branches missed.">        if (user == null) throw new UserNotFoundExceptions(&quot;User not found&quot;);</span>
+<span class="nc" id="L227">        User user = userRepository.findByEmail(email);</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">        if (user == null) throw new UserNotFoundExceptions(&quot;User not found&quot;);</span>
 
-<span class="nc" id="L208">        emailService.sendResetPasswordEmail(email, resetPasswordLink, domain);</span>
+<span class="nc" id="L230">        emailService.sendResetPasswordEmail(email, resetPasswordLink, domain);</span>
 
-<span class="nc" id="L210">        return new ResponseDto(HttpStatus.OK.toString(), &quot;Email sent&quot;);</span>
+<span class="nc" id="L232">        return new ResponseDto(HttpStatus.OK.toString(), &quot;Email sent&quot;);</span>
     }
 
     @Override
     @Transactional
     public ResponseDto handleForgotPassword(String email, String domain) {
-<span class="nc bnc" id="L216" title="All 4 branches missed.">        if (email == null || email.isEmpty()) {</span>
-<span class="nc" id="L217">            log.warn(&quot;Forgot password attempt with empty email&quot;);</span>
-<span class="nc" id="L218">            return new ResponseDto(&quot;Unsuccessful&quot;, &quot;Email is required&quot;);</span>
+<span class="nc bnc" id="L238" title="All 4 branches missed.">        if (email == null || email.isEmpty()) {</span>
+<span class="nc" id="L239">            log.warn(&quot;Forgot password attempt with empty email&quot;);</span>
+<span class="nc" id="L240">            return new ResponseDto(&quot;Unsuccessful&quot;, &quot;Email is required&quot;);</span>
         }
         
-<span class="nc" id="L221">        User user = userRepository.findByEmail(email);</span>
-<span class="nc bnc" id="L222" title="All 2 branches missed.">        if (user == null) {</span>
-<span class="nc" id="L223">            log.warn(&quot;Forgot password attempt for non-existent email: {}&quot;, </span>
-<span class="nc" id="L224">                    DataMaskingUtils.maskEmail(email));</span>
-<span class="nc" id="L225">            throw new UserNotFoundExceptions(&quot;User not found with email: &quot; + email);</span>
+<span class="nc" id="L243">        User user = userRepository.findByEmail(email);</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L245">            log.warn(&quot;Forgot password attempt for non-existent email: {}&quot;, </span>
+<span class="nc" id="L246">                    DataMaskingUtils.maskEmail(email));</span>
+<span class="nc" id="L247">            throw new UserNotFoundExceptions(&quot;User not found with email: &quot; + email);</span>
         }
 
-<span class="nc" id="L228">        String token = RandomStringUtils.randomAlphanumeric(64);</span>
-<span class="nc" id="L229">        log.debug(&quot;Generated password reset token for user: {}&quot;, </span>
-<span class="nc" id="L230">                DataMaskingUtils.maskEmail(email));</span>
+<span class="nc" id="L250">        String token = RandomStringUtils.randomAlphanumeric(64);</span>
+<span class="nc" id="L251">        log.debug(&quot;Generated password reset token for user: {}&quot;, </span>
+<span class="nc" id="L252">                DataMaskingUtils.maskEmail(email));</span>
         
-<span class="nc" id="L232">        updateResetPassword(token, email);</span>
+<span class="nc" id="L254">        updateResetPassword(token, email);</span>
 
-<span class="nc" id="L234">        String resetPasswordLink = passwordResetUrl + &quot;?token=&quot; + token;</span>
+<span class="nc" id="L256">        String resetPasswordLink = passwordResetUrl + &quot;?token=&quot; + token;</span>
         try {
-<span class="nc" id="L236">            emailService.sendResetPasswordEmail(email, resetPasswordLink, domain);</span>
-<span class="nc" id="L237">            log.info(&quot;Password reset email sent to: {}&quot;, DataMaskingUtils.maskEmail(email));</span>
-<span class="nc" id="L238">            return new ResponseDto(&quot;Successful&quot;, &quot;Password reset instructions sent to your email&quot;);</span>
-<span class="nc" id="L239">        } catch (Exception e) {</span>
-<span class="nc" id="L240">            log.error(&quot;Failed to send password reset email to: {}&quot;, DataMaskingUtils.maskEmail(email), e);</span>
-<span class="nc" id="L241">            return new ResponseDto(&quot;Unsuccessful&quot;, &quot;Failed to send reset instructions. Please try again later.&quot;);</span>
+<span class="nc" id="L258">            emailService.sendResetPasswordEmail(email, resetPasswordLink, domain);</span>
+<span class="nc" id="L259">            log.info(&quot;Password reset email sent to: {}&quot;, DataMaskingUtils.maskEmail(email));</span>
+<span class="nc" id="L260">            return new ResponseDto(&quot;Successful&quot;, &quot;Password reset instructions sent to your email&quot;);</span>
+<span class="nc" id="L261">        } catch (Exception e) {</span>
+<span class="nc" id="L262">            log.error(&quot;Failed to send password reset email to: {}&quot;, DataMaskingUtils.maskEmail(email), e);</span>
+<span class="nc" id="L263">            return new ResponseDto(&quot;Unsuccessful&quot;, &quot;Failed to send reset instructions. Please try again later.&quot;);</span>
         }
     }
 
     @Override
     @Transactional
     public void updateResetPassword(String token, String email) {
-<span class="nc" id="L248">        User user = userRepository.findByEmail(email);</span>
-<span class="nc bnc" id="L249" title="All 2 branches missed.">        if (user == null) {</span>
-<span class="nc" id="L250">            log.warn(&quot;Attempt to update reset password for non-existent email: {}&quot;, email);</span>
-<span class="nc" id="L251">            throw new UserNotFoundExceptions(&quot;User not found with email: &quot; + email);</span>
+<span class="nc" id="L270">        User user = userRepository.findByEmail(email);</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L272">            log.warn(&quot;Attempt to update reset password for non-existent email: {}&quot;, email);</span>
+<span class="nc" id="L273">            throw new UserNotFoundExceptions(&quot;User not found with email: &quot; + email);</span>
         }
 
-<span class="nc" id="L254">        user.setResetPasswordToken(token);</span>
-<span class="nc" id="L255">        user.setResetPasswordTokenExpiry(LocalDateTime.now().plusMinutes(30));</span>
-<span class="nc" id="L256">        userRepository.save(user);</span>
-<span class="nc" id="L257">        log.debug(&quot;Reset password token updated for user: {}&quot;, email);</span>
-<span class="nc" id="L258">    }</span>
+<span class="nc" id="L276">        user.setResetPasswordToken(token);</span>
+<span class="nc" id="L277">        user.setResetPasswordTokenExpiry(LocalDateTime.now().plusMinutes(30));</span>
+<span class="nc" id="L278">        userRepository.save(user);</span>
+<span class="nc" id="L279">        log.debug(&quot;Reset password token updated for user: {}&quot;, email);</span>
+<span class="nc" id="L280">    }</span>
 
     @Override
     @Transactional
     public ResponseDto updatePassword(String token, String newPassword) {
-<span class="nc" id="L263">        User user = userRepository.findByResetPasswordToken(token);</span>
-<span class="nc bnc" id="L264" title="All 4 branches missed.">        if (user == null || user.getResetPasswordTokenExpiry() == null || </span>
-<span class="nc bnc" id="L265" title="All 2 branches missed.">                LocalDateTime.now().isAfter(user.getResetPasswordTokenExpiry())) {</span>
-<span class="nc" id="L266">            log.warn(&quot;Invalid or expired reset token used: {}&quot;, token);</span>
-<span class="nc" id="L267">            throw new UserNotFoundExceptions(&quot;Invalid or expired token&quot;);</span>
+<span class="nc" id="L285">        User user = userRepository.findByResetPasswordToken(token);</span>
+<span class="nc bnc" id="L286" title="All 4 branches missed.">        if (user == null || user.getResetPasswordTokenExpiry() == null || </span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">                LocalDateTime.now().isAfter(user.getResetPasswordTokenExpiry())) {</span>
+<span class="nc" id="L288">            log.warn(&quot;Invalid or expired reset token used: {}&quot;, token);</span>
+<span class="nc" id="L289">            throw new UserNotFoundExceptions(&quot;Invalid or expired token&quot;);</span>
         }
         
-<span class="nc" id="L270">        user.setPassword(passwordEncoder.encode(newPassword));</span>
-<span class="nc" id="L271">        user.setResetPasswordToken(null);</span>
-<span class="nc" id="L272">        user.setResetPasswordTokenExpiry(null);</span>
-<span class="nc" id="L273">        userRepository.save(user);</span>
-<span class="nc" id="L274">        log.info(&quot;Password successfully reset for user: {}&quot;, user.getEmail());</span>
+<span class="nc" id="L292">        user.setPassword(passwordEncoder.encode(newPassword));</span>
+<span class="nc" id="L293">        user.setResetPasswordToken(null);</span>
+<span class="nc" id="L294">        user.setResetPasswordTokenExpiry(null);</span>
+<span class="nc" id="L295">        userRepository.save(user);</span>
+<span class="nc" id="L296">        log.info(&quot;Password successfully reset for user: {}&quot;, user.getEmail());</span>
 
-<span class="nc" id="L276">        return new ResponseDto(HttpStatus.OK.toString(), &quot;Password reset successful&quot;);</span>
+<span class="nc" id="L298">        return new ResponseDto(HttpStatus.OK.toString(), &quot;Password reset successful&quot;);</span>
     }
 
     @Override
     @Transactional
     public ResponseDto processPasswordUpdate(ResetPassword request) {
 
-<span class="nc bnc" id="L283" title="All 6 branches missed.">        if (request.getPassword() == null || request.getConfirmPassword() == null || request.getToken() == null) {</span>
-<span class="nc" id="L284">            log.warn(&quot;Missing required fields in password reset request&quot;);</span>
-<span class="nc" id="L285">            return new ResponseDto(&quot;Unsuccessful&quot;, &quot;Missing required fields&quot;);</span>
+<span class="nc bnc" id="L305" title="All 6 branches missed.">        if (request.getPassword() == null || request.getConfirmPassword() == null || request.getToken() == null) {</span>
+<span class="nc" id="L306">            log.warn(&quot;Missing required fields in password reset request&quot;);</span>
+<span class="nc" id="L307">            return new ResponseDto(&quot;Unsuccessful&quot;, &quot;Missing required fields&quot;);</span>
         }
         
-<span class="nc bnc" id="L288" title="All 2 branches missed.">        if (!request.getPassword().equals(request.getConfirmPassword())) {</span>
-<span class="nc" id="L289">            log.warn(&quot;Password mismatch in reset request&quot;);</span>
-<span class="nc" id="L290">            return new ResponseDto(&quot;Unsuccessful&quot;, &quot;Passwords do not match&quot;);</span>
+<span class="nc bnc" id="L310" title="All 2 branches missed.">        if (!request.getPassword().equals(request.getConfirmPassword())) {</span>
+<span class="nc" id="L311">            log.warn(&quot;Password mismatch in reset request&quot;);</span>
+<span class="nc" id="L312">            return new ResponseDto(&quot;Unsuccessful&quot;, &quot;Passwords do not match&quot;);</span>
         }
 
-<span class="nc bnc" id="L293" title="All 2 branches missed.">        if (!validateResetToken(request.getToken())) {</span>
-<span class="nc" id="L294">            log.warn(&quot;Invalid token used in password reset: {}&quot;, request.getToken());</span>
-<span class="nc" id="L295">            return new ResponseDto(&quot;Unsuccessful&quot;, &quot;Invalid or expired token&quot;);</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">        if (!validateResetToken(request.getToken())) {</span>
+<span class="nc" id="L316">            log.warn(&quot;Invalid token used in password reset: {}&quot;, request.getToken());</span>
+<span class="nc" id="L317">            return new ResponseDto(&quot;Unsuccessful&quot;, &quot;Invalid or expired token&quot;);</span>
         }
 
-<span class="nc bnc" id="L298" title="All 2 branches missed.">        if (isSameAsOldPassword(request.getToken(), request.getPassword())) {</span>
-<span class="nc" id="L299">            log.warn(&quot;New password same as old password in reset request&quot;);</span>
-<span class="nc" id="L300">            return new ResponseDto(&quot;Unsuccessful&quot;, &quot;New password cannot be the same as the old password&quot;);</span>
+<span class="nc bnc" id="L320" title="All 2 branches missed.">        if (isSameAsOldPassword(request.getToken(), request.getPassword())) {</span>
+<span class="nc" id="L321">            log.warn(&quot;New password same as old password in reset request&quot;);</span>
+<span class="nc" id="L322">            return new ResponseDto(&quot;Unsuccessful&quot;, &quot;New password cannot be the same as the old password&quot;);</span>
         }
 
         try {
-<span class="nc" id="L304">            ResponseDto response = updatePassword(request.getToken(), request.getPassword());</span>
-<span class="nc" id="L305">            return new ResponseDto(&quot;Successful&quot;, response.getMessage());</span>
-<span class="nc" id="L306">        } catch (Exception e) {</span>
-<span class="nc" id="L307">            log.error(&quot;Error during password update&quot;, e);</span>
-<span class="nc" id="L308">            return new ResponseDto(&quot;Unsuccessful&quot;, &quot;An error occurred during password reset&quot;);</span>
+<span class="nc" id="L326">            ResponseDto response = updatePassword(request.getToken(), request.getPassword());</span>
+<span class="nc" id="L327">            return new ResponseDto(&quot;Successful&quot;, response.getMessage());</span>
+<span class="nc" id="L328">        } catch (Exception e) {</span>
+<span class="nc" id="L329">            log.error(&quot;Error during password update&quot;, e);</span>
+<span class="nc" id="L330">            return new ResponseDto(&quot;Unsuccessful&quot;, &quot;An error occurred during password reset&quot;);</span>
         }
     }
 
     @Override
     public boolean validateResetToken(String token) {
-<span class="nc bnc" id="L314" title="All 4 branches missed.">        if (token == null || token.isEmpty()) {</span>
-<span class="nc" id="L315">            return false;</span>
+<span class="nc bnc" id="L336" title="All 4 branches missed.">        if (token == null || token.isEmpty()) {</span>
+<span class="nc" id="L337">            return false;</span>
         }
         
-<span class="nc" id="L318">        User user = userRepository.findByResetPasswordToken(token);</span>
-<span class="nc bnc" id="L319" title="All 2 branches missed.">        if (user == null) {</span>
-<span class="nc" id="L320">            log.debug(&quot;Reset token not found: {}&quot;, token);</span>
-<span class="nc" id="L321">            return false;</span>
+<span class="nc" id="L340">        User user = userRepository.findByResetPasswordToken(token);</span>
+<span class="nc bnc" id="L341" title="All 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L342">            log.debug(&quot;Reset token not found: {}&quot;, token);</span>
+<span class="nc" id="L343">            return false;</span>
         }
 
-<span class="nc bnc" id="L324" title="All 2 branches missed.">        boolean isValid = user.getResetPasswordTokenExpiry() != null &amp;&amp; </span>
-<span class="nc bnc" id="L325" title="All 2 branches missed.">                         LocalDateTime.now().isBefore(user.getResetPasswordTokenExpiry());</span>
+<span class="nc bnc" id="L346" title="All 2 branches missed.">        boolean isValid = user.getResetPasswordTokenExpiry() != null &amp;&amp; </span>
+<span class="nc bnc" id="L347" title="All 2 branches missed.">                         LocalDateTime.now().isBefore(user.getResetPasswordTokenExpiry());</span>
         
-<span class="nc bnc" id="L327" title="All 2 branches missed.">        if (!isValid) {</span>
-<span class="nc" id="L328">            log.debug(&quot;Expired reset token used: {}&quot;, token);</span>
+<span class="nc bnc" id="L349" title="All 2 branches missed.">        if (!isValid) {</span>
+<span class="nc" id="L350">            log.debug(&quot;Expired reset token used: {}&quot;, token);</span>
         }
         
-<span class="nc" id="L331">        return isValid;</span>
+<span class="nc" id="L353">        return isValid;</span>
     }
 
     @Override
     public boolean isSameAsOldPassword(String token, String newPassword) {
-<span class="nc" id="L336">        User user = userRepository.findByResetPasswordToken(token);</span>
-<span class="nc bnc" id="L337" title="All 2 branches missed.">        if (user == null) throw new UserNotFoundExceptions(&quot;Invalid or expired token&quot;);</span>
+<span class="nc" id="L358">        User user = userRepository.findByResetPasswordToken(token);</span>
+<span class="nc bnc" id="L359" title="All 2 branches missed.">        if (user == null) throw new UserNotFoundExceptions(&quot;Invalid or expired token&quot;);</span>
 
-<span class="nc" id="L339">        return passwordEncoder.matches(newPassword, user.getPassword());</span>
+<span class="nc" id="L361">        return passwordEncoder.matches(newPassword, user.getPassword());</span>
     }
 
     @Override
     public Page&lt;UserDTO&gt; getAllUsers(int pageNo, int pageSize) {
-<span class="nc" id="L344">        Pageable pageable = PageRequest.of(pageNo, pageSize);</span>
-<span class="nc" id="L345">        Page&lt;User&gt; users = userRepository.findAll(pageable);</span>
+<span class="nc" id="L366">        Pageable pageable = PageRequest.of(pageNo, pageSize);</span>
+<span class="nc" id="L367">        Page&lt;User&gt; users = userRepository.findAll(pageable);</span>
         
-<span class="nc" id="L347">        return users.map(user -&gt; {</span>
-<span class="nc" id="L348">            UserDTO userDTO = userMapper.toDTO(user);</span>
-<span class="nc" id="L349">            return populateRoleSpecificData(user, userDTO);</span>
+<span class="nc" id="L369">        return users.map(user -&gt; {</span>
+<span class="nc" id="L370">            UserDTO userDTO = userMapper.toDTO(user);</span>
+<span class="nc" id="L371">            return populateRoleSpecificData(user, userDTO);</span>
         });
     }
 
     @Override
     public UserDTO getUserById(Long id) {
-<span class="nc" id="L355">        User user = userRepository.findById(id)</span>
-<span class="nc" id="L356">                .orElseThrow(() -&gt; new UserNotFoundExceptions(&quot;User not found with id: &quot; + id));</span>
+<span class="nc" id="L377">        User user = userRepository.findById(id)</span>
+<span class="nc" id="L378">                .orElseThrow(() -&gt; new UserNotFoundExceptions(&quot;User not found with id: &quot; + id));</span>
         
-<span class="nc" id="L358">        UserDTO userDTO = userMapper.toDTO(user);</span>
+<span class="nc" id="L380">        UserDTO userDTO = userMapper.toDTO(user);</span>
 
-<span class="nc" id="L360">        return populateRoleSpecificData(user, userDTO);</span>
+<span class="nc" id="L382">        return populateRoleSpecificData(user, userDTO);</span>
     }
     
     /**
@@ -365,97 +387,97 @@ public class UserServiceImpl implements UserService {
      */
     private UserDTO populateRoleSpecificData(User user, UserDTO userDTO) {
 
-<span class="nc" id="L368">        Set&lt;String&gt; roles = user.getRoles().stream()</span>
-<span class="nc" id="L369">                .map(Role::getName)</span>
-<span class="nc" id="L370">                .collect(Collectors.toSet());</span>
+<span class="nc" id="L390">        Set&lt;String&gt; roles = user.getRoles().stream()</span>
+<span class="nc" id="L391">                .map(Role::getName)</span>
+<span class="nc" id="L392">                .collect(Collectors.toSet());</span>
                 
         // Ensure the roles collection is preserved
-<span class="nc" id="L373">        userDTO.setRoles(roles);</span>
+<span class="nc" id="L395">        userDTO.setRoles(roles);</span>
 
-<span class="nc" id="L375">        Integer userId = user.getId().intValue();</span>
+<span class="nc" id="L397">        Integer userId = user.getId().intValue();</span>
         
-<span class="nc bnc" id="L377" title="All 2 branches missed.">        if (roles.contains(&quot;USER&quot;)) {</span>
-<span class="nc" id="L378">            UserProfile userProfile = userProfileRepository.findByUserId(userId);</span>
-<span class="nc bnc" id="L379" title="All 2 branches missed.">            if (userProfile != null) {</span>
-<span class="nc" id="L380">                userDTO.setRole(&quot;USER&quot;);</span>
-<span class="nc" id="L381">                userDTO.setDateOfBirth(userProfile.getDateOfBirth());</span>
-<span class="nc" id="L382">                userDTO.setStudentcol(userProfile.getStudentcol());</span>
-<span class="nc" id="L383">                userDTO.setStudentcol1(userProfile.getStudentcol1());</span>
-<span class="nc" id="L384">                userDTO.setStudentClass(userProfile.getStudentClass());</span>
+<span class="nc bnc" id="L399" title="All 2 branches missed.">        if (roles.contains(&quot;USER&quot;)) {</span>
+<span class="nc" id="L400">            UserProfile userProfile = userProfileRepository.findByUserId(userId);</span>
+<span class="nc bnc" id="L401" title="All 2 branches missed.">            if (userProfile != null) {</span>
+<span class="nc" id="L402">                userDTO.setRole(&quot;USER&quot;);</span>
+<span class="nc" id="L403">                userDTO.setDateOfBirth(userProfile.getDateOfBirth());</span>
+<span class="nc" id="L404">                userDTO.setStudentcol(userProfile.getStudentcol());</span>
+<span class="nc" id="L405">                userDTO.setStudentcol1(userProfile.getStudentcol1());</span>
+<span class="nc" id="L406">                userDTO.setStudentClass(userProfile.getStudentClass());</span>
             }
         }
         
-<span class="nc" id="L388">        return userDTO;</span>
+<span class="nc" id="L410">        return userDTO;</span>
     }
 
     @Override
     public UserDTO updateUser(Long id, UserUpdateRequest request) {
-<span class="nc" id="L393">        User user = userRepository.findById(id)</span>
-<span class="nc" id="L394">                .orElseThrow(() -&gt; new UserNotFoundExceptions(&quot;User not found with id: &quot; + id));</span>
+<span class="nc" id="L415">        User user = userRepository.findById(id)</span>
+<span class="nc" id="L416">                .orElseThrow(() -&gt; new UserNotFoundExceptions(&quot;User not found with id: &quot; + id));</span>
 
-<span class="nc bnc" id="L396" title="All 2 branches missed.">        if (request.getFirstName() != null) {</span>
-<span class="nc" id="L397">            user.setFirstName(request.getFirstName());</span>
+<span class="nc bnc" id="L418" title="All 2 branches missed.">        if (request.getFirstName() != null) {</span>
+<span class="nc" id="L419">            user.setFirstName(request.getFirstName());</span>
         }
-<span class="nc bnc" id="L399" title="All 2 branches missed.">        if (request.getLastName() != null) {</span>
-<span class="nc" id="L400">            user.setLastName(request.getLastName());</span>
+<span class="nc bnc" id="L421" title="All 2 branches missed.">        if (request.getLastName() != null) {</span>
+<span class="nc" id="L422">            user.setLastName(request.getLastName());</span>
         }
-<span class="nc bnc" id="L402" title="All 2 branches missed.">        if (request.getAddress() != null) {</span>
-<span class="nc" id="L403">            user.setAddress(request.getAddress());</span>
+<span class="nc bnc" id="L424" title="All 2 branches missed.">        if (request.getAddress() != null) {</span>
+<span class="nc" id="L425">            user.setAddress(request.getAddress());</span>
         }
-<span class="nc bnc" id="L405" title="All 2 branches missed.">        if (request.getMobileNumber() != null) {</span>
-<span class="nc" id="L406">            user.setMobileNumber(request.getMobileNumber());</span>
+<span class="nc bnc" id="L427" title="All 2 branches missed.">        if (request.getMobileNumber() != null) {</span>
+<span class="nc" id="L428">            user.setMobileNumber(request.getMobileNumber());</span>
         }
         
-<span class="nc" id="L409">        User updatedUser = userRepository.save(user);</span>
-<span class="nc" id="L410">        return userMapper.toDTO(updatedUser);</span>
+<span class="nc" id="L431">        User updatedUser = userRepository.save(user);</span>
+<span class="nc" id="L432">        return userMapper.toDTO(updatedUser);</span>
     }
 
     @Override
     public UserProfileDTO getUserProfileById(Long id) {
-<span class="nc" id="L415">        User user = userRepository.findById(id)</span>
-<span class="nc" id="L416">                .orElseThrow(() -&gt; new UserNotFoundExceptions(&quot;User not found with id: &quot; + id));</span>
+<span class="nc" id="L437">        User user = userRepository.findById(id)</span>
+<span class="nc" id="L438">                .orElseThrow(() -&gt; new UserNotFoundExceptions(&quot;User not found with id: &quot; + id));</span>
         
-<span class="nc" id="L418">        return buildUserProfileDTO(user);</span>
+<span class="nc" id="L440">        return buildUserProfileDTO(user);</span>
     }
     
     @Override
     public UserProfileDTO getCurrentUserProfile() {
-<span class="nc" id="L423">        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();</span>
-<span class="nc bnc" id="L424" title="All 4 branches missed.">        if (authentication == null || !authentication.isAuthenticated()) {</span>
-<span class="nc" id="L425">            throw new BaseException(String.valueOf(HttpStatus.UNAUTHORIZED.value()), &quot;User not authenticated&quot;);</span>
+<span class="nc" id="L445">        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="nc bnc" id="L446" title="All 4 branches missed.">        if (authentication == null || !authentication.isAuthenticated()) {</span>
+<span class="nc" id="L447">            throw new BaseException(String.valueOf(HttpStatus.UNAUTHORIZED.value()), &quot;User not authenticated&quot;);</span>
         }
         
-<span class="nc" id="L428">        String email = authentication.getName();</span>
-<span class="nc" id="L429">        User user = userRepository.findByEmail(email);</span>
-<span class="nc bnc" id="L430" title="All 2 branches missed.">        if (user == null) {</span>
-<span class="nc" id="L431">            throw new UserNotFoundExceptions(&quot;User not found with email: &quot; + email);</span>
+<span class="nc" id="L450">        String email = authentication.getName();</span>
+<span class="nc" id="L451">        User user = userRepository.findByEmail(email);</span>
+<span class="nc bnc" id="L452" title="All 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L453">            throw new UserNotFoundExceptions(&quot;User not found with email: &quot; + email);</span>
         }
         
-<span class="nc" id="L434">        return buildUserProfileDTO(user);</span>
+<span class="nc" id="L456">        return buildUserProfileDTO(user);</span>
     }
     
     private UserProfileDTO buildUserProfileDTO(User user) {
-<span class="nc" id="L438">        UserProfileDTO profileDTO = new UserProfileDTO();</span>
+<span class="nc" id="L460">        UserProfileDTO profileDTO = new UserProfileDTO();</span>
 
-<span class="nc" id="L440">        profileDTO.setUser(userMapper.toDTO(user));</span>
+<span class="nc" id="L462">        profileDTO.setUser(userMapper.toDTO(user));</span>
 
-<span class="nc" id="L442">        Set&lt;String&gt; roles = user.getRoles().stream()</span>
-<span class="nc" id="L443">                .map(Role::getName)</span>
-<span class="nc" id="L444">                .collect(Collectors.toSet());</span>
-<span class="nc" id="L445">        profileDTO.setRoles(roles);</span>
+<span class="nc" id="L464">        Set&lt;String&gt; roles = user.getRoles().stream()</span>
+<span class="nc" id="L465">                .map(Role::getName)</span>
+<span class="nc" id="L466">                .collect(Collectors.toSet());</span>
+<span class="nc" id="L467">        profileDTO.setRoles(roles);</span>
 
-<span class="nc" id="L447">        Integer userId = user.getId().intValue();</span>
+<span class="nc" id="L469">        Integer userId = user.getId().intValue();</span>
         
-<span class="nc bnc" id="L449" title="All 2 branches missed.">        if (roles.contains(&quot;USER&quot;)) {</span>
-<span class="nc" id="L450">            UserProfile student = userProfileRepository.findByUserId(userId);</span>
-<span class="nc bnc" id="L451" title="All 2 branches missed.">            if (student != null) {</span>
-<span class="nc" id="L452">                profileDTO.setUserProfileDTO1(UserProfileDTO1.fromEntity(student));</span>
+<span class="nc bnc" id="L471" title="All 2 branches missed.">        if (roles.contains(&quot;USER&quot;)) {</span>
+<span class="nc" id="L472">            UserProfile student = userProfileRepository.findByUserId(userId);</span>
+<span class="nc bnc" id="L473" title="All 2 branches missed.">            if (student != null) {</span>
+<span class="nc" id="L474">                profileDTO.setUserProfileDTO1(UserProfileDTO1.fromEntity(student));</span>
             }
         }
         
 
         
-<span class="nc" id="L458">        return profileDTO;</span>
+<span class="nc" id="L480">        return profileDTO;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

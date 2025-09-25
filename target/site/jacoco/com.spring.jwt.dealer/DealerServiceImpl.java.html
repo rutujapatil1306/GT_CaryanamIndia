@@ -23,147 +23,179 @@ public class DealerServiceImpl implements DealerService {
 
     private final DealerRepository dealerRepository;
 
-
-
     @Override
     public DealerResponseDto updateDealer(Integer dealerId, DealerDTO dealerDTO) {
-<span class="nc" id="L30">        Dealer dealer = dealerRepository.findById(dealerId)</span>
-<span class="nc" id="L31">                .orElseThrow(() -&gt; new DealerNotFoundException(&quot;Dealer not found with id: &quot; + dealerId));</span>
+<span class="nc" id="L28">        Dealer dealer = dealerRepository.findById(dealerId)</span>
+<span class="nc" id="L29">                .orElseThrow(() -&gt; new DealerNotFoundException(&quot;Dealer not found with id: &quot; + dealerId));</span>
 
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        if (dealerDTO.getAddress() != null) {</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">            if (dealerDTO.getAddress().isBlank()) {</span>
+<span class="nc" id="L33">                throw new IllegalArgumentException(&quot;Address cannot be blank&quot;);</span>
+            }
+<span class="nc" id="L35">            dealer.setAddress(dealerDTO.getAddress());</span>
+        }
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (dealerDTO.getShopName() != null) {</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">            if (dealerDTO.getShopName().isBlank()) {</span>
+<span class="nc" id="L39">                throw new IllegalArgumentException(&quot;Shop name cannot be blank&quot;);</span>
+            }
+<span class="nc" id="L41">            dealer.setShopName(dealerDTO.getShopName());</span>
+        }
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        if (dealerDTO.getMobileNo() != null) {</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            if (dealerDTO.getMobileNo().isBlank()) {</span>
+<span class="nc" id="L45">                throw new IllegalArgumentException(&quot;Mobile number cannot be blank&quot;);</span>
+            }
+<span class="nc bnc" id="L47" title="All 2 branches missed.">            if (!dealerDTO.getMobileNo().matches(&quot;\\d{10}&quot;)) {</span>
+<span class="nc" id="L48">                throw new IllegalArgumentException(&quot;Mobile number must be 10 digits&quot;);</span>
+            }
+<span class="nc" id="L50">            dealer.setMobileNo(dealerDTO.getMobileNo());</span>
+        }
+//        if (dealerDTO.getMobileNo() != null) {
+//            if (dealerDTO.getMobileNo().isBlank()) {
+//                throw new IllegalArgumentException(&quot;Mobile number cannot be blank&quot;);
+//            }
+//            if (!dealerDTO.getMobileNo().matches(&quot;\\d{10}&quot;)) {
+//                throw new IllegalArgumentException(&quot;Mobile number must be 10 digits&quot;);
+//            }
+//            dealer.setMobileNo(dealerDTO.getMobileNo());
+//        }
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (dealerDTO.getLastName() != null) {</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">            if (dealerDTO.getLastName().isBlank()) {</span>
+<span class="nc" id="L63">                throw new IllegalArgumentException(&quot;Last name cannot be blank&quot;);</span>
+            }
+<span class="nc" id="L65">            dealer.setLastName(dealerDTO.getLastName());</span>
+        }
+
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (dealerDTO.getArea() != null) {</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (dealerDTO.getArea().isBlank()) {</span>
+<span class="nc" id="L70">                throw new IllegalArgumentException(&quot;Area cannot be blank&quot;);</span>
+            }
+<span class="nc" id="L72">            dealer.setArea(dealerDTO.getArea());</span>
+        }
+
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (dealerDTO.getEmail() != null) {</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            if (dealerDTO.getEmail().isBlank()) {</span>
+<span class="nc" id="L77">                throw new IllegalArgumentException(&quot;Email cannot be blank&quot;);</span>
+            }
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (!dealerDTO.getEmail().matches(&quot;^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$&quot;)) {</span>
+<span class="nc" id="L80">                throw new IllegalArgumentException(&quot;Email format is invalid&quot;);</span>
+            }
+<span class="nc" id="L82">            dealer.setEmail(dealerDTO.getEmail());</span>
+        }
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (dealerDTO.getStatus() != null) {</span>
+<span class="nc" id="L86">            dealer.setStatus(dealerDTO.getStatus());</span>
+        } else {
+<span class="nc" id="L88">            throw new IllegalArgumentException(&quot;Dealer status cannot be null&quot;);</span>
+        }
         // Map DTO → Entity (you can make a helper method in DealerMapper)
-<span class="nc" id="L34">        DealerMapper.updateEntityFromDTO(dealerDTO, dealer);</span>
+<span class="nc" id="L91">        DealerMapper.updateEntityFromDTO(dealerDTO, dealer);</span>
 
-<span class="nc" id="L36">        Dealer updatedDealer = dealerRepository.save(dealer);</span>
-<span class="nc" id="L37">        DealerDTO dto = DealerMapper.toDTO(updatedDealer, false);</span>
+<span class="nc" id="L93">        Dealer updatedDealer = dealerRepository.save(dealer);</span>
+<span class="nc" id="L94">        DealerDTO dto = DealerMapper.toDTO(updatedDealer, false);</span>
 
-<span class="nc" id="L39">        return DealerResponseDto.success(&quot;Dealer updated successfully&quot;, dto);</span>
+<span class="nc" id="L96">        return DealerResponseDto.success(&quot;Dealer updated successfully&quot;, dto);</span>
     }
 
     @Override
     public DealerResponseDto deleteDealer(Integer dealerId) {
-<span class="nc" id="L44">        Dealer dealer = dealerRepository.findById(dealerId)</span>
-<span class="nc" id="L45">                .orElseThrow(() -&gt; new DealerNotFoundException(&quot;Dealer not found with id: &quot; + dealerId));</span>
+<span class="nc" id="L101">        Dealer dealer = dealerRepository.findById(dealerId)</span>
+<span class="nc" id="L102">                .orElseThrow(() -&gt; new DealerNotFoundException(&quot;Dealer not found with id: &quot; + dealerId));</span>
 
-<span class="nc" id="L47">        dealerRepository.delete(dealer);</span>
-<span class="nc" id="L48">        return DealerResponseDto.success(&quot;Dealer deleted successfully&quot;, null);</span>
+<span class="nc" id="L104">        dealerRepository.delete(dealer);</span>
+<span class="nc" id="L105">        return DealerResponseDto.success(&quot;Dealer deleted successfully&quot;, null);</span>
     }
 
     @Override
     public DealerResponseDto getDealerById(Integer dealerId) {
-<span class="nc" id="L53">        Dealer dealer = dealerRepository.findById(dealerId)</span>
-<span class="nc" id="L54">                .orElseThrow(() -&gt; new DealerNotFoundException(&quot;Dealer not found with id: &quot; + dealerId));</span>
+<span class="nc" id="L110">        Dealer dealer = dealerRepository.findById(dealerId)</span>
+<span class="nc" id="L111">                .orElseThrow(() -&gt; new DealerNotFoundException(&quot;Dealer not found with id: &quot; + dealerId));</span>
 
-<span class="nc" id="L56">        DealerDTO dto = DealerMapper.toDTO(dealer, false);</span>
-<span class="nc" id="L57">        return DealerResponseDto.success(&quot;Dealer fetched successfully&quot;, dto);</span>
+<span class="nc" id="L113">        DealerDTO dto = DealerMapper.toDTO(dealer, false);</span>
+<span class="nc" id="L114">        return DealerResponseDto.success(&quot;Dealer fetched successfully&quot;, dto);</span>
     }
 
 
     @Override
     public DealerResponseDto getAllDealers() {
-<span class="nc" id="L63">        List&lt;Dealer&gt; dealers = dealerRepository.findAll();</span>
+<span class="nc" id="L120">        List&lt;Dealer&gt; dealers = dealerRepository.findAll();</span>
 
-<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (dealers.isEmpty()) {</span>
-<span class="nc" id="L66">            throw new DealerNotFoundException(&quot;No dealers found&quot;);</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        if (dealers.isEmpty()) {</span>
+<span class="nc" id="L123">            throw new DealerNotFoundException(&quot;No dealers found&quot;);</span>
         }
 
-<span class="nc" id="L69">        List&lt;DealerDTO&gt; dealerDTOs = dealers.stream()</span>
-<span class="nc" id="L70">                .map(dealer -&gt; DealerMapper.toDTO(dealer, false))</span>
-<span class="nc" id="L71">                .toList();</span>
+<span class="nc" id="L126">        List&lt;DealerDTO&gt; dealerDTOs = dealers.stream()</span>
+<span class="nc" id="L127">                .map(dealer -&gt; DealerMapper.toDTO(dealer, false))</span>
+<span class="nc" id="L128">                .toList();</span>
 
         // use successWithList to populate dataList + totalDealers
-<span class="nc" id="L74">        return DealerResponseDto.successWithList(&quot;Dealers fetched successfully&quot;, dealerDTOs);</span>
+<span class="nc" id="L131">        return DealerResponseDto.successWithList(&quot;Dealers fetched successfully&quot;, dealerDTOs);</span>
     }
-
-
-
-
 
     @Override
     public DealerResponseDto getDealersByStatus(DealerStatus status) {
-<span class="nc" id="L83">        List&lt;DealerDTO&gt; dealerDTOs = dealerRepository.findAll().stream()</span>
-<span class="nc bnc" id="L84" title="All 4 branches missed.">                .filter(d -&gt; d.getStatus() != null &amp;&amp; d.getStatus().equals(status))</span>
-<span class="nc" id="L85">                .map(dealer -&gt; DealerMapper.toDTO(dealer, false))</span>
-<span class="nc" id="L86">                .toList();</span>
+<span class="nc" id="L136">        List&lt;DealerDTO&gt; dealerDTOs = dealerRepository.findAll().stream()</span>
+<span class="nc bnc" id="L137" title="All 4 branches missed.">                .filter(d -&gt; d.getStatus() != null &amp;&amp; d.getStatus().equals(status))</span>
+<span class="nc" id="L138">                .map(dealer -&gt; DealerMapper.toDTO(dealer, false))</span>
+<span class="nc" id="L139">                .toList();</span>
 
-<span class="nc bnc" id="L88" title="All 2 branches missed.">        if (dealerDTOs.isEmpty()) {</span>
-<span class="nc" id="L89">            throw new DealerNotFoundException(&quot;No dealers found with status: &quot; + status);</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        if (dealerDTOs.isEmpty()) {</span>
+<span class="nc" id="L142">            throw new DealerNotFoundException(&quot;No dealers found with status: &quot; + status);</span>
         }
 
-<span class="nc" id="L92">        return DealerResponseDto.successWithList(&quot;Dealers fetched successfully&quot;, dealerDTOs);</span>
+<span class="nc" id="L145">        return DealerResponseDto.successWithList(&quot;Dealers fetched successfully&quot;, dealerDTOs);</span>
     }
 
 
     @Override
     public DealerResponseDto getDealersByUserId(Long userId) {
-<span class="nc" id="L98">        return dealerRepository.findAll().stream()</span>
-<span class="nc bnc" id="L99" title="All 4 branches missed.">                .filter(d -&gt; d.getUser() != null &amp;&amp; d.getUser().getId().equals(userId.intValue()))</span>
-<span class="nc" id="L100">                .findFirst()</span>
-<span class="nc" id="L101">                .map(dealer -&gt; DealerResponseDto.success(&quot;Dealer fetched successfully&quot;, DealerMapper.toDTO(dealer,false)))</span>
-<span class="nc" id="L102">                .orElseThrow(() -&gt; new DealerNotFoundException(&quot;No dealer found for userId: &quot; + userId));</span>
+<span class="nc" id="L151">        return dealerRepository.findAll().stream()</span>
+<span class="nc bnc" id="L152" title="All 4 branches missed.">                .filter(d -&gt; d.getUser() != null &amp;&amp; d.getUser().getId().equals(userId.intValue()))</span>
+<span class="nc" id="L153">                .findFirst()</span>
+<span class="nc" id="L154">                .map(dealer -&gt; DealerResponseDto.success(&quot;Dealer fetched successfully&quot;, DealerMapper.toDTO(dealer,false)))</span>
+<span class="nc" id="L155">                .orElseThrow(() -&gt; new DealerNotFoundException(&quot;No dealer found for userId: &quot; + userId));</span>
     }
-
-
-
 
     @Override
     public Page&lt;Dealer&gt; getDealersWithPagination(Pageable pageable)
     {
-<span class="nc" id="L111">        return dealerRepository.findAll(pageable);</span>
+<span class="nc" id="L161">        return dealerRepository.findAll(pageable);</span>
     }
-
 
     @Override
     public DealerResponseDto updateDealerStatus(Integer dealerId, DealerStatus status) {
-<span class="nc" id="L117">        Dealer dealer = dealerRepository.findById(dealerId)</span>
-<span class="nc" id="L118">                .orElseThrow(() -&gt; new DealerNotFoundException(&quot;Dealer not found with id: &quot; + dealerId));</span>
+<span class="nc" id="L166">        Dealer dealer = dealerRepository.findById(dealerId)</span>
+<span class="nc" id="L167">                .orElseThrow(() -&gt; new DealerNotFoundException(&quot;Dealer not found with id: &quot; + dealerId));</span>
 
-<span class="nc" id="L120">        dealer.setStatus(status);</span>
-<span class="nc" id="L121">        Dealer savedDealer = dealerRepository.save(dealer);</span>
+<span class="nc" id="L169">        dealer.setStatus(status);</span>
+<span class="nc" id="L170">        Dealer savedDealer = dealerRepository.save(dealer);</span>
 
-<span class="nc" id="L123">        DealerDTO dto = DealerMapper.toDTO(savedDealer,false);</span>
-<span class="nc" id="L124">        return DealerResponseDto.success(&quot;Dealer status updated successfully&quot;, dto);</span>
+<span class="nc" id="L172">        DealerDTO dto = DealerMapper.toDTO(savedDealer,false);</span>
+<span class="nc" id="L173">        return DealerResponseDto.success(&quot;Dealer status updated successfully&quot;, dto);</span>
     }
 
     // Sorting Logic
     @Override
     public DealerResponseDto getDealersWithPagination(int page, int size, String sortBy, String sortDir) {
-<span class="nc bnc" id="L130" title="All 2 branches missed.">        Sort sort = sortDir.equalsIgnoreCase(&quot;desc&quot;)</span>
-<span class="nc" id="L131">                ? Sort.by(sortBy).descending()</span>
-<span class="nc" id="L132">                : Sort.by(sortBy).ascending();</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        Sort sort = sortDir.equalsIgnoreCase(&quot;desc&quot;)</span>
+<span class="nc" id="L180">                ? Sort.by(sortBy).descending()</span>
+<span class="nc" id="L181">                : Sort.by(sortBy).ascending();</span>
 
-<span class="nc" id="L134">        PageRequest pageRequest = PageRequest.of(page, size, sort);</span>
-<span class="nc" id="L135">        Page&lt;Dealer&gt; dealerPage = dealerRepository.findAll(pageRequest);</span>
+<span class="nc" id="L183">        PageRequest pageRequest = PageRequest.of(page, size, sort);</span>
+<span class="nc" id="L184">        Page&lt;Dealer&gt; dealerPage = dealerRepository.findAll(pageRequest);</span>
 
-<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (dealerPage.isEmpty()) {</span>
-<span class="nc" id="L138">            throw new DealerNotFoundException(&quot;No dealers found for given pagination&quot;);</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">        if (dealerPage.isEmpty()) {</span>
+<span class="nc" id="L187">            throw new DealerNotFoundException(&quot;No dealers found for given pagination&quot;);</span>
         }
 
-<span class="nc" id="L141">        List&lt;DealerDTO&gt; dealerDTOs = dealerPage.getContent()</span>
-<span class="nc" id="L142">                .stream()</span>
-<span class="nc" id="L143">                .map(dealer -&gt; DealerMapper.toDTO(dealer, true))</span>
-<span class="nc" id="L144">                .toList();</span>
+<span class="nc" id="L190">        List&lt;DealerDTO&gt; dealerDTOs = dealerPage.getContent()</span>
+<span class="nc" id="L191">                .stream()</span>
+<span class="nc" id="L192">                .map(dealer -&gt; DealerMapper.toDTO(dealer, true))</span>
+<span class="nc" id="L193">                .toList();</span>
 
-<span class="nc" id="L146">        return DealerResponseDto.successWithList(&quot;Dealers fetched successfully&quot;, dealerDTOs);</span>
+<span class="nc" id="L195">        return DealerResponseDto.successWithList(&quot;Dealers fetched successfully&quot;, dealerDTOs);</span>
     }
 
-    @Override
-    public Dealer createDealerForUser(User user, DealerDTO dealerDTO) {
-<span class="nc" id="L151">        Dealer dealer = new Dealer();</span>
-<span class="nc" id="L152">        dealer.setUser(user);</span>
-<span class="nc" id="L153">        dealer.setEmail(dealerDTO.getEmail());</span>
-<span class="nc" id="L154">        dealer.setFirstname(dealerDTO.getUserFirstName());</span>
-<span class="nc" id="L155">        dealer.setLastName(dealerDTO.getLastName());</span>
-<span class="nc" id="L156">        dealer.setMobileNo(String.valueOf(dealerDTO.getUserMobileNumber()));</span>
-<span class="nc" id="L157">        dealer.setShopName(dealerDTO.getShopName());</span>
-<span class="nc" id="L158">        dealer.setAddress(dealerDTO.getAddress());</span>
-<span class="nc" id="L159">        dealer.setArea(dealerDTO.getArea());</span>
-<span class="nc" id="L160">        dealer.setCity(dealerDTO.getCity());</span>
-<span class="nc" id="L161">        dealer.setSalesPersonId(dealerDTO.getSalesPersonId());</span>
-<span class="nc" id="L162">        dealer.setDealerDocumentPhoto(dealerDTO.getDealerDocumentPhoto());</span>
-<span class="nc" id="L163">        dealer.setStatus(DealerStatus.ACTIVE);</span>
 
-<span class="nc" id="L165">        return dealerRepository.save(dealer);</span>
-    }
 
 
 }
