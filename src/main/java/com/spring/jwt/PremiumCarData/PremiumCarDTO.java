@@ -1,11 +1,10 @@
 package com.spring.jwt.PremiumCarData;
 
 import com.spring.jwt.entity.Status;
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor

@@ -21,7 +21,7 @@ public class PremiumBrandResponseDto <T>{
 
 
 
-     PremiumBrandResponseDto(String Status, int StatusCode, String message, String exception, LocalDateTime timestamp) {
+    public  PremiumBrandResponseDto(String Status, int StatusCode, String message, String exception, LocalDateTime timestamp) {
         this.Status = Status;
         this.statusCode = statusCode;
         this.message = message;

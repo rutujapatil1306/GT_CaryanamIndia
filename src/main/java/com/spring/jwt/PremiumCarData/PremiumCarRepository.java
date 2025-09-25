@@ -12,10 +12,10 @@ import java.util.Optional;
 public interface PremiumCarRepository extends JpaRepository<PremiumCar, Integer> {
 
     // fetch by dealer + status
-    Page<PremiumCar> findByDealerIdAndCarstatus(Long dealerId, Status status, Pageable pageable);
+    Page<PremiumCar> findByDealerIdAndCarstatus(Integer dealerId, Status status, Pageable pageable);
 
     // fetch by dealer (if status not provided)
-    Page<PremiumCar> findByDealerId(Long dealerId, Pageable pageable);
+    Page<PremiumCar> findByDealerId(Integer dealerId, Pageable pageable);
 
     Page<PremiumCar> findByCarstatus(Status status, Pageable pageable);
 

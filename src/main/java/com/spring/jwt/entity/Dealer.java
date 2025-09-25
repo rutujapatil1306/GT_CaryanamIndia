@@ -2,11 +2,15 @@ package com.spring.jwt.entity;
 
 
 
+import com.spring.jwt.PremiumCarData.PremiumCar;
 import com.spring.jwt.dealer.DealerStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -62,6 +66,10 @@ public class Dealer {
     @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "dealer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PremiumCar>  premiumCars=  new ArrayList<>();
+
 
 //    @OneToMany(mappedBy = "dealerVendor")
 //    private Set<Car> cars = new LinkedHashSet<>();

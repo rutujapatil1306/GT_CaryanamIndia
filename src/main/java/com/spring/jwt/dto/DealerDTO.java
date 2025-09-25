@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class DealerDTO {
 
+    private Integer id;
     @NotBlank(message = "Address cannot be blank")
     private String address;
 
@@ -50,6 +51,5 @@ public class DealerDTO {
     @NotBlank(message = "User last name cannot be blank")
     private String userLastName;
 
-    public void setId(Integer id) {
-    }
+
 }

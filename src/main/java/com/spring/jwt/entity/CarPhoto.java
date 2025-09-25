@@ -63,4 +63,5 @@ public class CarPhoto {
 
     @Enumerated(EnumType.STRING)
     private CarPhotoStatus status;
+
 }

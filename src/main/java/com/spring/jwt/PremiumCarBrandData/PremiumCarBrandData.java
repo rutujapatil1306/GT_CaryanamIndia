@@ -12,7 +12,7 @@ public class PremiumCarBrandData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "premiumCarBrandDataId", nullable = false)
+    @Column(name = "premiumCarBrandDataId")
     private Integer premiumCarBrandDataId;
 
     @Column(name = "brand")
