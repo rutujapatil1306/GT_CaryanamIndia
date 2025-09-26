@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BrandDataServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JWT-with-Spring-Security</a> &gt; <a href="index.source.html" class="el_package">com.spring.jwt.BrandData</a> &gt; <span class="el_source">BrandDataServiceImpl.java</span></div><h1>BrandDataServiceImpl.java</h1><pre class="source lang-java linenums">package com.spring.jwt.BrandData;
+
+import com.spring.jwt.BrandData.DTO.BrandDataDto;
+import com.spring.jwt.BrandData.Exception.BrandAlreadyExistsException;
+import com.spring.jwt.BrandData.Exception.BrandNotFoundException;
+import com.spring.jwt.BrandData.Exception.SubVariantNotFoundException;
+import com.spring.jwt.BrandData.Exception.VariantNotFoundException;
+import com.spring.jwt.entity.BrandData;
+import com.spring.jwt.exception.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+<span class="nc" id="L20">public class BrandDataServiceImpl implements BrandDataService {</span>
+
+    @Autowired
+    BrandDataRepository brandDataRepository;
+
+    @Autowired
+    BrandMapper brandMapper;
+
+    //Create Brand
+
+    @Override
+    public BrandDataDto createBrand(BrandDataDto brandDataDto) {
+        try {
+<span class="nc" id="L33">            BrandData existing = brandDataRepository.findByBrandAndVariantAndSubVariant(brandDataDto.getBrand(), brandDataDto.getVariant(), brandDataDto.getSubVariant());</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">            if (existing != null) {</span>
+<span class="nc" id="L35">                throw new BrandAlreadyExistsException(&quot;BrandData Already Exists&quot;);</span>
+            }
+<span class="nc" id="L37">            BrandData brandData = brandDataRepository.save(brandMapper.toEntity(brandDataDto));</span>
+
+<span class="nc" id="L39">            return brandMapper.toDto(brandData);</span>
+        }
+<span class="nc" id="L41">        catch(BrandAlreadyExistsException e)</span>
+        {
+<span class="nc" id="L43">            throw e;</span>
+        }
+<span class="nc" id="L45">        catch(Exception e){</span>
+<span class="nc" id="L46">            throw new RuntimeException(&quot;Internal Server Error occurred while creating Brand&quot;, e);</span>
+        }
+    }
+
+    //Get brand By id
+
+    @Override
+    public BrandDataDto getBrandById(Integer brandDataId) {
+<span class="nc" id="L54">        BrandData brandData = brandDataRepository.findById(brandDataId).orElseThrow(() -&gt; new BrandNotFoundException(&quot;Brand not found with id &quot; + brandDataId));</span>
+
+
+<span class="nc" id="L57">        return brandMapper.toDto(brandData);</span>
+    }
+
+    // update brand details
+    @Override
+    public BrandDataDto updateBrandById(BrandDataDto brandDataDto, Integer brandDataId) {
+<span class="nc" id="L63">        BrandData brandData = brandDataRepository.findById(brandDataId).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Brand not found with id&quot; + brandDataId));</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (brandDataDto.getBrand() != null) {</span>
+<span class="nc" id="L65">            brandData.setBrand(brandDataDto.getBrand());</span>
+        }
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (brandDataDto.getVariant() != null) {</span>
+<span class="nc" id="L68">            brandData.setVariant(brandDataDto.getVariant());</span>
+        }
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (brandDataDto.getSubVariant() != null) {</span>
+<span class="nc" id="L71">            brandData.setSubVariant(brandDataDto.getSubVariant());</span>
+        }
+
+<span class="nc" id="L74">        BrandData updatedBrand = brandDataRepository.save(brandData);</span>
+<span class="nc" id="L75">        return brandMapper.toDto(updatedBrand);</span>
+    }
+
+    //delete brand details
+
+    @Override
+    public void deleteBrand(Integer brandDataId) {
+<span class="nc" id="L82">        BrandData brandData = brandDataRepository.findById(brandDataId).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Brand not found with id&quot; + brandDataId));</span>
+<span class="nc" id="L83">        brandDataRepository.delete(brandData);</span>
+
+<span class="nc" id="L85">    }</span>
+
+    @Override
+    public List&lt;BrandDataDto&gt; getAllBrands(int page, int size){
+
+<span class="nc" id="L90">        Pageable pageable = PageRequest.of(page, size, Sort.by(&quot;brandDataId&quot;).descending());</span>
+<span class="nc" id="L91">        Page&lt;BrandData&gt; brandDataPage = brandDataRepository.findAll(pageable);</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (page &gt;= brandDataPage.getTotalPages()) {</span>
+<span class="nc" id="L93">            throw new PageNotFoundException(&quot;Page &quot; + page + &quot; not found. Total pages: &quot; + brandDataPage.getTotalPages());</span>
+        }
+<span class="nc" id="L95">        return brandDataPage.getContent().stream()</span>
+<span class="nc" id="L96">                .map(brandData -&gt; brandMapper.toDto(brandData)).toList();</span>
+    }
+
+    @Override
+    public List&lt;String&gt; getUniqueBrands() {
+<span class="nc" id="L101">        List&lt;String&gt; uniqueBrands = brandDataRepository.findDistinctBrands();</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if(uniqueBrands.isEmpty())</span>
+        {
+<span class="nc" id="L104">            throw new BrandNotFoundException(&quot;No Brands Available in Database&quot;);</span>
+        }
+<span class="nc" id="L106">        return uniqueBrands;</span>
+
+    }
+
+    @Override
+    public List&lt;String&gt; getVariantsByBrand(String brand) {
+<span class="nc" id="L112">        List&lt;BrandData&gt; variants = brandDataRepository.findByBrand(brand);</span>
+
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        if(variants.isEmpty())</span>
+        {
+<span class="nc" id="L116">            throw new VariantNotFoundException(&quot;No Variants found for given brand&quot;);</span>
+        }
+
+<span class="nc" id="L119">        return variants.stream().filter(b -&gt; b.getBrand().equalsIgnoreCase(brand))</span>
+<span class="nc" id="L120">                .map(BrandData::getVariant)</span>
+<span class="nc bnc" id="L121" title="All 4 branches missed.">                .filter(v -&gt; v != null  &amp;&amp; !v.isBlank())</span>
+<span class="nc" id="L122">                .map(String::toLowerCase)</span>
+<span class="nc" id="L123">                .distinct()</span>
+<span class="nc" id="L124">                .toList();</span>
+    }
+
+    @Override
+    public List&lt;String&gt; getSubVariantsByBrandVariant(String brand, String variant) {
+<span class="nc" id="L129">        List&lt;BrandData&gt; subVariants = brandDataRepository.findByBrandAndVariant(brand, variant);</span>
+
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        if(subVariants.isEmpty())</span>
+        {
+<span class="nc" id="L133">            throw new SubVariantNotFoundException(&quot;No Subvariants found for given brand and variant&quot;);</span>
+        }
+
+<span class="nc" id="L136">        return subVariants.stream()</span>
+<span class="nc" id="L137">                .filter(b -&gt; b.getBrand().equalsIgnoreCase(brand))</span>
+<span class="nc" id="L138">                .filter(v -&gt; v.getVariant().equalsIgnoreCase(variant))</span>
+<span class="nc" id="L139">                .map(BrandData::getSubVariant)</span>
+<span class="nc bnc" id="L140" title="All 4 branches missed.">                .filter(s -&gt; s != null &amp;&amp; !s.isBlank())</span>
+<span class="nc" id="L141">                .map(String::toLowerCase)</span>
+<span class="nc" id="L142">                .distinct()</span>
+<span class="nc" id="L143">                .toList();</span>
+
+
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

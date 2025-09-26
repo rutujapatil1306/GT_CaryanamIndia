@@ -2,6 +2,7 @@ package com.spring.jwt.Car.DTO;
 
 
 import com.spring.jwt.Car.Status;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

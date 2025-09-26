@@ -19,6 +19,7 @@ public interface DealerService {
     DealerResponseDto getAllDealers();
     DealerResponseDto getDealersByStatus(DealerStatus status);
     DealerResponseDto getDealersByUserId(Long userId);
+
     Page<Dealer> getDealersWithPagination(Pageable pageable);
 
     DealerResponseDto updateDealerStatus(Integer dealerId, DealerStatus status);

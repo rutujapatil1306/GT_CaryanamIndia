@@ -1,6 +1,7 @@
 package com.spring.jwt.service.impl;
-
 import com.spring.jwt.dealer.DealerStatus;
+import com.spring.jwt.dto.DealerDTO;
+import com.spring.jwt.dto.DealerDTO;
 import com.spring.jwt.dto.*;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.Role;
@@ -34,11 +35,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import com.spring.jwt.mapper.UserMapper;
 
 
@@ -69,105 +68,6 @@ public class UserServiceImpl implements UserService {
 
     @Value("${app.url.password-reset}")
     private String passwordResetUrl;
-
-
-// add Dealer
-//@Transactional
-//public BaseResponseDTO registerDealer(DealerDTO dealerDTO) {
-//    BaseResponseDTO response = new BaseResponseDTO();
-//
-//    // ✅ Validate required fields and return messages if missing
-//    if (dealerDTO.getFirstname() == null || dealerDTO.getFirstname().isEmpty()) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("First name is required");
-//        return response;
-//    }
-//    if (dealerDTO.getLastName() == null || dealerDTO.getLastName().isEmpty()) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("Last name is required");
-//        return response;
-//    }
-//    if (dealerDTO.getEmail() == null || dealerDTO.getEmail().isEmpty()) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("Email is required");
-//        return response;
-//    }
-//    if (dealerDTO.getPassword() == null || dealerDTO.getPassword().isEmpty()) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("Password is required");
-//        return response;
-//    }
-//    if (dealerDTO.getMobileNo() == null) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("Mobile number is required");
-//        return response;
-//    }
-//
-//    // Check if dealer already exists
-//    if (dealerRepository.existsByEmail(dealerDTO.getEmail())) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("Dealer with this email already exists");
-//        return response;
-//    }
-//    if (dealerRepository.existsByMobileNo(dealerDTO.getMobileNo())) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("Dealer with this mobile number already exists");
-//        return response;
-//    }
-//
-//    // Create User entity
-//    User user = new User();
-//    user.setFirstName(dealerDTO.getFirstname());
-//    user.setLastName(dealerDTO.getLastName());
-//    user.setEmail(dealerDTO.getEmail());
-//    user.setPassword(passwordEncoder.encode(dealerDTO.getPassword()));
-//    user.setMobileNumber(dealerDTO.getMobileNo());
-//    user.setAddress(dealerDTO.getAddress());
-//
-//    // Assign DEALER role
-//    Role role = roleRepository.findByName("DEALER");
-//    if (role == null) {
-//        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-//        response.setMessage("Dealer role not found");
-//        return response;
-//    }
-////    user.setRoles(Collections.singleton(role));
-//    Set<Role> roles = new HashSet<>();
-//    roles.add(role);
-//    user.setRoles(roles);
-//
-//    userRepository.save(user);
-//
-//    //  Create Dealer entity
-//    Dealer dealer = new Dealer();
-//    dealer.setAddress(dealerDTO.getAddress());
-//    dealer.setEmail(dealerDTO.getEmail());
-//    dealer.setMobileNo(dealerDTO.getMobileNo());
-//    dealer.setFirstname(dealerDTO.getFirstname());
-//    dealer.setLastName(dealerDTO.getLastName());
-//    dealer.setArea(dealerDTO.getArea());
-//    dealer.setCity(dealerDTO.getCity());
-//    dealer.setSalesPersonId(dealerDTO.getSalesPersonId());
-//    dealer.setShopName(dealerDTO.getShopName());
-//    dealer.setDealerDocumentPhoto(dealerDTO.getDealerDocumentPhoto());
-//    dealer.setStatus(dealerDTO.getStatus());
-//    dealer.setUser(user); // Link to User
-//    dealerRepository.save(dealer);
-//
-//    dealerRepository.save(dealer);
-//
-//    response.setCode(String.valueOf(HttpStatus.OK.value()));
-//    response.setMessage("Dealer registered successfully!");
-//    return response;
-//}
-
-
-
-
-
-
-
-
 
     @Override
     @Transactional
@@ -201,6 +101,11 @@ public class UserServiceImpl implements UserService {
 
         User user = new User();
         user.setEmail(userDTO.getEmail());
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        } else {
+            user.setPassword(null);
+        }
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
@@ -231,13 +136,38 @@ public class UserServiceImpl implements UserService {
                     createUserProfile(user, userDTO);
                     break;
                 case  "DEALER":
-                // Create Dealer entity for this user
-                Dealer dealer = new Dealer();
+                    if (userDTO.getShopName() == null || userDTO.getShopName().isEmpty()) {
+                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Shop name is required");
+                    }
+                    if (userDTO.getFirstName() == null || userDTO.getFirstName().isEmpty()) {
+                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "First name is required");
+                    }
+
+                    if (userDTO.getLastName() == null || userDTO.getLastName().isEmpty()) {
+                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Last name is required");
+                    }
+
+                    if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
+                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Password is required");
+                    }
+                    if (userDTO.getDealerDocumentPhoto() == 0L) {
+                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Dealer Document Photo is required");
+                    }
+                    if (userDTO.getCity() == null || userDTO.getCity().isEmpty()) {
+                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "City is required");
+                    }
+                    if (dealerRepository.existsBySalesPersonId(userDTO.getSalesPersonId())) {
+                        throw new BaseException(String.valueOf(HttpStatus.CONFLICT.value()),
+                                "Salesperson already registered");
+                    }
+
+                    // Create Dealer entity for this user
+                    Dealer dealer = new Dealer();
                     dealer.setUser(user);
                     dealer.setEmail(userDTO.getEmail());
                     dealer.setFirstname(userDTO.getFirstName());
                     dealer.setLastName(userDTO.getLastName());
-                    dealer.setMobileNo(Long.valueOf(userDTO.getMobileNumber())); //convert Long -> String
+                    dealer.setMobileNo(String.valueOf(userDTO.getMobileNumber()));
                     dealer.setShopName(userDTO.getShopName());
                     dealer.setAddress(userDTO.getAddress());
                     dealer.setArea(userDTO.getArea());
@@ -245,8 +175,11 @@ public class UserServiceImpl implements UserService {
                     dealer.setSalesPersonId(userDTO.getSalesPersonId());
                     dealer.setDealerDocumentPhoto(userDTO.getDealerDocumentPhoto());
                     dealer.setStatus(DealerStatus.ACTIVE);  // ✅
+                    dealer.setUser(user);
                     dealerRepository.save(dealer); //  Dealer entity saved
-
+                    dealerRepository.save(dealer); //  Dealer entity saved
+                    dealer.setUser(user);
+                    dealerRepository.save(dealer); //  Dealer entity saved
                     break;
                 default:
                     break;
@@ -255,7 +188,6 @@ public class UserServiceImpl implements UserService {
 
         return user;
     }
-    
     private void createUserProfile(User user, UserDTO userDTO) {
         UserProfile student = new UserProfile();
         student.setName(userDTO.getFirstName());
@@ -270,11 +202,6 @@ public class UserServiceImpl implements UserService {
         userProfileRepository.save(student);
         log.info("Created student profile for user ID: {}", user.getId());
     }
-    
-
-    
-
-
     private void validateAccount(UserDTO userDTO) {
         if (ObjectUtils.isEmpty(userDTO)) {
             throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Data must not be empty");

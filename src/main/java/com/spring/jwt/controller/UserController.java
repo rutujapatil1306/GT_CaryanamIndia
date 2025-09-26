@@ -71,7 +71,6 @@ public class UserController {
     
     @Value("${app.url.password-reset}")
     private String passwordResetUrl;
-
 ///////////////////////////////////////////////////////////////////////////////////
 //
 //      File Name    : UserController
