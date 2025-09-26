@@ -1,12 +1,26 @@
 package com.spring.jwt.PremiumCarData;
+<<<<<<< HEAD
+
+import com.spring.jwt.entity.Dealer;
+=======
+>>>>>>> 70eaad7ab55db1bd984b82e716443094c1ae1fa2
 import com.spring.jwt.entity.PremiumCarPendingBooking;
 import com.spring.jwt.entity.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+<<<<<<< HEAD
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+=======
 import lombok.*;
+>>>>>>> 70eaad7ab55db1bd984b82e716443094c1ae1fa2
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
 @Setter
 @Getter
 @Entity
@@ -46,9 +60,9 @@ public class PremiumCar {
     @NotBlank(message = "Variant is required")
     @Column(name = "variant", length = 45)
     private String variant;
-
-    @NotNull(message = "Brand is required")
-    @Size(min = 2, max = 50, message = "Brand must be between 2 and 50 characters")
+    @NotBlank(message = "Brand is mandatory")
+    @Size(max = 45, message = "Brand cannot exceed 45 characters")
+    @Pattern(regexp = "^[A-Za-z ]{1,49}$", message = "Brand must contain only letters, spaces")
     @Column(name = "brand", nullable = false, length = 45)
     private String brand;
 
@@ -102,7 +116,7 @@ public class PremiumCar {
     @Column(name = "rear_parking_camera_feature")
     private Boolean rearParkingCameraFeature;
 
-    @Column(name = "registration", length = 45)
+    @Column(name = "registration",unique = true, length = 45)
     private String registration;
 
     @Column(name = "title", length = 250)
@@ -119,8 +133,8 @@ public class PremiumCar {
     @Column(name = "date")
     private LocalDate date;
 
-    @Column(name = "dealer_id")
-    private Integer dealerId;
+//    @Column(name = "dealer_id")
+//    private Integer dealerId;
 
     private long carPhotoId;
 
@@ -133,5 +147,8 @@ public class PremiumCar {
     @OneToMany(mappedBy = "premiumCarCar")
     private Set<PremiumCarPendingBooking> pendingBookings = new LinkedHashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name ="Dealer_id" ,nullable= false)
+    private Dealer dealer;
 
 }

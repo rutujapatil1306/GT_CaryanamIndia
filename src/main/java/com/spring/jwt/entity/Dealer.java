@@ -1,10 +1,20 @@
 package com.spring.jwt.entity;
+<<<<<<< HEAD
+
+
+
+import com.spring.jwt.PremiumCarData.PremiumCar;
+=======
+>>>>>>> 70eaad7ab55db1bd984b82e716443094c1ae1fa2
 import com.spring.jwt.dealer.DealerStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +78,10 @@ public class Dealer {
     private User user;
     @OneToMany(mappedBy = "dealer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Car> cars = new ArrayList<>();
+
+    @OneToMany(mappedBy = "dealer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PremiumCar>  premiumCars=  new ArrayList<>();
+
 
 //    @OneToMany(mappedBy = "dealerVendor")
 //    private Set<Car> cars = new LinkedHashSet<>();

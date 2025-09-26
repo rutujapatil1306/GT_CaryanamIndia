@@ -1,6 +1,7 @@
 package com.spring.jwt.PremiumCarData;
 
 //import com.spring.jwt.dealer.DealerNotFoundException;
+import com.spring.jwt.dealer.exception.DealerNotFoundException;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.Status;
 import com.spring.jwt.repository.DealerRepository;
@@ -13,35 +14,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class PremiumCarServiceImpl implements PremiumCarService {
 
     @Autowired
     private PremiumCarRepository premiumCarRepository;
+    @Autowired
+    private DealerRepository dealerRepository;
 
     @Override
     public PremiumCarDTO createPremiumCar(PremiumCarDTO dto) {
-        if (dto == null) {
-            throw new PremiumCarNotFoundException("PremiumCar data cannot be null");
-        }
-
-        try {
-            // Convert DTO -> Entity
+        Dealer dealer = dealerRepository.findById(dto.getDealerId())
+                .orElseThrow(() -> new DealerNotFoundException("Dealer not found with ID: " + dto.getDealerId()));
             PremiumCar entity = PremiumCarMapper.toEntity(dto);
-
-            // Save to DB
             PremiumCar savedEntity = premiumCarRepository.save(entity);
-
-            // Convert Entity -> DTO (return saved details)
             return PremiumCarMapper.toDTO(savedEntity);
-
-        } catch (DataIntegrityViolationException e) {
-            throw new PremiumCarNotFoundException("Invalid PremiumCar data: " + e.getMessage());
-        } catch (Exception s) {
-            throw new ServiceException("Error occurred while saving PremiumCar: " + s.getMessage());
-        }
     }
 
     @Override
@@ -99,7 +86,7 @@ public class PremiumCarServiceImpl implements PremiumCarService {
 
     @Override
 
-    public Page<PremiumCarDTO> getCarsByDealerAndStatus(Long dealerId, Status status, Pageable pageable) {
+    public Page<PremiumCarDTO> getCarsByDealerAndStatus(Integer dealerId, Status status, Pageable pageable) {
         Page<PremiumCar> cars;
 
         if (status != null) {

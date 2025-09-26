@@ -1,8 +1,9 @@
 package com.spring.jwt.PremiumCarData;
 
+import com.spring.jwt.entity.Dealer;
+
 public class PremiumCarMapper {
     public static PremiumCar toEntity(PremiumCarDTO dto) {
-
 
         PremiumCar entity = new PremiumCar();
         entity.setPremiumCarId(dto.getPremiumCarId());
@@ -36,17 +37,24 @@ public class PremiumCarMapper {
         entity.setTransmission(dto.getTransmission());
         entity.setYear(dto.getYear());
         entity.setDate(dto.getDate());
-        entity.setDealerId(dto.getDealerId());
+//        entity.setDealerId(dto.getDealerId());
         entity.setCarPhotoId(dto.getCarPhotoId());
         entity.setMainCarId(dto.getMainCarId());
         entity.setCarType(dto.getCarType());
-
+        if (dto.getDealerId() != null) {
+            Dealer dealer = new Dealer();
+            dealer.setId(dto.getDealerId());
+            entity.setDealer(dealer);
+        } else {
+            entity.setDealer(null);
+        }
         return entity;
     }
 
     // Entity → DTO
     public static PremiumCarDTO toDTO(PremiumCar entity) {
         if (entity == null) return null;
+
 
         return PremiumCarDTO.builder()
                 .premiumCarId(entity.getPremiumCarId())
@@ -80,11 +88,12 @@ public class PremiumCarMapper {
                 .transmission(entity.getTransmission())
                 .year(entity.getYear())
                 .date(entity.getDate())
-                .dealerId(entity.getDealerId())
+                .dealerId(entity.getDealer() != null ? entity.getDealer().getId() : null)
                 .carPhotoId(entity.getCarPhotoId())
                 .mainCarId(entity.getMainCarId())
                 .carType(entity.getCarType())
                 .build();
+
     }
     }
 

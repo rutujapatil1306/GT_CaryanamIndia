@@ -121,9 +121,13 @@ public class AppConfig {
                     "/premiumcars/photos/**",
                     "/dealer/**",
                     "/premiumbrands/**",
+<<<<<<< HEAD
+                    "/premiumcars/**",// add
+=======
                     "/premiums/**",// add
                     "/dealer/**", // add
                     "/premiumcars/photos/**",
+>>>>>>> 70eaad7ab55db1bd984b82e716443094c1ae1fa2
                 jwtConfig.getUrl(),
                 jwtConfig.getRefreshUrl()
             )
@@ -164,6 +168,9 @@ public class AppConfig {
                 .requestMatchers("/api/v1/exam/**").permitAll()
                 .requestMatchers("/api/v1/**").permitAll()
                 .requestMatchers("/premiumbrands/**").permitAll()
+<<<<<<< HEAD
+                .requestMatchers("/premiumcars/**").permitAll()
+=======
                 .requestMatchers("/premiums/**").permitAll()
                 .requestMatchers("/api/v1/users/register/dealer").permitAll()// add
                 .requestMatchers("/api/v1/users/password/**").permitAll()
@@ -174,6 +181,7 @@ public class AppConfig {
                 .requestMatchers("/api/carPhotos/**").permitAll()
                 .requestMatchers("/cars/filter/**").permitAll()//add
                 .requestMatchers("/premiumcars/photos/**").permitAll()
+>>>>>>> 70eaad7ab55db1bd984b82e716443094c1ae1fa2
                 .requestMatchers(jwtConfig.getUrl()).permitAll()
                 .requestMatchers(jwtConfig.getRefreshUrl()).permitAll()
 
@@ -226,8 +234,12 @@ public class AppConfig {
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/swagger-ui.html"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/user/**"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/premiumbrands/**"),
+<<<<<<< HEAD
+                new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/premiumcars/**"),
+=======
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/premiums/**"),
 
+>>>>>>> 70eaad7ab55db1bd984b82e716443094c1ae1fa2
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(jwtConfig.getUrl()),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(jwtConfig.getRefreshUrl())
             );
