@@ -149,13 +149,17 @@ public class CarPhotoServiceImpl implements CarPhotoService {
         Car car = carRepository.findById(carId).orElseThrow(() -> new CarNotFoundException("Car Not Found At carId : " + carId));
         CarPhoto carPhoto = carPhotoRepository.findByCarId(carId).orElseThrow(() -> new PhotoNotFoundException("Photo not found for CarId: " + carId));
 
+        boolean exists;
+        if(imageFile == null || imageFile.isEmpty() && type ==null){
+            throw new IllegalArgumentException("No new photo file or type provided for update");
+        }
         if (imageFile != null && !imageFile.isEmpty()) {
             validateFileFormat(imageFile);
         try{
             String hash = DigestUtils.md5DigestAsHex(imageFile.getBytes());
 
             // Duplicate check for this car
-            boolean exists = carPhotoRepository.existsByCarAndHashAndIdNot(car, hash, carPhoto.getId());
+             exists = carPhotoRepository.existsByCarAndHashAndIdNot(car, hash, carPhoto.getId());
             if (exists) {
                 throw new DuplicatePhotoException("This photo has already been uploaded for this car.");
             }
@@ -172,9 +176,12 @@ public class CarPhotoServiceImpl implements CarPhotoService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload new File "+ e.getMessage(),e);
         }
-
         }
-        if (type != null) {
+        if (type != null && !type.equals(carPhoto.getType())) {
+             exists = carPhotoRepository.existsByCarAndTypeAndIdNot(car, type, carPhoto.getId());
+            if (exists) {
+                throw new DuplicatePhotoException("This photo with type " + type + " already exists for this car.");
+            }
             carPhoto.setType(type);
         }
 

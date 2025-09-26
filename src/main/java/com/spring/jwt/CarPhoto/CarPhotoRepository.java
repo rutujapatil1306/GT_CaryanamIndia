@@ -21,4 +21,6 @@ public interface CarPhotoRepository extends JpaRepository<CarPhoto, Integer> {
         boolean existsByCarAndHash(Car car, String hash);
 
         boolean existsByCarAndTypeAndIdNot(Car car, DocType type, Integer id);
+
+
 }

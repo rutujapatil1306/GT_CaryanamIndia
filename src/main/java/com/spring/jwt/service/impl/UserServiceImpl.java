@@ -368,7 +368,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO getUserById(Long id) {
+    public UserDTO getUserById(Integer id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundExceptions("User not found with id: " + id));
         
@@ -406,7 +406,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(Long id, UserUpdateRequest request) {
+    public UserDTO updateUser(Integer id, UserUpdateRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundExceptions("User not found with id: " + id));
 
@@ -428,7 +428,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserProfileDTO getUserProfileById(Long id) {
+    public UserProfileDTO getUserProfileById(Integer id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundExceptions("User not found with id: " + id));
         
