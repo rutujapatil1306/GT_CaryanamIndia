@@ -34,9 +34,7 @@ public class  BrandDataController {
 
     @Autowired
     BrandDataService brandDataService;
-
     // API To Create Brand
-
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createBrand(@Valid @RequestBody BrandDataDto brandDataDto)
     {
@@ -47,9 +45,9 @@ public class  BrandDataController {
     }
 
     // API To Get Brand By Id
-
     @GetMapping("/getBrand")
    public ResponseEntity<BrandResponseDto> getBrandById(@RequestParam Integer brandId)
+
     {
 
             BrandDataDto brand = brandDataService.getBrandById(brandId);
@@ -58,7 +56,6 @@ public class  BrandDataController {
     }
 
     // API TO Update Brand
-
     @PatchMapping("/update")
     public ResponseEntity<BrandResponseDto> updateBrandById(@Valid @RequestBody BrandDataDto brandDataDto, @RequestParam Integer brandId)
     {
@@ -72,7 +69,6 @@ public class  BrandDataController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BrandResponseDto.error("Failed To Update Brand at Given Id", ex.getMessage()));
         }
     }
-
     @DeleteMapping("/delete")
     public ResponseEntity<ApiResponse<Void>> deleteBrand(@RequestParam Integer brandId)
     {
@@ -90,8 +86,6 @@ public class  BrandDataController {
             return ResponseEntity.ok(BrandResponseDto.success("Brands Retrieved Successfully", response));
 
     }
-
-
     @GetMapping("/uniqueBrands")
     public ResponseEntity<BrandResponseDto<List<String>>> getUniqueBrands()
     {

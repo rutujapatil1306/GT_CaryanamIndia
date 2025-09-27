@@ -32,6 +32,8 @@ public interface CarService {
     CarDto getCarByMainCarId(String mainCarId);
 
 
+    CarResponseDto<List<CarDto>> filterCars(Status status, String brand, String model, String city, String fuelType, String transmission,
+            Integer minPrice, Integer maxPrice);
     CarResponseDto<List<CarDto>> getCarsWithPaginationOnlyActivePending(int page, int size,Status status);
     CarResponseDto<List<CarDto>> getCarsWithoutPaginationOnlyActivePending(Status status);
 

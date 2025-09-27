@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class PremiumCarPhotoDto {
 
     private Long id;
-    private int carId;            // Instead of full Car object
+    private int premiumCarId;            // Instead of full Car object
     private String docType;
     private long fileSize;
     private String contentType;
@@ -15,10 +15,12 @@ public class PremiumCarPhotoDto {
     // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
-    public int getCarId() { return carId; }
-    public void setCarId(int carId) { this.carId = carId; }
-
+    public int getPremiumCarId() {
+        return premiumCarId;
+    }
+    public void setPremiumCarId(int premiumCarId) {
+        this.premiumCarId = premiumCarId;
+    }
     public String getDocType() { return docType; }
     public void setDocType(String docType) { this.docType = docType; }
 

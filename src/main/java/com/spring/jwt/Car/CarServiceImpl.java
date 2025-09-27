@@ -17,12 +17,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.EnumSet;
 import java.util.List;
 
 @Service
-public class CarServiceImpl implements CarService{
+public class CarServiceImpl implements CarService {
 
     @Autowired
     CarRepository carRepository;
@@ -60,9 +59,8 @@ public class CarServiceImpl implements CarService{
         String mainCarId = generateMainCarId(savedCar);
         savedCar.setMainCarId(mainCarId);
         boolean exists = carRepository.existsByMainCarId(mainCarId);
-        if(exists)
-        {
-            throw  new CarAlreadyExistsException("Car Already Exists for id: " + mainCarId);
+        if (exists) {
+            throw new CarAlreadyExistsException("Car Already Exists for id: " + mainCarId);
         }
 
         if (cardto.getCarStatus() == null) {
@@ -85,7 +83,7 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public CarDto updateCar(CarDto carDto, int id) {
-        Car car = carRepository.findById(id).orElseThrow(()-> new CarNotFoundException("Car Not Found At Id: " + id));
+        Car car = carRepository.findById(id).orElseThrow(() -> new CarNotFoundException("Car Not Found At Id: " + id));
 
         if (carDto.getPrice() != null) {
             if (carDto.getPrice() <= 0) {
@@ -113,14 +111,14 @@ public class CarServiceImpl implements CarService{
             car.setDealer(dealer);
         }
 
-         Car updatedCar = carRepository.save(car);
-         return carMapper.toDto(updatedCar);
+        Car updatedCar = carRepository.save(car);
+        return carMapper.toDto(updatedCar);
 
     }
 
     @Override
     public void softDelete(int id) {
-        Car car = carRepository.findById(id).orElseThrow(()-> new CarNotFoundException("Car Not Found At id " + id));
+        Car car = carRepository.findById(id).orElseThrow(() -> new CarNotFoundException("Car Not Found At id " + id));
 
         //set Car Status to DELETED for Soft Delete
         car.setCarStatus(Status.INACTIVE);
@@ -129,18 +127,17 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public void hardDelete(int id) {
-        Car car = carRepository.findById(id).orElseThrow(()-> new CarNotFoundException("Car Not Found At id " + id));
+        Car car = carRepository.findById(id).orElseThrow(() -> new CarNotFoundException("Car Not Found At id " + id));
         carRepository.delete(car);
     }
 
     @Override
-    public CarResponseDto<List<CarDto>> getAllCarsByStatus(String carStatus , int page, int size) {
+    public CarResponseDto<List<CarDto>> getAllCarsByStatus(String carStatus, int page, int size) {
         Status status;
         // Convert String to Enum safely
         try {
             status = Status.valueOf(carStatus.toUpperCase());
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             throw new StatusNotFoundException("Invalid car status: " + carStatus);
         }
 
@@ -156,9 +153,8 @@ public class CarServiceImpl implements CarService{
         }
 
         List<Car> cars = carRepository.findByCarStatus(status, pageable);
-        if(cars.isEmpty())
-        {
-            throw  new CarNotFoundException("Car Not found for given Status " + carStatus + " on Page Number " + page);
+        if (cars.isEmpty()) {
+            throw new CarNotFoundException("Car Not found for given Status " + carStatus + " on Page Number " + page);
         }
         List<CarDto> dtos = cars.stream().map(c -> carMapper.toDto(c)).toList();
         //long totalNoOfCars = carRepository.countByCarStatus(status);
@@ -194,8 +190,7 @@ public class CarServiceImpl implements CarService{
 
         List<Car> allCars = carRepository.findByDealerIdAndCarStatus(id, status, pageable);
 
-        if (allCars.isEmpty())
-        {
+        if (allCars.isEmpty()) {
             throw new CarNotFoundException("No cars found for dealerId: " + id + " and status: " + carStatus);
         }
         List<CarDto> cars = allCars.stream().map(c -> carMapper.toDto(c)).toList();
@@ -230,7 +225,7 @@ public class CarServiceImpl implements CarService{
         return brandInitials + modelInitials + yearSuffix + "-" + car.getId();
     }
 
-//*    @Override
+    //*    @Override
     public CarDto getCarByMainCarId(String mainCarId) {
         Car car = carRepository.findByMainCarId(mainCarId).orElseThrow(() -> new CarNotFoundException("Car Not Found With MainCarId " + mainCarId));
         return carMapper.toDto(car);
@@ -313,5 +308,49 @@ public class CarServiceImpl implements CarService{
                 null,
                 totalCars
         );
+    }
+
+    public CarResponseDto<List<CarDto>> filterCars(Status status, String brand, String model, String city, String fuelType, String transmission, Integer minPrice, Integer maxPrice) {
+        // Allowed statuses
+        List<Status> allowedStatuses = List.of(Status.PENDING, Status.ACTIVE);
+
+        if (status != null && !allowedStatuses.contains(status)) {
+            throw new InvalidStatusException("Invalid status: " + status);
+        }
+
+        List<Status> statusesToFetch = (status != null) ? List.of(status) : allowedStatuses;
+
+        // Fetch initial list by status
+        List<Car> cars = carRepository.findByCarStatusIn(statusesToFetch);
+
+        // Apply filters one by one
+        if (brand != null && !brand.isEmpty()) {
+            cars = cars.stream().filter(c -> c.getBrand().toLowerCase().contains(brand.toLowerCase())).toList();
+        }
+        if (model != null && !model.isEmpty()) {
+            cars = cars.stream().filter(c -> c.getModel().toLowerCase().contains(model.toLowerCase())).toList();
+        }
+        if (city != null && !city.isEmpty()) {
+            cars = cars.stream().filter(c -> c.getCity().toLowerCase().contains(city.toLowerCase())).toList();
+        }
+        if (fuelType != null && !fuelType.isEmpty()) {
+            cars = cars.stream().filter(c -> c.getFuelType().toLowerCase().contains(fuelType.toLowerCase())).toList();
+        }
+        if (transmission != null && !transmission.isEmpty()) {
+            cars = cars.stream().filter(c -> c.getTransmission().toLowerCase().contains(transmission.toLowerCase())).toList();
+        }
+        if (minPrice != null) {
+            cars = cars.stream().filter(c -> c.getPrice() >= minPrice).toList();
+        }
+        if (maxPrice != null) {
+            cars = cars.stream().filter(c -> c.getPrice() <= maxPrice).toList();
+        }
+        if (cars.isEmpty()) {
+            throw new CarNotFoundException("No cars found with the given filters");
+        }
+
+        List<CarDto> dtos = cars.stream().map(carMapper::toDto).toList();
+
+        return new CarResponseDto<>("Cars fetched successfully with filters", dtos, null, cars.size());
     }
 }

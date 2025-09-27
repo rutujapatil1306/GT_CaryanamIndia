@@ -1,12 +1,9 @@
 package com.spring.jwt.PremiumCarData;
-
 import com.spring.jwt.entity.PremiumCarPendingBooking;
 import com.spring.jwt.entity.Status;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;

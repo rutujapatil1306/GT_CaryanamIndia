@@ -1,5 +1,6 @@
 package com.spring.jwt.CarPhoto;
-
+import com.spring.jwt.dto.ResponseDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.spring.jwt.CarPhoto.DTO.CarPhotoDto;
 import com.spring.jwt.CarPhoto.DTO.CarPhotoResponseDto;
 import com.spring.jwt.dto.ResponseDto;
@@ -17,7 +18,8 @@ public class CarPhotoController {
     @Autowired
     CarPhotoService carPhotoService;
 
-    @PostMapping("/photos")
+
+    @GetMapping("/getPhoto")
     public ResponseEntity<CarPhotoResponseDto> uploadCarPhoto(@Valid @RequestParam Integer carId,
                                                       @RequestParam MultipartFile imageFile,
                                                       @RequestParam DocType type)

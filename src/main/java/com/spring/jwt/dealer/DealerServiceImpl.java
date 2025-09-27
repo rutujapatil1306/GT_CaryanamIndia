@@ -23,13 +23,70 @@ public class DealerServiceImpl implements DealerService {
 
     private final DealerRepository dealerRepository;
 
-
-
     @Override
     public DealerResponseDto updateDealer(Integer dealerId, DealerDTO dealerDTO) {
         Dealer dealer = dealerRepository.findById(dealerId)
                 .orElseThrow(() -> new DealerNotFoundException("Dealer not found with id: " + dealerId));
 
+        if (dealerDTO.getAddress() != null) {
+            if (dealerDTO.getAddress().isBlank()) {
+                throw new IllegalArgumentException("Address cannot be blank");
+            }
+            dealer.setAddress(dealerDTO.getAddress());
+        }
+        if (dealerDTO.getShopName() != null) {
+            if (dealerDTO.getShopName().isBlank()) {
+                throw new IllegalArgumentException("Shop name cannot be blank");
+            }
+            dealer.setShopName(dealerDTO.getShopName());
+        }
+        if (dealerDTO.getMobileNo() != null) {
+            if (dealerDTO.getMobileNo().isBlank()) {
+                throw new IllegalArgumentException("Mobile number cannot be blank");
+            }
+            if (!dealerDTO.getMobileNo().matches("\\d{10}")) {
+                throw new IllegalArgumentException("Mobile number must be 10 digits");
+            }
+            dealer.setMobileNo(dealerDTO.getMobileNo());
+        }
+//        if (dealerDTO.getMobileNo() != null) {
+//            if (dealerDTO.getMobileNo().isBlank()) {
+//                throw new IllegalArgumentException("Mobile number cannot be blank");
+//            }
+//            if (!dealerDTO.getMobileNo().matches("\\d{10}")) {
+//                throw new IllegalArgumentException("Mobile number must be 10 digits");
+//            }
+//            dealer.setMobileNo(dealerDTO.getMobileNo());
+//        }
+        if (dealerDTO.getLastName() != null) {
+            if (dealerDTO.getLastName().isBlank()) {
+                throw new IllegalArgumentException("Last name cannot be blank");
+            }
+            dealer.setLastName(dealerDTO.getLastName());
+        }
+
+        if (dealerDTO.getArea() != null) {
+            if (dealerDTO.getArea().isBlank()) {
+                throw new IllegalArgumentException("Area cannot be blank");
+            }
+            dealer.setArea(dealerDTO.getArea());
+        }
+
+        if (dealerDTO.getEmail() != null) {
+            if (dealerDTO.getEmail().isBlank()) {
+                throw new IllegalArgumentException("Email cannot be blank");
+            }
+            if (!dealerDTO.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                throw new IllegalArgumentException("Email format is invalid");
+            }
+            dealer.setEmail(dealerDTO.getEmail());
+        }
+
+        if (dealerDTO.getStatus() != null) {
+            dealer.setStatus(dealerDTO.getStatus());
+        } else {
+            throw new IllegalArgumentException("Dealer status cannot be null");
+        }
         // Map DTO → Entity (you can make a helper method in DealerMapper)
         DealerMapper.updateEntityFromDTO(dealerDTO, dealer);
 
@@ -74,10 +131,6 @@ public class DealerServiceImpl implements DealerService {
         return DealerResponseDto.successWithList("Dealers fetched successfully", dealerDTOs);
     }
 
-
-
-
-
     @Override
     public DealerResponseDto getDealersByStatus(DealerStatus status) {
         List<DealerDTO> dealerDTOs = dealerRepository.findAll().stream()
@@ -102,15 +155,11 @@ public class DealerServiceImpl implements DealerService {
                 .orElseThrow(() -> new DealerNotFoundException("No dealer found for userId: " + userId));
     }
 
-
-
-
     @Override
     public Page<Dealer> getDealersWithPagination(Pageable pageable)
     {
         return dealerRepository.findAll(pageable);
     }
-
 
     @Override
     public DealerResponseDto updateDealerStatus(Integer dealerId, DealerStatus status) {
@@ -146,24 +195,7 @@ public class DealerServiceImpl implements DealerService {
         return DealerResponseDto.successWithList("Dealers fetched successfully", dealerDTOs);
     }
 
-    @Override
-    public Dealer createDealerForUser(User user, DealerDTO dealerDTO) {
-        Dealer dealer = new Dealer();
-        dealer.setUser(user);
-        dealer.setEmail(dealerDTO.getEmail());
-        dealer.setFirstname(dealerDTO.getUserFirstName());
-        dealer.setLastName(dealerDTO.getLastName());
-        dealer.setMobileNo(String.valueOf(dealerDTO.getUserMobileNumber()));
-        dealer.setShopName(dealerDTO.getShopName());
-        dealer.setAddress(dealerDTO.getAddress());
-        dealer.setArea(dealerDTO.getArea());
-        dealer.setCity(dealerDTO.getCity());
-        dealer.setSalesPersonId(dealerDTO.getSalesPersonId());
-        dealer.setDealerDocumentPhoto(dealerDTO.getDealerDocumentPhoto());
-        dealer.setStatus(DealerStatus.ACTIVE);
 
-        return dealerRepository.save(dealer);
-    }
 
 
 }

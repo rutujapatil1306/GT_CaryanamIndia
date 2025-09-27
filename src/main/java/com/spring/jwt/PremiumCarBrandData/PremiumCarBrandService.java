@@ -4,11 +4,11 @@ import com.spring.jwt.dto.ResponseDto;
 import com.spring.jwt.utils.BaseResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-
 import java.util.List;
 
 public interface PremiumCarBrandService {
-   PremiumBrandDTO save(PremiumBrandDTO dto);
+
+    PremiumBrandDTO save(PremiumBrandDTO dto);
 
     PremiumBrandDTO updateBrandById(PremiumBrandDTO brandDataDto, Integer premiumCarBrandDataId);
     PremiumBrandDTO deletePremiumBrand(Integer premiumCarBrandDataId);
