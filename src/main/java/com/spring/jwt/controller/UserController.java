@@ -324,7 +324,7 @@ public class UserController {
     @GetMapping("/{id}")
 //    @PreAuthorize("hasAuthority('STUDENT')")
     public ResponseEntity<UserDTO> getUserById(
-            @PathVariable @Min(value = 1, message = "Invalid user ID") Long id) {
+            @PathVariable @Min(value = 1, message = "Invalid user ID") Integer id) {
         UserDTO user = userService.getUserById(id);
         
         try {
@@ -373,7 +373,7 @@ public class UserController {
     })
     @GetMapping("/profile/{id}")
     public ResponseEntity<UserProfileDTO> getUserProfile(
-            @PathVariable @Min(value = 1, message = "Invalid user ID") Long id) {
+            @PathVariable @Min(value = 1, message = "Invalid user ID") Integer id) {
         UserProfileDTO profile = userService.getUserProfileById(id);
 
         try {
@@ -474,7 +474,7 @@ public class UserController {
     })
     @PatchMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(
-            @PathVariable @Min(value = 1, message = "Invalid user ID") Long id,
+            @PathVariable @Min(value = 1, message = "Invalid user ID") Integer id,
             @Valid @RequestBody UserUpdateRequest request) {
         UserDTO updatedUser = userService.updateUser(id, request);
         return ResponseEntity.ok(updatedUser);
