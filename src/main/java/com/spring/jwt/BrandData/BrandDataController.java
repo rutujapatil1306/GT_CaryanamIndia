@@ -26,10 +26,8 @@ public class BrandDataController {
     @PostMapping
     public ResponseEntity<ResponseDto> createBrand(@Valid @RequestBody BrandDataDto brandDataDto)
     {
-
             BrandDataDto addedBrand = brandDataService.createBrand(brandDataDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto("Success","Brand added Successfully"));
-
     }
 
     // API To Get Brand By Id
@@ -37,10 +35,8 @@ public class BrandDataController {
     @GetMapping("/{brandId}")
     public ResponseEntity<BrandResponseDto> getBrandById(@RequestParam Integer brandId)
     {
-
             BrandDataDto brand = brandDataService.getBrandById(brandId);
             return ResponseEntity.ok(BrandResponseDto.success("Brand with given id is found", brand));
-
     }
 
     // API TO Update Brand
