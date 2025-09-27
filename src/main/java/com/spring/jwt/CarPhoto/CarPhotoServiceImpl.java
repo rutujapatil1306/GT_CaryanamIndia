@@ -109,11 +109,16 @@ public class CarPhotoServiceImpl implements CarPhotoService {
 
         Car car = carPhoto.getCar();
         if (type != null) {
-            boolean typeExists = carPhotoRepository.existsByCarAndTypeAndIdNot(car, type, id);
-            if (typeExists) {
-                throw new DuplicatePhotoException("Car already has a photo of type " + type);
+
+            if (type.equals(carPhoto.getType())) {
+                throw new DuplicatePhotoException("Car photo already has type " + type);
             }
-            carPhoto.setType(type);
+                boolean typeExists = carPhotoRepository.existsByCarAndTypeAndIdNot(car, type, id);
+                if (typeExists) {
+                    throw new DuplicatePhotoException("Car already has a photo of type " + type);
+                }
+                carPhoto.setType(type);
+
         }
         if (imageFile != null && !imageFile.isEmpty()) {
             validateFileFormat(imageFile);
@@ -153,38 +158,62 @@ public class CarPhotoServiceImpl implements CarPhotoService {
             Car car = carRepository.findById(carId).orElseThrow(() -> new CarNotFoundException("Car Not Found At carId : " + carId));
             CarPhoto carPhoto = carPhotoRepository.findByCarId(carId).orElseThrow(() -> new PhotoNotFoundException("Photo not found for CarId: " + carId));
 
-            if (imageFile != null && !imageFile.isEmpty()) {
+        if ((imageFile == null || imageFile.isEmpty()) && type == null) {
+            throw new IllegalArgumentException("No new photo file or type provided for update");
+        }
+        boolean updated = false;
+
+        if (imageFile != null && !imageFile.isEmpty()) {
                 validateFileFormat(imageFile);
                 try {
                     String hash = DigestUtils.md5DigestAsHex(imageFile.getBytes());
 
-                    // Duplicate check for this car
-                    boolean exists = carPhotoRepository.existsByCarAndHashAndIdNot(car, hash, carPhoto.getId());
-                    if (exists) {
-                        throw new DuplicatePhotoException("This photo has already been uploaded for this car.");
+                    if (hash.equals(carPhoto.getHash())) {
+                        throw new DuplicatePhotoException("This photo is already set for this car.");
                     }
 
-                    Map uploadResult = cloudinary.uploader().upload(imageFile.getBytes(),
-                            ObjectUtils.asMap("folder", "car_photos"));
+                        boolean exists = carPhotoRepository.existsByCarAndHashAndIdNot(car, hash, carPhoto.getId());
+                        if (exists) {
+                            throw new DuplicatePhotoException("This photo has already been uploaded for this car.");
+                        }
 
-                    String url = (String) uploadResult.get("secure_url");
-                    String fileFormat = (String) uploadResult.get("format");
-                    carPhoto.setPhoto_link(url);
-                    carPhoto.setFileFormat(fileFormat);
-                    carPhoto.setUploadedAt(LocalDateTime.now());
-                    carPhoto.setHash(hash);
+                        Map uploadResult = cloudinary.uploader().upload(imageFile.getBytes(),
+                                ObjectUtils.asMap("folder", "car_photos"));
+
+                        String url = (String) uploadResult.get("secure_url");
+                        String fileFormat = (String) uploadResult.get("format");
+                        carPhoto.setPhoto_link(url);
+                        carPhoto.setFileFormat(fileFormat);
+                        carPhoto.setUploadedAt(LocalDateTime.now());
+                        carPhoto.setHash(hash);
+                        updated = true;
+
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to upload new File " + e.getMessage(), e);
                 }
 
             }
-            if (type != null) {
-                carPhoto.setType(type);
-            }
+                if (type != null) {
+                    if (type.equals(carPhoto.getType())) {
+                        throw new DuplicatePhotoException("This type is already set for this car photo.");
+                    }
 
-            CarPhoto saved = carPhotoRepository.save(carPhoto);
-            return carPhotoMapper.toDto(saved);
-        }
+                    boolean duplicateType = carPhotoRepository.existsByCarAndTypeAndIdNot(car, type, carPhoto.getId());
+                    if (duplicateType) {
+                        throw new DuplicatePhotoException("This photo with type " + type + " already exists for this car.");
+                    }
+                    carPhoto.setType(type);
+                    updated = true;
+                }
+
+
+                if (!updated) {
+                    throw new DuplicatePhotoException("No changes detected to update. Either same file or same type.");
+                }
+
+                    CarPhoto saved = carPhotoRepository.save(carPhoto);
+                    return carPhotoMapper.toDto(saved);
+    }
 
         @Override
         public void deleteCarPhoto (Integer id,boolean hardDelete){
