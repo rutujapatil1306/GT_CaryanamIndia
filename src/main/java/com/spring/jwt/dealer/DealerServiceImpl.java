@@ -173,7 +173,6 @@ public class DealerServiceImpl implements DealerService {
         return DealerResponseDto.success("Dealer status updated successfully", dto);
     }
 
-    // Sorting Logic
     @Override
     public DealerResponseDto getDealersWithPagination(int page, int size, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase("desc")
@@ -189,7 +188,7 @@ public class DealerServiceImpl implements DealerService {
 
         List<DealerDTO> dealerDTOs = dealerPage.getContent()
                 .stream()
-                .map(dealer -> DealerMapper.toDTO(dealer, true))
+                .map(dealer -> DealerMapper.toDTO(dealer, false))
                 .toList();
 
         return DealerResponseDto.successWithList("Dealers fetched successfully", dealerDTOs);

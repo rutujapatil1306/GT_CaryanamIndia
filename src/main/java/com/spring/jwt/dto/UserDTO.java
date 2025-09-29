@@ -1,8 +1,11 @@
 package com.spring.jwt.dto;
 
+import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.Role;
 import com.spring.jwt.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +18,11 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class UserDTO {
 
+    @NotBlank(message = "Email cannot be blank")
+    @Pattern(
+            regexp = "^[A-Za-z][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$",
+            message = "Invalid email format: must start with a letter"
+    )
     @Schema(
             description = "Email of User", example = "example@example.com"
     )
@@ -25,6 +33,10 @@ public class UserDTO {
     )
     private String userId;
 
+    @Pattern(
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+            message = "Password must be at least 8 characters long and include one uppercase letter, one lowercase letter, one number, and one special character"
+    )
     @Schema(
             description = "Password to create an account", example = "Pass@1234"
     )
@@ -64,11 +76,13 @@ public class UserDTO {
 
 
     // added for dealer
+    private Dealer id;
     private String shopName;
     private String area;
     private String city;
     private Long salesPersonId;
     private long dealerDocumentPhoto;
+
 
     public UserDTO(User user) {
         this.email = user.getEmail();

@@ -1,6 +1,7 @@
 package com.spring.jwt.Car;
 
 import com.spring.jwt.Car.DTO.CarDto;
+import com.spring.jwt.Car.DTO.CarFilterDTO;
 import com.spring.jwt.Car.DTO.CarResponseDto;
 import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
 import com.spring.jwt.Car.Exception.CarNotFoundException;
@@ -17,6 +18,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -310,47 +313,40 @@ public class CarServiceImpl implements CarService {
         );
     }
 
-    public CarResponseDto<List<CarDto>> filterCars(Status status, String brand, String model, String city, String fuelType, String transmission, Integer minPrice, Integer maxPrice) {
-        // Allowed statuses
-        List<Status> allowedStatuses = List.of(Status.PENDING, Status.ACTIVE);
+    @Override
+    public CarResponseDto<List<CarDto>> filterCars(Status status, String brand, String model, String city,
+                                                   String fuelType, String transmission,
+                                                   Integer minPrice, Integer maxPrice) {
 
-        if (status != null && !allowedStatuses.contains(status)) {
-            throw new InvalidStatusException("Invalid status: " + status);
-        }
+        // Build filter object
+        CarFilterDTO filter = new CarFilterDTO();
+        filter.setStatus(status);
+        filter.setBrand(brand);
+        filter.setModel(model);
+        filter.setCity(city);
+        filter.setFuelType(fuelType);
+        filter.setTransmission(transmission);
+        filter.setMinPrice(minPrice);
+        filter.setMaxPrice(maxPrice);
 
-        List<Status> statusesToFetch = (status != null) ? List.of(status) : allowedStatuses;
+        // Fetch cars using Specification
+        List<Car> cars = carRepository.findAll(CarSpecifications.withFilters(filter));
 
-        // Fetch initial list by status
-        List<Car> cars = carRepository.findByCarStatusIn(statusesToFetch);
-
-        // Apply filters one by one
-        if (brand != null && !brand.isEmpty()) {
-            cars = cars.stream().filter(c -> c.getBrand().toLowerCase().contains(brand.toLowerCase())).toList();
-        }
-        if (model != null && !model.isEmpty()) {
-            cars = cars.stream().filter(c -> c.getModel().toLowerCase().contains(model.toLowerCase())).toList();
-        }
-        if (city != null && !city.isEmpty()) {
-            cars = cars.stream().filter(c -> c.getCity().toLowerCase().contains(city.toLowerCase())).toList();
-        }
-        if (fuelType != null && !fuelType.isEmpty()) {
-            cars = cars.stream().filter(c -> c.getFuelType().toLowerCase().contains(fuelType.toLowerCase())).toList();
-        }
-        if (transmission != null && !transmission.isEmpty()) {
-            cars = cars.stream().filter(c -> c.getTransmission().toLowerCase().contains(transmission.toLowerCase())).toList();
-        }
-        if (minPrice != null) {
-            cars = cars.stream().filter(c -> c.getPrice() >= minPrice).toList();
-        }
-        if (maxPrice != null) {
-            cars = cars.stream().filter(c -> c.getPrice() <= maxPrice).toList();
-        }
         if (cars.isEmpty()) {
             throw new CarNotFoundException("No cars found with the given filters");
         }
 
-        List<CarDto> dtos = cars.stream().map(carMapper::toDto).toList();
+        // Map to DTOs
+        List<CarDto> dtos = new ArrayList<>();
+        for (Car car : cars) {
+            dtos.add(carMapper.toDto(car));
+        }
 
-        return new CarResponseDto<>("Cars fetched successfully with filters", dtos, null, cars.size());
+        return new CarResponseDto<>(
+                "Cars fetched successfully with filters",
+                dtos,
+                null,
+                dtos.size()
+        );
     }
 }
