@@ -189,7 +189,7 @@ public class DealerServiceImpl implements DealerService {
 
         List<DealerDTO> dealerDTOs = dealerPage.getContent()
                 .stream()
-                .map(dealer -> DealerMapper.toDTO(dealer, true))
+                .map(dealer -> DealerMapper.toDTO(dealer, false))
                 .toList();
 
         return DealerResponseDto.successWithList("Dealers fetched successfully", dealerDTOs);

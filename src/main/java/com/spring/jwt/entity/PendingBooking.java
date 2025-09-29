@@ -1,6 +1,8 @@
 package com.spring.jwt.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,11 +29,13 @@ public class PendingBooking {
     @Column(name = "price", length = 45)
     private int price;
 
-    @Column(name = "dealerId", length = 45)
-    private Integer dealerId;
+    @ManyToOne
+    @JoinColumn(name = "dealerId")
+    private Dealer dealerId;
 
-    @Column(name = "userId", length = 45)
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User userId;
 
     @Enumerated(EnumType.STRING)
     private Status status;
