@@ -104,7 +104,7 @@ public class PendingBookingServiceImpl implements PendingBookingService {
 
     private User getUser(Integer userId) {
         if (userId == null) return null;
-        return userRepository.findById(Long.valueOf(userId))
+        return userRepository.findById(Integer.valueOf(userId))
                 .orElseThrow(() -> new ResourceNotFoundExceptions("User not found with ID: " + userId));
     }
 
