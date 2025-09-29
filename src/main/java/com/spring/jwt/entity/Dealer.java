@@ -1,11 +1,11 @@
 package com.spring.jwt.entity;
-<<<<<<< HEAD
+
 
 
 
 import com.spring.jwt.PremiumCarData.PremiumCar;
-=======
->>>>>>> 70eaad7ab55db1bd984b82e716443094c1ae1fa2
+
+
 import com.spring.jwt.dealer.DealerStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -15,8 +15,6 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter

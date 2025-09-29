@@ -1,22 +1,21 @@
 package com.spring.jwt.PremiumCarData;
-<<<<<<< HEAD
+
 
 import com.spring.jwt.entity.Dealer;
-=======
->>>>>>> 70eaad7ab55db1bd984b82e716443094c1ae1fa2
+
 import com.spring.jwt.entity.PremiumCarPendingBooking;
 import com.spring.jwt.entity.Status;
 import jakarta.persistence.*;
+
 import jakarta.validation.constraints.*;
-<<<<<<< HEAD
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-=======
+
 import lombok.*;
->>>>>>> 70eaad7ab55db1bd984b82e716443094c1ae1fa2
+
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;

@@ -8,12 +8,12 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DealerDTO {
 
-<<<<<<< HEAD
-    private Integer id;
-=======
-    private Integer id; // Add this field
 
->>>>>>> 70eaad7ab55db1bd984b82e716443094c1ae1fa2
+    private Integer id;
+
+
+
+
     @NotBlank(message = "Address cannot be blank")
     private String address;
 
@@ -58,11 +58,9 @@ public class DealerDTO {
     private String userLastName;
     private String userMobileNumber;
 
-<<<<<<< HEAD
-=======
+
     public void setId(Integer id) {
     }
 
->>>>>>> 70eaad7ab55db1bd984b82e716443094c1ae1fa2
 
 }

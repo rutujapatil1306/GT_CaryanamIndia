@@ -1,6 +1,7 @@
 package com.spring.jwt.PremiumCarData;
 
 
+import com.spring.jwt.PremiumCarBrandData.PremiumBrandResponseDto;
 import com.spring.jwt.entity.Status;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/premiums")
@@ -20,28 +23,36 @@ PremiumCarController {
     private PremiumCarService premiumCarService;
 
     @PostMapping("/add")
-    public ResponseEntity<PremiumResponseDTO> createCar(@Valid @RequestBody PremiumCarDTO dto) {
+    public ResponseEntity<PremiumCarResponseDto> createCar(@Valid @RequestBody PremiumCarDTO dto) {
         PremiumCarDTO premiumCarDTO = premiumCarService.createPremiumCar(dto);
 
-        PremiumResponseDTO response = new PremiumResponseDTO(
+
+        PremiumCarResponseDto response = new PremiumCarResponseDto(
                 "success",
-                "Car created successfully",
-                premiumCarDTO
+                HttpStatus.OK.value(),
+                "Premium Car Added Successfully",
+                null,
+                LocalDateTime.now()
         );
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.ok(response);
     }
 //
 @PatchMapping("/update")
-public ResponseEntity<PremiumResponseDTO> patchPremiumCar(
+public ResponseEntity<PremiumCarResponseDto> patchPremiumCar(
         @RequestParam Integer id,
          @RequestBody PremiumCarDTO dto) {
 
     PremiumCarDTO updatedCar = premiumCarService.updatePremiumCar(id, dto);
-
-    return ResponseEntity.ok(
-            new PremiumResponseDTO("success", "Car updated successfully", updatedCar)
+    PremiumCarResponseDto response = new PremiumCarResponseDto(
+            "success",
+            HttpStatus.OK.value(),
+            "Premium Car updated successfully",
+            null,
+            LocalDateTime.now()
     );
+
+    return ResponseEntity.ok(response);
 }
 
 
