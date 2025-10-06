@@ -14,36 +14,36 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PendingBookingController {
 
-    private final PendingBookingService service;
+    private final PendingBookingService pendingbookingservice;
 
     @PostMapping("create")
     public ResponseEntity<ApiResponseDto> create(@Valid @RequestBody PendingBookingDTO dto) {
-        ApiResponseDto response = service.create(dto); // service now returns ApiResponseDto
-        // Set HTTP status based on success (201) or error (400)
+        ApiResponseDto response = pendingbookingservice.create(dto);
         HttpStatus status = response.getCode() == 201 ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(response, status);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PendingBookingDTO> getById(@Valid @PathVariable Integer id) {
-        return ResponseEntity.ok(service.getById(id));
+        return ResponseEntity.ok(pendingbookingservice.getById(id));
     }
 
     @GetMapping("all")
     public ResponseEntity<List<PendingBookingDTO>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+
+        return ResponseEntity.ok(pendingbookingservice.getAll());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseDto> update(@PathVariable Integer id, @RequestBody PendingBookingDTO dto) {
-        ApiResponseDto response = service.update(id, dto);
+        ApiResponseDto response = pendingbookingservice.update(id, dto);
         HttpStatus status = response.getCode() == 200 ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return new ResponseEntity<>(response, status);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        service.delete(id);
+        pendingbookingservice.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

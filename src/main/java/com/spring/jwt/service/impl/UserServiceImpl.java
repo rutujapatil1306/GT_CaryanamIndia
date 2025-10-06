@@ -48,22 +48,14 @@ import com.spring.jwt.mapper.UserMapper;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
     private final JavaMailSender mailSender;
-
     private final UserProfileRepository userProfileRepository;
-
     private final EmailVerificationRepo emailVerificationRepo;
-
     private final RoleRepository roleRepository;
-
     private final BCryptPasswordEncoder passwordEncoder;
-
     private final EmailService emailService;
-
     private final UserMapper userMapper;
-    //add
-  private final DealerRepository dealerRepository;
+    private final DealerRepository dealerRepository;
 
 
     @Value("${app.url.password-reset}")
@@ -109,7 +101,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
-        user.setMobileNumber(userDTO.getMobileNumber());
+        user.setMobileNumber(Long.valueOf(userDTO.getMobileNumber()));
         user.setAddress(userDTO.getAddress());
         user.setEmailVerified(true);
 
@@ -136,36 +128,13 @@ public class UserServiceImpl implements UserService {
                     createUserProfile(user, userDTO);
                     break;
                 case  "DEALER":
-                    if (userDTO.getShopName() == null || userDTO.getShopName().isEmpty()) {
-                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Shop name is required");
-                    }
-                    if (userDTO.getShopName().length() > 15) {
-                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Shop name must be less than or equal to 15 characters");
-                    }
-                    if (userDTO.getFirstName() == null || userDTO.getFirstName().isEmpty()) {
-                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "First name is required");
-                    }
-                    if (userDTO.getLastName() == null || userDTO.getLastName().isEmpty()) {
-                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Last name is required");
-                    }
-                    if (userDTO.getArea() == null || userDTO.getArea().isEmpty()) {
-                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Area is required");
-                    }
-                    if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
-                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Password is required");
-                    }
-                    if (userDTO.getDealerDocumentPhoto() == 0L) {
-                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Dealer Document Photo is required");
-                    }
-                    if (userDTO.getCity() == null || userDTO.getCity().isEmpty()) {
-                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "City is required");
-                    }
+
                     if (dealerRepository.existsBySalesPersonId(userDTO.getSalesPersonId())) {
                         throw new BaseException(String.valueOf(HttpStatus.CONFLICT.value()),
                                 "Salesperson already registered");
                     }
 
-                    // Create Dealer entity for this user
+//                    Dealer entity for this user
                     Dealer dealer = new Dealer();
                     dealer.setUser(user);
                     dealer.setEmail(userDTO.getEmail());

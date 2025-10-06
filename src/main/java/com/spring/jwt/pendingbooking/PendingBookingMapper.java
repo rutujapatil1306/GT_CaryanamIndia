@@ -1,44 +1,31 @@
 package com.spring.jwt.pendingbooking;
-import com.spring.jwt.entity.Car;
-import com.spring.jwt.entity.Dealer;
-import com.spring.jwt.entity.PendingBooking;
-import com.spring.jwt.entity.User;
+import com.spring.jwt.entity.*;
 import org.springframework.stereotype.Component;
-
 @Component
 public class PendingBookingMapper {
-
-    // Convert entity → DTO
-    public PendingBookingDTO toDTO(PendingBooking pb) {
-        if (pb == null) return null;
-
+    public PendingBookingDTO toDTO(PendingBooking pendingbooking) {
         return PendingBookingDTO.builder()
-                .id(pb.getId())
-                .date(pb.getDate())
-                .price(pb.getPrice())
-                .askingPrice(pb.getAskingPrice())
-                .status(pb.getStatus())
-                .dealerId(pb.getDealerId() != null ? pb.getDealerId().getId() : null)
-                .userId(pb.getUserId() != null ? pb.getUserId().getId() : null)
-                .carId(pb.getCarCar() != null ? pb.getCarCar().getId() : null)
+                .id(pendingbooking.getId())
+                .date(pendingbooking.getDate())
+                .price(pendingbooking.getPrice())
+                .askingPrice(pendingbooking.getAskingPrice())
+                .status(String.valueOf(pendingbooking.getStatus()))
+                .dealerId(pendingbooking.getDealerId() != null ? pendingbooking.getDealerId().getId() : null)
+                .userId(pendingbooking.getUserId() != null ? pendingbooking.getUserId().getId() : null)
+                .carId(pendingbooking.getCarCar() != null ? pendingbooking.getCarCar().getId() : null)
                 .build();
     }
-
-    // Convert DTO → entity
     public PendingBooking toEntity(PendingBookingDTO dto, Dealer dealer, User user, Car car) {
-        if (dto == null) return null;
-
-        PendingBooking pb = new PendingBooking();
-        pb.setId(dto.getId());
-        pb.setDate(dto.getDate());
-        pb.setPrice(dto.getPrice());
-        pb.setAskingPrice(dto.getAskingPrice());
-        pb.setStatus(dto.getStatus());
-        pb.setDealerId(dealer);
-        pb.setUserId(user);
-        pb.setCarCar(car);
-
-        return pb;
+        PendingBooking pendingbooking = new PendingBooking();
+        pendingbooking.setId(dto.getId());
+        pendingbooking.setDate(dto.getDate());
+        pendingbooking.setPrice(dto.getPrice());
+        pendingbooking.setAskingPrice(dto.getAskingPrice());
+        pendingbooking.setStatus(Status.fromString(dto.getStatus()));
+        pendingbooking.setDealerId(dealer);
+        pendingbooking.setUserId(user);
+        pendingbooking.setCarCar(car);
+        return pendingbooking;
     }
 }
 

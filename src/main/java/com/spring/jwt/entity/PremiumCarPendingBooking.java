@@ -25,14 +25,32 @@ public class PremiumCarPendingBooking {
     @Column(name = "price", length = 45)
     private int price;
 
-    @Column(name = "dealerId", length = 45)
-    private Integer dealerId;
+    @ManyToOne
+    @JoinColumn(name = "dealer_id",nullable = false)
+    private Dealer dealer;
 
-    @Column(name = "userId", length = 45)
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    public Dealer getDealer() {
+        return dealer;
+    }
+
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Column(name = "status")
+    private String status;
 
     @Column (name = "asking_price", nullable = false)
     private int askingPrice;
@@ -42,5 +60,13 @@ public class PremiumCarPendingBooking {
     @JsonIgnore
     private PremiumCar premiumCarCar;
 
+
+    public Long getPremiumCarPendingBookingId() {
+        return premiumCarPendingBookingId;
+    }
+
+    public void setPremiumCarPendingBookingId(Long premiumCarPendingBookingId) {
+        this.premiumCarPendingBookingId = premiumCarPendingBookingId;
+    }
 
 }
