@@ -174,6 +174,7 @@ public class AppConfig {
                 .requestMatchers("/api/carPhotos/**").permitAll()
                 .requestMatchers("/cars/filter/**").permitAll()//add
                 .requestMatchers("/premiumcars/photos/**").permitAll()
+                .requestMatchers("/api/pending-bookings/**").permitAll()
                 .requestMatchers(jwtConfig.getUrl()).permitAll()
                 .requestMatchers(jwtConfig.getRefreshUrl()).permitAll()
 
@@ -227,7 +228,7 @@ public class AppConfig {
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/user/**"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/premiumbrands/**"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/premiums/**"),
-
+                    new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/pending-bookings/**"),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(jwtConfig.getUrl()),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(jwtConfig.getRefreshUrl())
             );

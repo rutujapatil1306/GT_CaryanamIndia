@@ -1,6 +1,7 @@
 package com.spring.jwt.entity;
 import com.spring.jwt.dealer.DealerStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

@@ -139,14 +139,18 @@ public class UserServiceImpl implements UserService {
                     if (userDTO.getShopName() == null || userDTO.getShopName().isEmpty()) {
                         throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Shop name is required");
                     }
+                    if (userDTO.getShopName().length() > 15) {
+                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Shop name must be less than or equal to 15 characters");
+                    }
                     if (userDTO.getFirstName() == null || userDTO.getFirstName().isEmpty()) {
                         throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "First name is required");
                     }
-
                     if (userDTO.getLastName() == null || userDTO.getLastName().isEmpty()) {
                         throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Last name is required");
                     }
-
+                    if (userDTO.getArea() == null || userDTO.getArea().isEmpty()) {
+                        throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Area is required");
+                    }
                     if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
                         throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Password is required");
                     }

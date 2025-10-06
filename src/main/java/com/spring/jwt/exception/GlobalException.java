@@ -523,5 +523,4 @@ public class GlobalException extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
-
 }

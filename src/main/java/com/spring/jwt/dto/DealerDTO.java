@@ -31,9 +31,13 @@ public class DealerDTO {
 
 
     @NotBlank(message = "Shop name cannot be blank")
+    @Size(max = 15, message = "Shop name must be less than or equal to 15 characters")
     private String shopName;
 
-    @Email(message = "Email should be valid")
+    @Pattern(
+            regexp = "^[A-Za-z][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$",
+            message = "Invalid email format: must start with a letter"
+    )
     private String email;
 
     private long dealerDocumentPhoto;
@@ -55,6 +59,7 @@ public class DealerDTO {
     private String userMobileNumber;
 
     public void setId(Integer id) {
+        this.id = id;
     }
 
 
