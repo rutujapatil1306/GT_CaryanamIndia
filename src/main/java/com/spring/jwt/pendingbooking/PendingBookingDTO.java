@@ -4,15 +4,12 @@ import lombok.*;
 import java.time.LocalDate;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class PendingBookingDTO {
-
-
     private Integer id;
     @NotNull(message = "Date cannot be null")
     private LocalDate date;
@@ -29,6 +26,5 @@ public class PendingBookingDTO {
     private Integer userId;
     @NotNull(message = "carId is required")
     private Integer carId;
-
-    private Status status;
+    private String status;
 }

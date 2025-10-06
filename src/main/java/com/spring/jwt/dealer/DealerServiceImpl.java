@@ -13,88 +13,24 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class DealerServiceImpl implements DealerService {
-
-
     private final DealerRepository dealerRepository;
+@Override
+public DealerResponseDto updateDealer(Integer dealerId, DealerDTO dealerDTO) {
+    Dealer dealer = dealerRepository.findById(dealerId)
+            .orElseThrow(() -> new DealerNotFoundException("Dealer not found with id: " + dealerId));
 
-    @Override
-    public DealerResponseDto updateDealer(Integer dealerId, DealerDTO dealerDTO) {
-        Dealer dealer = dealerRepository.findById(dealerId)
-                .orElseThrow(() -> new DealerNotFoundException("Dealer not found with id: " + dealerId));
+    DealerMapper.updateEntityFromDTO(dealerDTO, dealer);
 
-        if (dealerDTO.getAddress() != null) {
-            if (dealerDTO.getAddress().isBlank()) {
-                throw new IllegalArgumentException("Address cannot be blank");
-            }
-            dealer.setAddress(dealerDTO.getAddress());
-        }
-        if (dealerDTO.getShopName() != null) {
-            if (dealerDTO.getShopName().isBlank()) {
-                throw new IllegalArgumentException("Shop name cannot be blank");
-            }
-            dealer.setShopName(dealerDTO.getShopName());
-        }
-        if (dealerDTO.getMobileNo() != null) {
-            if (dealerDTO.getMobileNo().isBlank()) {
-                throw new IllegalArgumentException("Mobile number cannot be blank");
-            }
-            if (!dealerDTO.getMobileNo().matches("\\d{10}")) {
-                throw new IllegalArgumentException("Mobile number must be 10 digits");
-            }
-            dealer.setMobileNo(dealerDTO.getMobileNo());
-        }
-//        if (dealerDTO.getMobileNo() != null) {
-//            if (dealerDTO.getMobileNo().isBlank()) {
-//                throw new IllegalArgumentException("Mobile number cannot be blank");
-//            }
-//            if (!dealerDTO.getMobileNo().matches("\\d{10}")) {
-//                throw new IllegalArgumentException("Mobile number must be 10 digits");
-//            }
-//            dealer.setMobileNo(dealerDTO.getMobileNo());
-//        }
-        if (dealerDTO.getLastName() != null) {
-            if (dealerDTO.getLastName().isBlank()) {
-                throw new IllegalArgumentException("Last name cannot be blank");
-            }
-            dealer.setLastName(dealerDTO.getLastName());
-        }
+    Dealer updatedDealer = dealerRepository.save(dealer);
+    DealerDTO dto = DealerMapper.toDTO(updatedDealer, false);
 
-        if (dealerDTO.getArea() != null) {
-            if (dealerDTO.getArea().isBlank()) {
-                throw new IllegalArgumentException("Area cannot be blank");
-            }
-            dealer.setArea(dealerDTO.getArea());
-        }
+    return DealerResponseDto.success("Dealer updated successfully", dto);
+}
 
-        if (dealerDTO.getEmail() != null) {
-            if (dealerDTO.getEmail().isBlank()) {
-                throw new IllegalArgumentException("Email cannot be blank");
-            }
-            if (!dealerDTO.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-                throw new IllegalArgumentException("Email format is invalid");
-            }
-            dealer.setEmail(dealerDTO.getEmail());
-        }
-
-        if (dealerDTO.getStatus() != null) {
-            dealer.setStatus(dealerDTO.getStatus());
-        } else {
-            throw new IllegalArgumentException("Dealer status cannot be null");
-        }
-        // Map DTO → Entity (you can make a helper method in DealerMapper)
-        DealerMapper.updateEntityFromDTO(dealerDTO, dealer);
-
-        Dealer updatedDealer = dealerRepository.save(dealer);
-        DealerDTO dto = DealerMapper.toDTO(updatedDealer, false);
-
-        return DealerResponseDto.success("Dealer updated successfully", dto);
-    }
 
     @Override
     public DealerResponseDto deleteDealer(Integer dealerId) {
@@ -102,7 +38,7 @@ public class DealerServiceImpl implements DealerService {
                 .orElseThrow(() -> new DealerNotFoundException("Dealer not found with id: " + dealerId));
 
         dealerRepository.delete(dealer);
-        return DealerResponseDto.success("Dealer deleted successfully", null);
+        return DealerResponseDto.success("Dealer deleted successfully for id:"+ dealerId, null);
     }
 
     @Override
@@ -172,7 +108,6 @@ public class DealerServiceImpl implements DealerService {
         DealerDTO dto = DealerMapper.toDTO(savedDealer,false);
         return DealerResponseDto.success("Dealer status updated successfully", dto);
     }
-
     @Override
     public DealerResponseDto getDealersWithPagination(int page, int size, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase("desc")

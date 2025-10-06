@@ -1,10 +1,13 @@
 package com.spring.jwt.entity;
 
 public enum Status {
-    PENDING("Pending"),
-    ACTIVE("Active"),
+    PENDING("pending"),
+    ACTIVE("active"),
     SOLD("Sold"),
+    APPROVED("approved"),
+    REJECTED("rejected"),
     DEACTIVATE("Deactivate");
+
 
 
     private final String status;
@@ -26,5 +29,6 @@ public enum Status {
         }
         throw new IllegalArgumentException("Invalid status: " + status);
     }
+
 }
 

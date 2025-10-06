@@ -47,7 +47,7 @@ public class User {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "mobile_number")
+    @Column(name = "mobile_number",unique = true)
     private Long mobileNumber;
 
     @Column(name = "password")

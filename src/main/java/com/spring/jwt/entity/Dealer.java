@@ -44,10 +44,8 @@ public class Dealer {
 
     @NotNull(message = "Mobile number is required")
     @Pattern(regexp = "[0-9]{10}", message = "Invalid mobile number format")
-    @Column(name = "mobile_no", nullable = false, length = 45)
+    @Column(name = "mobile_no",unique = true, nullable = false, length = 45)
     private String mobileNo;
-
-
 
     @Column(name = "shop_name", nullable = false, length = 250)
     private String shopName;

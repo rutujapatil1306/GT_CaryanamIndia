@@ -9,43 +9,41 @@ import lombok.Data;
 public class DealerDTO {
 
     private Integer id; // Add this field
+    @Pattern(
+            regexp = "^[A-Za-z][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$",
+            message = "Invalid email format"
+    )
+    @Email
+    private String email;
 
-    @NotBlank(message = "Address cannot be blank")
-    private String address;
-
-    private String area;
-    private String city;
-
-    @NotBlank(message = "First name cannot be blank")
+    @Pattern(regexp = "^[A-Za-z\\s]{1,15}$", message = "First name must contain only letters")
     private String firstname;
 
-    @NotBlank(message = "Last name cannot be blank")
+    @Pattern(regexp = "^[A-Za-z\\s]{1,15}$", message = "Last name must contain only letters")
     private String lastName;
 
-    @NotNull(message = "Sales person ID cannot be null")
+    @Pattern(regexp = "^[A-Za-z\\s]{1,15}$", message = "Shop name must contain only letters")
+    private String shopName;
+
+    @Pattern(regexp = "^[A-Za-z\\s]{2,30}$", message = "City must contain only letters")
+    private String city;
+
+    @Positive(message = "Sales person ID must be positive")
     private Long salesPersonId;
 
-    @NotNull(message = "Mobile number cannot be null")
-    @Pattern(regexp = "\\d{10}", message = "Mobile number must be 10 digits")
+    private String address;
+    private String area;
+
+    @Pattern(
+            regexp = "^[6-9]\\d{9}$",
+            message = "Invalid mobile number: must be 10 digits starting with 6-9"
+    )
     private String mobileNo;
 
 
-    @NotBlank(message = "Shop name cannot be blank")
-    @Size(max = 15, message = "Shop name must be less than or equal to 15 characters")
-    private String shopName;
-
-    @Pattern(
-            regexp = "^[A-Za-z][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$",
-            message = "Invalid email format: must start with a letter"
-    )
-    private String email;
-
     private long dealerDocumentPhoto;
 
-    @NotNull(message = "Dealer status cannot be null")
     private DealerStatus status;
-
-
     // For User entity creation
     @NotBlank(message = "User email cannot be blank")
     private String userEmail;
@@ -57,7 +55,6 @@ public class DealerDTO {
     private String userFirstName;
     private String userLastName;
     private String userMobileNumber;
-
     public void setId(Integer id) {
         this.id = id;
     }
