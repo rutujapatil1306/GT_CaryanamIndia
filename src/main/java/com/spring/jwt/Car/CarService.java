@@ -8,16 +8,16 @@ public interface CarService {
     CarDto addCar(CarDto cardto);
 
     //Get Car By id
-    CarDto getCarById(int id);
+    CarDto getCarById(Integer userId, Integer id);
 
     //Update Car By Given id
-    CarDto updateCar(CarDto carDto, int id);
+    CarDto updateCar(CarDto carDto, Integer id);
 
     //Delete Car By id (Soft Delete)
-    void softDelete(int id);
+    void softDelete(Integer id);
 
     //Delete Car By id (Hard Delete)
-    void hardDelete(int id);
+    void hardDelete(Integer id);
 
     //Get All Cars By Status
     CarResponseDto<List<CarDto>> getAllCarsByStatus(String carStatus, int page, int size);

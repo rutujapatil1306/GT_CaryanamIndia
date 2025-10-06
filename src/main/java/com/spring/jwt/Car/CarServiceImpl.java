@@ -7,17 +7,23 @@ import com.spring.jwt.Car.Exception.CarNotFoundException;
 import com.spring.jwt.Car.Exception.InvalidStatusException;
 import com.spring.jwt.Car.Exception.StatusNotFoundException;
 //import com.spring.jwt.dealer.DealerNotFoundException;
+import com.spring.jwt.CarView.CarViewRepository;
 import com.spring.jwt.dealer.exception.DealerNotFoundException;
 import com.spring.jwt.entity.Car;
+import com.spring.jwt.entity.CarView;
 import com.spring.jwt.entity.Dealer;
+import com.spring.jwt.entity.User;
 import com.spring.jwt.exception.PageNotFoundException;
+import com.spring.jwt.exception.UserNotFoundExceptions;
 import com.spring.jwt.repository.DealerRepository;
+import com.spring.jwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import java.util.EnumSet;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,6 +34,12 @@ public class CarServiceImpl implements CarService {
 
     @Autowired
     DealerRepository dealerRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    CarViewRepository carViewRepository;
 
 
     @Autowired
@@ -45,6 +57,7 @@ public class CarServiceImpl implements CarService {
         if (cardto.getCarStatus() == null) {
             throw new IllegalArgumentException("Car status is required");
         }
+
         Status status;
         try {
             status = Status.valueOf(cardto.getCarStatus().toString().toUpperCase());
@@ -75,14 +88,27 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CarDto getCarById(int id) {
-        Car car = carRepository.findById(id).orElseThrow(() -> new CarNotFoundException("Car Not Found At id " + id));
+    public CarDto getCarById(Integer userId, Integer carId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundExceptions("User not found At id " + userId));
+        Car car = carRepository.findById(carId).orElseThrow(() -> new CarNotFoundException("Car Not Found At id " + carId));
+        CarView carView = carViewRepository.findByUserIdAndCarId(userId, carId).orElseGet(()->
+        {
+            CarView view = new CarView();
+            view.setUser(user);
+            view.setCar(car);
+            view.setCount(0);
+            return view;
+        } );
+
+            carView.setCount(carView.getCount() + 1);
+            carView.setLastViewedAt(LocalDateTime.now());
+            carViewRepository.save(carView);
 
         return carMapper.toDto(car);
     }
 
     @Override
-    public CarDto updateCar(CarDto carDto, int id) {
+    public CarDto updateCar(CarDto carDto, Integer id) {
         Car car = carRepository.findById(id).orElseThrow(() -> new CarNotFoundException("Car Not Found At Id: " + id));
 
         if (carDto.getPrice() != null) {
@@ -117,7 +143,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void softDelete(int id) {
+    public void softDelete(Integer id) {
         Car car = carRepository.findById(id).orElseThrow(() -> new CarNotFoundException("Car Not Found At id " + id));
 
         //set Car Status to DELETED for Soft Delete
@@ -126,7 +152,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void hardDelete(int id) {
+    public void hardDelete(Integer id) {
         Car car = carRepository.findById(id).orElseThrow(() -> new CarNotFoundException("Car Not Found At id " + id));
         carRepository.delete(car);
     }
