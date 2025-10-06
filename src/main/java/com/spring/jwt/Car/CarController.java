@@ -33,28 +33,29 @@ public class CarController {
     // Get Car By Id
     //Using RequestParam to take car id
     @GetMapping("/getCar")
-    public ResponseEntity<CarResponseDto2> getCarById(@RequestParam int id) {
-        CarDto car = carService.getCarById(id);
+    public ResponseEntity<CarResponseDto2> getCarById(@RequestParam Integer userId,
+                                                      @RequestParam Integer id) {
+        CarDto car = carService.getCarById(userId, id);
         return ResponseEntity.ok(CarResponseDto2.response("Fetched Car with given id " + id + " is Found", car));
     }
 
     //Update Car By Id
     @PatchMapping("/update")
-    public ResponseEntity<CarResponseDto2> updateCar(@Valid @RequestBody CarDto carDto, @RequestParam int id) {
+    public ResponseEntity<CarResponseDto2> updateCar(@Valid @RequestBody CarDto carDto, @RequestParam Integer id) {
         CarDto updateCar = carService.updateCar(carDto, id);
         return ResponseEntity.ok(new CarResponseDto2<>("Car Updated Successfully", updateCar, null));
     }
 
     // Delete Car(Soft Delete)
     @DeleteMapping("/softDelete")
-    public ResponseEntity<ResponseDto> softDelete(@RequestParam int id) {
+    public ResponseEntity<ResponseDto> softDelete(@RequestParam Integer id) {
         carService.softDelete(id);
         return ResponseEntity.ok(new ResponseDto("Success", "Car Deleted Successfully"));
     }
 
     //Delete Car(Hard Delete)
     @DeleteMapping("/hardDelete")
-    public ResponseEntity<ResponseDto> hardDelete(@RequestParam int id) {
+    public ResponseEntity<ResponseDto> hardDelete(@RequestParam Integer id) {
         carService.hardDelete(id);
         return ResponseEntity.ok(new ResponseDto("Success", "Car Deleted Successfully"));
     }

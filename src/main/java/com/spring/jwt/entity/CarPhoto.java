@@ -18,9 +18,7 @@ import java.time.LocalDateTime;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "car_photo",
-        uniqueConstraints = {@UniqueConstraint(name = "UK_car_photo", columnNames = {"car_id", "photo_type"})
-    })
+@Table(name = "car_photo")
 
 
 public class CarPhoto {
@@ -32,8 +30,6 @@ public class CarPhoto {
     @ManyToOne
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
-
-
 
     @NotBlank(message = "Photo link cannot be blank")
     @Size(max = 500, message = "Photo link cannot exceed 500 characters")
@@ -47,18 +43,19 @@ public class CarPhoto {
             message = "File format must be one of: jpg, jpeg, png, webp")
     private String fileFormat;
 
+    @NotBlank(message = "public Id is required")
+    @Column(name = "public_id", nullable = false)
+    private String publicId;
+
     @Column(name = "UploadedAt", nullable = false, updatable = false)
     @NotNull(message = "Uploaded time is required")
     private LocalDateTime uploadedAt;
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Photo type is required")
-
     @Column(name = "PhotoType", nullable = false, length = 50)
     private DocType type;
 
-    @Column(name = "hash", nullable = false)
-    private String hash;
 
     @Enumerated(EnumType.STRING)
     private CarPhotoStatus status;

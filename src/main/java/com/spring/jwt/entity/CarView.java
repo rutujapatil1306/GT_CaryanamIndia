@@ -15,7 +15,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "car_view")
+@Table(name = "car_view",
+       uniqueConstraints = {
+        @UniqueConstraint(columnNames = "{car_id, user_id}")
+       })
 public class CarView {
 
     @Id
