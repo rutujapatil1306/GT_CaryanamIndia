@@ -22,21 +22,21 @@ public class CarViewController {
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("/saveUserCarViews")
-    public ResponseEntity<CarViewResponseDto> saveUserCarView(@RequestParam Integer userId,
-                                                              @RequestParam Integer carId)
-    {
-
-        CarViewDto view = carViewService.saveUserCarView(userId, carId);
-        return ResponseEntity.ok(new CarViewResponseDto("Saved Car Views Successfully", "Success", HttpStatus.CREATED, null));
-    }
-
-    @GetMapping("/getCarViewCountByUser")
-    public ResponseEntity<CarViewResponseDto2> getCarViewCountByUser(@RequestParam Integer userId,
-                                                                     @RequestParam Integer carId)
-    {
-        CarViewDto view = carViewService.getCarViewCountByUser(userId,carId);
-        return ResponseEntity.ok(new CarViewResponseDto2("View count for car at Id " + carId + " by user at Id : " +userId, view, "Success", HttpStatus.OK, null));
-    }
+//    @PostMapping("/saveUserCarViews")
+//    public ResponseEntity<CarViewResponseDto> saveUserCarView(@RequestParam Integer userId,
+//                                                              @RequestParam Integer carId)
+//    {
+//
+//        CarViewDto view = carViewService.saveUserCarView(userId, carId);
+//        return ResponseEntity.ok(new CarViewResponseDto("Saved Car Views Successfully", "Success", HttpStatus.CREATED, null));
+//    }
+//
+//    @GetMapping("/getCarViewCountByUser")
+//    public ResponseEntity<CarViewResponseDto2> getCarViewCountByUser(@RequestParam Integer userId,
+//                                                                     @RequestParam Integer carId)
+//    {
+//        CarViewDto view = carViewService.getCarViewCountByUser(userId,carId);
+//        return ResponseEntity.ok(new CarViewResponseDto2("View count for car at Id " + carId + " by user at Id : " +userId, view, "Success", HttpStatus.OK, null));
+//    }
 
 }

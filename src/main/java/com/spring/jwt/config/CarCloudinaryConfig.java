@@ -10,7 +10,7 @@ import java.util.Map;
 @Configuration
 public class CarCloudinaryConfig {
 
-    @Bean
+    @Bean(name = "CarCloudinary")
     public Cloudinary getCloudinary()
     {
         Map config = new HashMap();

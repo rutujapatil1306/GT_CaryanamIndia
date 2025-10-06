@@ -94,9 +94,11 @@ public class Car {
 
     @NotBlank(message = "Color is Required")
     @Size(max = 45, message = "Color cannot exceed 45 characters")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "Color must contain only letters")
     @Column(name = "color", length = 45)
     private String color;
 
+    @NotBlank(message = "Description is Required")
     @Size(max = 5000, message = "Description cannot exceed 5000 characters")
     @Column(name = "description", length = 5000)
     @Size(max = 5000, message = "Description cannot exceed 5000 characters")
