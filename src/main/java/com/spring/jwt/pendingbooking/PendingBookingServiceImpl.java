@@ -1,7 +1,10 @@
 package com.spring.jwt.pendingbooking;
+import com.spring.jwt.dealer.exception.DealerNotFoundException;
 import com.spring.jwt.entity.*;
 import com.spring.jwt.Car.CarRepository;
+import com.spring.jwt.exception.UserNotFoundExceptions;
 import com.spring.jwt.premiumcar.ApiResponseDto;
+import com.spring.jwt.premiumcar.exceptions.CarsNotFoundException;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +23,14 @@ public class PendingBookingServiceImpl implements PendingBookingService {
 
     @Override
     public ApiResponseDto create(PendingBookingDTO dto) {
-        Dealer dealer = getDealer(dto.getDealerId());
-        User user = getUser(dto.getUserId());
-        Car car = getCar(dto.getCarId());
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new UserNotFoundExceptions("User not found with id :" + dto.getUserId()));
+
+        Dealer dealer = dealerRepository.findById(dto.getDealerId())
+                .orElseThrow(() -> new DealerNotFoundException("Dealer not found with id :" + dto.getDealerId()));
+
+        Car car = carRepository.findById(dto.getCarId())
+                .orElseThrow(() -> new CarsNotFoundException("car not found with id :" + dto.getCarId()));
         Status status = Status.fromString(dto.getStatus());
         PendingBooking pendingbooking = pendingbookingmapper.toEntity(dto, dealer, user, car);
         pendingbookingrepository.save(pendingbooking);
