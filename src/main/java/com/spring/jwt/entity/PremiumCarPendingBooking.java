@@ -2,8 +2,10 @@ package com.spring.jwt.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spring.jwt.PremiumCarData.PremiumCar;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
+import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 @Getter
 @Setter
@@ -20,17 +22,20 @@ public class PremiumCarPendingBooking {
     private Long premiumCarPendingBookingId;
 
     @Column(name = "date", nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "date is required")
     private LocalDate date;
 
     @Column(name = "price", length = 45)
+    @NotNull(message = "Mobile number is required")
     private int price;
 
     @ManyToOne
-    @JoinColumn(name = "dealer_id",nullable = false)
+    @JoinColumn(name = "dealer_id",nullable = true)
     private Dealer dealer;
 
     @ManyToOne
-    @JoinColumn(name = "user_id",nullable = false)
+    @JoinColumn(name = "user_id",nullable = true)
     private User user;
 
     public Dealer getDealer() {
@@ -50,14 +55,17 @@ public class PremiumCarPendingBooking {
     }
 
     @Column(name = "status")
+    @NotBlank(message = "Status is required")
     private String status;
 
     @Column (name = "asking_price", nullable = false)
+    @NotNull(message = "Asking price  is required")
     private int askingPrice;
 
     @ManyToOne
     @JoinColumn(name = "premium_car_car_id")
     @JsonIgnore
+    @NotNull(message = "premium car id  is required")
     private PremiumCar premiumCarCar;
 
 
@@ -69,4 +77,12 @@ public class PremiumCarPendingBooking {
         this.premiumCarPendingBookingId = premiumCarPendingBookingId;
     }
 
+
+    public PremiumCar getPremiumCarCar() {
+        return premiumCarCar;
+    }
+
+    public void setPremiumCarCar(PremiumCar premiumCarCar) {
+        this.premiumCarCar = premiumCarCar;
+    }
 }

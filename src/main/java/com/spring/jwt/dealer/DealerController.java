@@ -18,7 +18,7 @@ public class DealerController {
     @PatchMapping("/update")
     public ResponseEntity<DealerResponseDto> updateDealer(
             @RequestParam Integer dealerId,
-            @Valid@RequestBody DealerDTO dealerDTO) {
+            @RequestBody DealerDTO dealerDTO) {
         return ResponseEntity.ok(dealerService.updateDealer(dealerId, dealerDTO));
     }
     @DeleteMapping

@@ -1,5 +1,6 @@
 package com.spring.jwt.entity;
 
+import com.spring.jwt.PremiumCarData.PremiumCar;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,4 +41,7 @@ public class TempPendingBookingReq {
         @Column (name = "asking_price", nullable = false)
         private int askingPrice;
 
+        @ManyToOne
+        @JoinColumn(name = "premium_car_id",referencedColumnName = "premiumCar")
+        private PremiumCar premiumCarCar;
 }

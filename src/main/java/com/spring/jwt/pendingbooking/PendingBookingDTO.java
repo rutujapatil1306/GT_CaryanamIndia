@@ -27,4 +27,6 @@ public class PendingBookingDTO {
     @NotNull(message = "carId is required")
     private Integer carId;
     private String status;
+
+
 }

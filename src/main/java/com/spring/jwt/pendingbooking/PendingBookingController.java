@@ -1,6 +1,7 @@
 package com.spring.jwt.pendingbooking;
 
 import com.spring.jwt.premiumcar.ApiResponseDto;
+import com.spring.jwt.premiumcarpendingbooking.GetApiResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,32 +19,62 @@ public class PendingBookingController {
 
     @PostMapping("create")
     public ResponseEntity<ApiResponseDto> create(@Valid @RequestBody PendingBookingDTO dto) {
-        ApiResponseDto response = pendingbookingservice.create(dto);
-        HttpStatus status = response.getCode() == 201 ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
-        return new ResponseEntity<>(response, status);
+        PendingBookingDTO createBooking = pendingbookingservice.create(dto);
+        ApiResponseDto response = new ApiResponseDto(
+                "success",
+                "pending booking create successfully",
+                201,
+                "CREATED",
+                "null"
+        );
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PendingBookingDTO> getById(@Valid @PathVariable Integer id) {
-        return ResponseEntity.ok(pendingbookingservice.getById(id));
+    public ResponseEntity<GetApiResponseDto> getById(@Valid @PathVariable Integer id) {
+       PendingBookingDTO dto= pendingbookingservice.getById(id);
+        GetApiResponseDto response = new GetApiResponseDto(
+                "success",
+                "pending booking fetch successfully by id : "+ id,
+                dto
+        );
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping("all")
-    public ResponseEntity<List<PendingBookingDTO>> getAll() {
-
-        return ResponseEntity.ok(pendingbookingservice.getAll());
+    public ResponseEntity<GetApiResponseDto> getAll() {
+        List<PendingBookingDTO> List = pendingbookingservice.getAll();
+        GetApiResponseDto response = new GetApiResponseDto(
+                "success",
+                "All pending booking fetch successfully ",
+                List
+        );
+        return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponseDto> update(@PathVariable Integer id, @RequestBody PendingBookingDTO dto) {
-        ApiResponseDto response = pendingbookingservice.update(id, dto);
-        HttpStatus status = response.getCode() == 200 ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-        return new ResponseEntity<>(response, status);
+        PendingBookingDTO updateBooking = pendingbookingservice.update(id, dto);
+        ApiResponseDto response = new ApiResponseDto(
+                "success",
+                "pending booking update successfully",
+                201,
+                "UPDATE",
+                "null"
+        );
+        return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ApiResponseDto> delete(@PathVariable Integer id) {
         pendingbookingservice.delete(id);
-        return ResponseEntity.noContent().build();
+        ApiResponseDto response = new ApiResponseDto(
+                "success",
+                "pending booking delete successfully",
+                201,
+                "DELETE",
+                "null"
+        );
+        return ResponseEntity.ok(response);
     }
 }

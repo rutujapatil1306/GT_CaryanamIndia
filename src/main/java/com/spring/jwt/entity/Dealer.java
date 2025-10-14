@@ -68,7 +68,15 @@ public class Dealer {
     @OneToMany(mappedBy = "dealer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Car> cars = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "dealerVendor")
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    //    @OneToMany(mappedBy = "dealerVendor")
 //    private Set<Car> cars = new LinkedHashSet<>();
 
 

@@ -77,7 +77,7 @@ public class PendingBookingServiceImplTest {
         Mockito.when(mapper.toEntity(dto, dealer, user, car)).thenReturn(entity);
         Mockito.when(repository.save(Mockito.any(PendingBooking.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        ApiResponseDto response = service.create(dto);
+        PendingBookingDTO response = service.create(dto);
 
         // Verifications
         Mockito.verify(dealerRepository).findById(dealerId);
@@ -88,7 +88,6 @@ public class PendingBookingServiceImplTest {
 
         // Assertions
         Assertions.assertEquals("success", response.getStatus());
-        Assertions.assertEquals(201, response.getCode());
     }
 
     @Test
@@ -163,13 +162,12 @@ public class PendingBookingServiceImplTest {
         Mockito.when(carRepository.findById(1)).thenReturn(Optional.of(car));
         Mockito.when(repository.save(entity)).thenReturn(entity);
 
-        ApiResponseDto response = service.update(id, dto);
+        PendingBookingDTO response = service.update(id, dto);
 
         Mockito.verify(repository).findById(id);
         Mockito.verify(repository).save(entity);
 
         Assertions.assertEquals("success", response.getStatus());
-        Assertions.assertEquals(200, response.getCode());
     }
 
     @Test

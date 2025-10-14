@@ -62,6 +62,14 @@ public class PremiumCar {
     @Column(name = "carInsuranceType")
     private String carInsuranceType;
 
+    public Status getCarstatus() {
+        return carstatus;
+    }
+
+    public void setCarstatus(Status carstatus) {
+        this.carstatus = carstatus;
+    }
+
     @NotNull(message = "Status is required")
     @Enumerated(EnumType.STRING)
     private Status carstatus;
@@ -132,6 +140,7 @@ public class PremiumCar {
 
     @OneToMany(mappedBy = "premiumCarCar")
     private Set<PremiumCarPendingBooking> pendingBookings = new LinkedHashSet<>();
+
 
 
 }

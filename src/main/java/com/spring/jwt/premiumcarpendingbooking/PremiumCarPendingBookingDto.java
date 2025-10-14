@@ -1,6 +1,5 @@
 package com.spring.jwt.premiumcarpendingbooking;
 
-import com.spring.jwt.entity.Status;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;

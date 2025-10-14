@@ -13,7 +13,7 @@ public class PremiumCarPendingBookingMapper {
         entity.setDealer(dealer);
         entity.setUser(user);
         entity.setPremiumCarCar(premiumCar);
-        entity.setStatus(String.valueOf(entity.getStatus()));
+        entity.setStatus(dto.getStatus());
         entity.setAskingPrice(dto.getAskingPrice());
         return entity;
     }

@@ -157,12 +157,10 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         if (jwtService.isValidToken(token, deviceFingerprint)) {
             Claims claims = jwtService.extractClaims(token);
             String username = claims.getSubject();
-
             if (jwtService.isRefreshToken(token)) {
                 log.warn("Refresh token used for API access - not allowed");
                 return false;
             }
-            
             if (!ObjectUtils.isEmpty(username)) {
                 log.debug("Valid token found for user: {}", username);
 

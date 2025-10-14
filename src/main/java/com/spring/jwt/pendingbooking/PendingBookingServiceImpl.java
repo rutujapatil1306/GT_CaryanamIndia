@@ -22,7 +22,7 @@ public class PendingBookingServiceImpl implements PendingBookingService {
     private final PendingBookingMapper pendingbookingmapper;
 
     @Override
-    public ApiResponseDto create(PendingBookingDTO dto) {
+    public PendingBookingDTO create(PendingBookingDTO dto) {
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new UserNotFoundExceptions("User not found with id :" + dto.getUserId()));
 
@@ -34,13 +34,7 @@ public class PendingBookingServiceImpl implements PendingBookingService {
         Status status = Status.fromString(dto.getStatus());
         PendingBooking pendingbooking = pendingbookingmapper.toEntity(dto, dealer, user, car);
         pendingbookingrepository.save(pendingbooking);
-        return new ApiResponseDto(
-                "success",
-                "Pending booking created successfully for userId: " + dto.getUserId(),
-                201,
-                "CREATED",
-                null
-        );
+        return pendingbookingmapper.toDTO(pendingbooking);
     }
 
     @Override
@@ -59,7 +53,7 @@ public class PendingBookingServiceImpl implements PendingBookingService {
     }
 
     @Override
-    public ApiResponseDto update(Integer id, PendingBookingDTO dto) {
+    public PendingBookingDTO update(Integer id, PendingBookingDTO dto) {
         PendingBooking pendingbooking = pendingbookingrepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundExceptions(
                         "PendingBooking not found with ID: " + id));
@@ -67,16 +61,10 @@ public class PendingBookingServiceImpl implements PendingBookingService {
         pendingbooking.setDate(dto.getDate());
         pendingbooking.setPrice(dto.getPrice());
         pendingbooking.setAskingPrice(dto.getAskingPrice());
-        pendingbooking.setStatus(Status.fromString(dto.getStatus()));
+        pendingbooking.setStatus(Status.PENDING);
         setEntities(pendingbooking,dto);
         pendingbookingrepository.save(pendingbooking);
-        return new ApiResponseDto(
-                "success",
-                "Pending booking updated successfully for ID: " + id,
-                200,
-                "OK",
-                null
-        );
+        return pendingbookingmapper.toDTO(pendingbooking);
     }
 
     @Override

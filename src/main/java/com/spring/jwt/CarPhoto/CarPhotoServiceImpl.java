@@ -1,5 +1,4 @@
 package com.spring.jwt.CarPhoto;
-
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.spring.jwt.Car.CarRepository;

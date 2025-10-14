@@ -2,13 +2,15 @@ package com.spring.jwt.pendingbooking;
 
 import com.spring.jwt.premiumcar.ApiResponseDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface PendingBookingService {
-    ApiResponseDto create(PendingBookingDTO dto);
+    PendingBookingDTO create(PendingBookingDTO dto);
     PendingBookingDTO getById(Integer id);
     List<PendingBookingDTO> getAll();
-    ApiResponseDto update(Integer id, PendingBookingDTO dto);
+    PendingBookingDTO update(Integer id, PendingBookingDTO dto);
     void delete(Integer id);
 }
