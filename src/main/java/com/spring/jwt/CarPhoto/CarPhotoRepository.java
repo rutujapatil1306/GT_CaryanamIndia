@@ -13,19 +13,13 @@ import java.util.Optional;
 @Repository
 public interface CarPhotoRepository extends JpaRepository<CarPhoto, Integer> {
 
-        //boolean existsByCarIdAndType(Integer carId, DocType type);
-
-        //boolean existsByCarIdAndHashAndIdNot(Integer carId, String hash, Integer id);
-
         List<CarPhoto> findByCarId(Integer carId);
 
         Optional<CarPhoto> findByCarIdAndType(Integer carId, DocType type);
 
-            @Transactional
-            @Modifying
-            @Query("DELETE FROM CarPhoto cp WHERE cp.car.id = :carId")
-            void deleteByCarId(@Param("carId") Integer carId);
-
-    //boolean existsByCarIdAndTypeAndIdNot(Integer carId, DocType type, Integer id);
+        @Transactional
+        @Modifying
+        @Query("DELETE FROM CarPhoto cp WHERE cp.car.id = :carId")
+        void deleteByCarId(@Param("carId") Integer carId);
 
 }

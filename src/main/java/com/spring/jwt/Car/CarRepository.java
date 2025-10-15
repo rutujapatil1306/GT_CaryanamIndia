@@ -15,20 +15,20 @@ public interface CarRepository extends JpaRepository<Car, Integer>, JpaSpecifica
 
     boolean existsByMainCarId(String mainCarId);
 
-    List<Car> findByCarStatus(Status carStatus, Pageable pageable);
+    List<Car> findByCarStatus(CarStatus carStatus, Pageable pageable);
 
-    long countByCarStatus(Status carStatus);
+    long countByCarStatus(CarStatus carStatus);
 
-    List<Car> findByDealerIdAndCarStatus(Integer id, Status carStatus, Pageable pageable);
+    List<Car> findByDealerIdAndCarStatus(Integer id, CarStatus carStatus, Pageable pageable);
 
-    long countByDealerIdAndCarStatus(Integer id, Status carStatus);
+    long countByDealerIdAndCarStatus(Integer id, CarStatus carStatus);
 
     Optional<Car> findByMainCarId(String mainCarId);
 
     List<Car> findByDealer_Id(Integer id);
 
-    List<Car> findByCarStatusIn(List<Status> statuses); // For no pagination
-    Page<Car> findByCarStatusIn(List<Status> statuses, Pageable pageable); // For pagination
-    long countByCarStatusIn(List<Status> statuses); // For counting
+    List<Car> findByCarStatusIn(List<CarStatus> statuses); // For no pagination
+    Page<Car> findByCarStatusIn(List<CarStatus> statuses, Pageable pageable); // For pagination
+    long countByCarStatusIn(List<CarStatus> statuses); // For counting
 
 }

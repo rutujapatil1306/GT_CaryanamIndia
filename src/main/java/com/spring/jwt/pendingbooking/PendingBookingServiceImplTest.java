@@ -5,6 +5,7 @@ import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.PendingBooking;
 import com.spring.jwt.entity.Status;
 import com.spring.jwt.entity.User;
+import com.spring.jwt.pendingbooking.DTO.PendingBookingDTO;
 import com.spring.jwt.premiumcar.ApiResponseDto;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.repository.UserRepository;
@@ -65,9 +66,9 @@ public class PendingBookingServiceImplTest {
         entity.setDate(dto.getDate());
         entity.setPrice(dto.getPrice());
         entity.setAskingPrice(dto.getAskingPrice());
-        entity.setDealerId(dealer);
-        entity.setUserId(user);
-        entity.setCarCar(car);
+        entity.setDealer(dealer);
+        entity.setUser(user);
+        entity.setCar(car);
         entity.setStatus(Status.valueOf(dto.getStatus()));
 
         // Mocking repository and mapper behavior
@@ -104,9 +105,9 @@ public class PendingBookingServiceImplTest {
 
         PendingBooking entity = new PendingBooking();
         entity.setId(id);
-        entity.setDealerId(dealer);
-        entity.setUserId(user);
-        entity.setCarCar(car);
+        entity.setDealer(dealer);
+        entity.setUser(user);
+        entity.setCar(car);
         entity.setStatus(Status.PENDING);
         entity.setPrice(1000);
         entity.setAskingPrice(1200);

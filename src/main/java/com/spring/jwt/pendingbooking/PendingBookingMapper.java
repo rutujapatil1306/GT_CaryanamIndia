@@ -1,5 +1,6 @@
 package com.spring.jwt.pendingbooking;
 import com.spring.jwt.entity.*;
+import com.spring.jwt.pendingbooking.DTO.PendingBookingDTO;
 import org.springframework.stereotype.Component;
 @Component
 public class PendingBookingMapper {
@@ -10,9 +11,9 @@ public class PendingBookingMapper {
                 .price(pendingbooking.getPrice())
                 .askingPrice(pendingbooking.getAskingPrice())
                 .status(String.valueOf(pendingbooking.getStatus()))
-                .dealerId(pendingbooking.getDealerId() != null ? pendingbooking.getDealerId().getId() : null)
-                .userId(pendingbooking.getUserId() != null ? pendingbooking.getUserId().getId() : null)
-                .carId(pendingbooking.getCarCar() != null ? pendingbooking.getCarCar().getId() : null)
+                .dealerId(pendingbooking.getDealer() != null ? pendingbooking.getDealer().getId() : null)
+                .userId(pendingbooking.getUser() != null ? pendingbooking.getUser().getId() : null)
+                .carId(pendingbooking.getCar() != null ? pendingbooking.getCar().getId() : null)
                 .build();
     }
     public PendingBooking toEntity(PendingBookingDTO dto, Dealer dealer, User user, Car car) {
@@ -22,9 +23,9 @@ public class PendingBookingMapper {
         pendingbooking.setPrice(dto.getPrice());
         pendingbooking.setAskingPrice(dto.getAskingPrice());
         pendingbooking.setStatus(Status.fromString(dto.getStatus()));
-        pendingbooking.setDealerId(dealer);
-        pendingbooking.setUserId(user);
-        pendingbooking.setCarCar(car);
+        pendingbooking.setDealer(dealer);
+        pendingbooking.setUser(user);
+        pendingbooking.setCar(car);
         return pendingbooking;
     }
 }

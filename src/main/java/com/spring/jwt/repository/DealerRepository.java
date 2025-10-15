@@ -11,5 +11,6 @@ public interface DealerRepository extends JpaRepository<Dealer, Integer> {
     boolean existsByEmail(String email);
     boolean existsByMobileNo(String mobileNo);
     boolean existsBySalesPersonId(Long salesPersonId);
+    Dealer findByUserId(Integer userId);
 }
 

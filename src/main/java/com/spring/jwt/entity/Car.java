@@ -1,8 +1,7 @@
 package com.spring.jwt.entity;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.spring.jwt.Car.Status;
+import com.spring.jwt.Car.CarStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -11,9 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 @Setter
 @Getter
@@ -81,7 +78,7 @@ public class Car {
 
 
     @Enumerated(EnumType.STRING)
-    private Status carStatus;
+    private CarStatus carStatus;
 
     @NotNull(message = "Pending approval status is required")
     @Column(name = "pending_approval", nullable = false)
@@ -177,7 +174,7 @@ public class Car {
     @Column(name = "carType", nullable = false)
     private String carType;
 
-    @OneToMany(mappedBy = "carCar")
+    @OneToMany(mappedBy = "car")
     private Set<PendingBooking> pendingBookings = new LinkedHashSet<>();
 
     @NotNull(message = "Dealer is required")
@@ -186,6 +183,6 @@ public class Car {
     private Dealer dealer;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CarPhoto> carPhoto = new HashSet<>();
+    private List<CarPhoto> carPhoto = new ArrayList<>();
 
 }

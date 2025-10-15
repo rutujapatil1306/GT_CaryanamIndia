@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface CarPhotoService {
 
-    CarPhotoDto uploadCarPhoto(Integer carId, MultipartFile imageFile, DocType type);
 
-    CarPhotoDto getCarPhotoById(Integer id);
+    List<CarPhotoDto> uploadCarPhotos(Integer carId, List<MultipartFile> files, DocType type);
+
+
+        CarPhotoDto getCarPhotoById(Integer id);
 
 
     CarPhotoDto updateCarPhotoByCarId(Integer carId, Integer photoId, MultipartFile imageFile, DocType type);

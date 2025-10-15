@@ -58,9 +58,9 @@ public class CarServiceImpl implements CarService {
             throw new IllegalArgumentException("Car status is required");
         }
 
-        Status status;
+        CarStatus status;
         try {
-            status = Status.valueOf(cardto.getCarStatus().toString().toUpperCase());
+            status = CarStatus.valueOf(cardto.getCarStatus().toString().toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new InvalidStatusException("Invalid car status: " + cardto.getCarStatus());
         }
@@ -147,7 +147,7 @@ public class CarServiceImpl implements CarService {
         Car car = carRepository.findById(id).orElseThrow(() -> new CarNotFoundException("Car Not Found At id " + id));
 
         //set Car Status to DELETED for Soft Delete
-        car.setCarStatus(Status.INACTIVE);
+        car.setCarStatus(CarStatus.INACTIVE);
         carRepository.save(car);
     }
 
@@ -159,10 +159,10 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarResponseDto<List<CarDto>> getAllCarsByStatus(String carStatus, int page, int size) {
-        Status status;
+        CarStatus status;
         // Convert String to Enum safely
         try {
-            status = Status.valueOf(carStatus.toUpperCase());
+            status = CarStatus.valueOf(carStatus.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new StatusNotFoundException("Invalid car status: " + carStatus);
         }
@@ -191,11 +191,11 @@ public class CarServiceImpl implements CarService {
     @Override
     public CarResponseDto<List<CarDto>> getCarsByDealerIdAndStatus(Integer id, String carStatus, int page, int size) {
 
-        Status status;
+        CarStatus status;
 
         // Convert string to enum safely
         try {
-            status = Status.valueOf(carStatus.toUpperCase());
+            status = CarStatus.valueOf(carStatus.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new StatusNotFoundException("Invalid Car Status: " + carStatus);
         }
@@ -230,10 +230,10 @@ public class CarServiceImpl implements CarService {
 
         Dealer dealer = dealerRepository.findById(id)
                 .orElseThrow(() -> new DealerNotFoundException("Dealer with ID " + id + " not found"));
-        Status status;
+        CarStatus status;
 
         try {
-            status = Status.valueOf(carStatus.toUpperCase());
+            status = CarStatus.valueOf(carStatus.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new StatusNotFoundException("Invalid car status: " + carStatus);
         }
@@ -258,14 +258,14 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CarResponseDto<List<CarDto>> getCarsWithPaginationOnlyActivePending(int page, int size, Status status) {
+    public CarResponseDto<List<CarDto>> getCarsWithPaginationOnlyActivePending(int page, int size, CarStatus status) {
         // Validate pagination
         if (page < 0 || size <= 0) {
             throw new PageNotFoundException("Page must be >= 0 and size must be > 0");
         }
 
         //Allowed statuses
-        List<Status> allowedStatuses = List.of(Status.PENDING, Status.ACTIVE);
+        List<CarStatus> allowedStatuses = List.of(CarStatus.PENDING, CarStatus.ACTIVE);
 
         // Validate input status
         if (status != null && !allowedStatuses.contains(status)) {
@@ -274,7 +274,7 @@ public class CarServiceImpl implements CarService {
         }
 
         // Build status list to fetch
-        List<Status> statusesToFetch = (status != null) ? List.of(status) : allowedStatuses;
+        List<CarStatus> statusesToFetch = (status != null) ? List.of(status) : allowedStatuses;
 
         // Fetch cars with pagination
         Pageable pageable = PageRequest.of(page, size);
@@ -302,9 +302,9 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CarResponseDto<List<CarDto>> getCarsWithoutPaginationOnlyActivePending(Status status) {
+    public CarResponseDto<List<CarDto>> getCarsWithoutPaginationOnlyActivePending(CarStatus status) {
         // Allowed statuses
-        List<Status> allowedStatuses = List.of(Status.PENDING, Status.ACTIVE);
+        List<CarStatus> allowedStatuses = List.of(CarStatus.PENDING, CarStatus.ACTIVE);
 
         // Validate input status
         if (status != null && !allowedStatuses.contains(status)) {
@@ -313,7 +313,7 @@ public class CarServiceImpl implements CarService {
         }
 
         //Build status list to fetch
-        List<Status> statusesToFetch = (status != null) ? List.of(status) : allowedStatuses;
+        List<CarStatus> statusesToFetch = (status != null) ? List.of(status) : allowedStatuses;
 
         // Fetch cars without pagination
         List<Car> cars = carRepository.findByCarStatusIn(statusesToFetch);
@@ -336,15 +336,15 @@ public class CarServiceImpl implements CarService {
         );
     }
 
-    public CarResponseDto<List<CarDto>> filterCars(Status status, String brand, String model, String city, String fuelType, String transmission, Integer minPrice, Integer maxPrice) {
+    public CarResponseDto<List<CarDto>> filterCars(CarStatus status, String brand, String model, String city, String fuelType, String transmission, Integer minPrice, Integer maxPrice) {
         // Allowed statuses
-        List<Status> allowedStatuses = List.of(Status.PENDING, Status.ACTIVE);
+        List<CarStatus> allowedStatuses = List.of(CarStatus.PENDING, CarStatus.ACTIVE);
 
         if (status != null && !allowedStatuses.contains(status)) {
             throw new InvalidStatusException("Invalid status: " + status);
         }
 
-        List<Status> statusesToFetch = (status != null) ? List.of(status) : allowedStatuses;
+        List<CarStatus> statusesToFetch = (status != null) ? List.of(status) : allowedStatuses;
 
         // Fetch initial list by status
         List<Car> cars = carRepository.findByCarStatusIn(statusesToFetch);
@@ -379,4 +379,8 @@ public class CarServiceImpl implements CarService {
 
         return new CarResponseDto<>("Cars fetched successfully with filters", dtos, null, cars.size());
     }
+
+
+
+
 }

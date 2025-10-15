@@ -19,14 +19,21 @@ public class CarPhotoController {
     @Autowired
     CarPhotoService carPhotoService;
 
+    @PostMapping("/addCarPhoto")
+    public ResponseEntity<CarPhotoResponseDto2> uploadCarPhotos(@Valid @RequestParam Integer carId,
+                                                               @RequestParam List<MultipartFile> files,
+                                                               @RequestParam DocType type){
+        List<CarPhotoDto> uploadImages = carPhotoService.uploadCarPhotos(carId, files, type);
+        if(type == DocType.COVER) {
+            CarPhotoResponseDto2 response = new CarPhotoResponseDto2("Cover Photo for Car with id " + carId + " Added Successfully", uploadImages, "Success", HttpStatus.CREATED, null);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } else  {
+            CarPhotoResponseDto2 response = new CarPhotoResponseDto2("Additional Photos for Car with id " + carId + " Added Successfully",uploadImages, "Success", HttpStatus.CREATED, null);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
-    @PostMapping("/addPhoto")
-    public ResponseEntity<CarPhotoResponseDto> uploadCarPhoto(@Valid @RequestParam Integer carId,
-                                                              @RequestParam MultipartFile imageFile,
-                                                              @RequestParam DocType type) {
-        CarPhotoDto uploadImage = carPhotoService.uploadCarPhoto(carId, imageFile, type);
-        return ResponseEntity.ok(new CarPhotoResponseDto("CarPhoto Added Successfully", "Success", HttpStatus.CREATED, null));
+        }
     }
+   
     @DeleteMapping("/deleteCarPhotoById")
     public ResponseEntity<CarPhotoResponseDto> deleteCarPhoto(@RequestParam Integer id)
     {

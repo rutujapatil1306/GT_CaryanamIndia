@@ -7,14 +7,18 @@ import com.spring.jwt.Car.Exception.CarNotFoundException;
 import com.spring.jwt.CarPhoto.DTO.CarPhotoDto;
 import com.spring.jwt.CarPhoto.Exception.InvalidFileException;
 import com.spring.jwt.CarPhoto.Exception.PhotoNotFoundException;
+import com.spring.jwt.CarPhoto.Exception.TypeMisMatchException;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.CarPhoto;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,101 +39,127 @@ public class CarPhotoServiceImpl implements CarPhotoService {
     @Autowired
     CarPhotoMapper carPhotoMapper;
 
-    private void validateFileFormat (MultipartFile imageFile) {
-        if (imageFile == null || imageFile.isEmpty()) {
-            throw new IllegalArgumentException("File can not be empty");
+    private void validateFileFormat (List<MultipartFile> files) {
+//        if (files == null || files.isEmpty()) {
+//            throw new InvalidFileException("No Files Provided to upload");
+//        }
+        for(MultipartFile file : files) {
+
+           validateFormat(file);
+        }
+    }
+    public void validateFormat(MultipartFile file)
+    {
+        if (file == null || file.isEmpty()) {
+            throw new InvalidFileException("No File Provided to upload");
         }
 
-        if (imageFile.getSize() > 5 * 1024 * 1024) {
-            throw new IllegalArgumentException("File must be <= 5 MB");
-        }
-        String contentType = imageFile.getContentType();
-        if (contentType == null ||
-                !(contentType.equals("image/jpeg") ||
-                        contentType.equals("image/jpg") ||
-                        contentType.equals("image/png") ||
-                        contentType.equals("image/webp"))) {
-            throw new InvalidFileException("Only JPEG, JPG, PNG, and WEBP formats are allowed.");
-        }
-
+            if (file.getSize() > 5 * 1024 * 1024) {
+                throw new IllegalArgumentException("File must be <= 5 MB");
+            }
+            String contentType = file.getContentType();
+            if (contentType == null ||
+                    !(contentType.equals("image/jpeg") ||
+                            contentType.equals("image/jpg") ||
+                            contentType.equals("image/png") ||
+                            contentType.equals("image/webp"))) {
+                throw new InvalidFileException("Only JPEG, JPG, PNG, and WEBP formats are allowed.");
+            }
     }
 
     @Override
-    public CarPhotoDto uploadCarPhoto(Integer carId, MultipartFile imageFile, DocType type) {
+    public List<CarPhotoDto> uploadCarPhotos(Integer carId, List<MultipartFile> files, DocType type) {
         Car car = carRepository.findById(carId).orElseThrow(() -> new CarNotFoundException("Car not Found at given Id : " + carId));
-        validateFileFormat(imageFile);
+        validateFileFormat(files);
+
 
         if(type == DocType.COVER) {
+            if(files.size() > 1)
+            {
+                throw new InvalidFileException("Only one Cover Photo Allowed for one Car");
+            }
             CarPhoto existingCoverImage = carPhotoRepository.findByCarIdAndType(carId, DocType.COVER).orElse(null);
             if (existingCoverImage != null) {
                 carPhotoRepository.delete(existingCoverImage);
                 deleteFromCloudinary(existingCoverImage.getPublicId());
             }
             try {
-                        Map uploadResult = cloudinary.uploader().upload(imageFile.getBytes(),
-                                ObjectUtils.asMap("folder", "car_photos"));
-                        String url = (String) uploadResult.get("secure_url");
-                        String publicId = (String) uploadResult.get("public_id");
+                List<CarPhoto> photos = new ArrayList<>();
+                for(MultipartFile file: files) {
+                    Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
+                            ObjectUtils.asMap("folder", "car_photos"));
+                    String url = (String) uploadResult.get("secure_url");
+                    String publicId = (String) uploadResult.get("public_id");
 
-                        System.out.println("Upload Result: " + uploadResult);
-                        String contentType = imageFile.getContentType();
-                        String fileFormat = null;
-                        if (contentType != null && contentType.startsWith("image/")) {
-                            fileFormat = contentType.substring(contentType.lastIndexOf("/") + 1);
-                        } else {
-                            throw new InvalidFileException("Invalid file format. Only images are allowed.");
-                        }
+                    System.out.println("Upload Result: " + uploadResult);
+                    String contentType = file.getContentType();
+                    String fileFormat = null;
+                    if (contentType != null && contentType.startsWith("image/")) {
+                        fileFormat = contentType.substring(contentType.lastIndexOf("/") + 1);
+                    } else {
+                        throw new InvalidFileException("Invalid file format. Only images are allowed.");
+                    }
 
-                        CarPhoto carPhoto = new CarPhoto();
-                        carPhoto.setCar(car);
-                        carPhoto.setPhoto_link(url);
-                        carPhoto.setFileFormat(fileFormat);
-                        carPhoto.setType(type);
-                        carPhoto.setUploadedAt(LocalDateTime.now());
-                        carPhoto.setPublicId(publicId);
+                    CarPhoto carPhoto = new CarPhoto();
+                    carPhoto.setCar(car);
+                    carPhoto.setPhoto_link(url);
+                    carPhoto.setFileFormat(fileFormat);
+                    carPhoto.setType(type);
+                    carPhoto.setUploadedAt(LocalDateTime.now());
+                    carPhoto.setPublicId(publicId);
 
-                        CarPhoto saved = carPhotoRepository.save(carPhoto);
-                        return carPhotoMapper.toDto(saved);
+                    CarPhoto saved = carPhotoRepository.save(carPhoto);
+                    photos.add(saved);
+                    return photos.stream().map(carPhotoMapper::toDto).toList();
+                }
 
 
             }catch(Exception ex){
-                    throw new RuntimeException("Failed To upload Cover Image "  + ex.getMessage(), ex);
+                throw new RuntimeException("Failed To upload Cover Image "  + ex.getMessage(), ex);
             }
         }
 
 
         else if (type == DocType.ADDITIONAL){
-                try {
-                        Map uploadResult = cloudinary.uploader().upload(imageFile.getBytes(),
-                                ObjectUtils.asMap("folder", "car_photos"));
-                        String url = (String) uploadResult.get("secure_url");
-                        String publicId = (String) uploadResult.get("public_id");
-                        String contentType = imageFile.getContentType();
-                        String fileFormat = null;
-                        if(contentType != null || contentType.startsWith("image/")) {
-                            fileFormat = contentType.substring(contentType.lastIndexOf("/") + 1);
-                        }
-                        else {
-                            throw new InvalidFileException("Invalid file format. Only images are allowed.");
-                        }
-                        CarPhoto carPhoto = new CarPhoto();
-                        carPhoto.setCar(car);
-                        carPhoto.setPhoto_link(url);
-                        carPhoto.setFileFormat(fileFormat);
-                        carPhoto.setType(type);
-                        carPhoto.setUploadedAt(LocalDateTime.now());
-                        carPhoto.setPublicId(publicId);
+            try {
+                List<CarPhoto> additionalPhotos = new ArrayList<>();
+                for(MultipartFile file : files) {
+                    Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
+                            ObjectUtils.asMap("folder", "car_photos"));
+                    String url = (String) uploadResult.get("secure_url");
+                    String publicId = (String) uploadResult.get("public_id");
+                    String contentType = file.getContentType();
+                    String fileFormat = null;
+                    if (contentType != null || contentType.startsWith("image/")) {
+                        fileFormat = contentType.substring(contentType.lastIndexOf("/") + 1);
+                    } else {
+                        throw new InvalidFileException("Invalid file format. Only images are allowed.");
+                    }
+                    CarPhoto carPhoto = new CarPhoto();
+                    carPhoto.setCar(car);
+                    carPhoto.setPhoto_link(url);
+                    carPhoto.setFileFormat(fileFormat);
+                    carPhoto.setType(type);
+                    carPhoto.setUploadedAt(LocalDateTime.now());
+                    carPhoto.setPublicId(publicId);
 
-                        CarPhoto saved = carPhotoRepository.save(carPhoto);
-                        return carPhotoMapper.toDto(saved);
+                    CarPhoto saved = carPhotoRepository.save(carPhoto);
+                    additionalPhotos.add(saved);
+                    System.out.println("Uploading File: " + file.getOriginalFilename());
 
-                }catch(Exception ex) {
-                        throw new RuntimeException("Failed to upload  image " + ex.getMessage(), ex);
+
                 }
+                return additionalPhotos.stream().map(carPhotoMapper::toDto).toList();
+            }catch(Exception ex) {
+                throw new RuntimeException("Failed to upload  image " + ex.getMessage(), ex);
+            }
         }
+
 
         return null;
     }
+
+
 
     // here id is PhotoId
     @Override
@@ -172,7 +202,8 @@ public class CarPhotoServiceImpl implements CarPhotoService {
             boolean updated = false;
             if( imageFile != null && !imageFile.isEmpty())
             {
-                validateFileFormat(imageFile);
+
+                validateFormat(imageFile);
                 deleteFromCloudinary(photo.getPublicId());
                 try
                 {

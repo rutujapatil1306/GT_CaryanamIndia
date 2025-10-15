@@ -1,8 +1,8 @@
 package com.spring.jwt.Car.DTO;
-import com.spring.jwt.Car.Status;
+import com.spring.jwt.Car.CarStatus;
 
 public class CarFilterDTO {
-    private Status status;
+    private CarStatus status;
     private String brand;
     private String model;
     private String city;
@@ -12,8 +12,8 @@ public class CarFilterDTO {
     private Integer maxPrice;
 
     // Getters and Setters
-    public Status getStatus() { return status; }
-    public void setStatus(Status status) { this.status = status; }
+    public CarStatus getStatus() { return status; }
+    public void setStatus(CarStatus status) { this.status = status; }
     public String getBrand() { return brand; }
     public void setBrand(String brand) { this.brand = brand; }
     public String getModel() { return model; }

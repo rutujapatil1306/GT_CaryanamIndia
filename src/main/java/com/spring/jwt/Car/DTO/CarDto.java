@@ -1,8 +1,7 @@
 package com.spring.jwt.Car.DTO;
 
 
-import com.spring.jwt.Car.Status;
-import jakarta.validation.constraints.NotNull;
+import com.spring.jwt.Car.CarStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,7 +27,7 @@ public class CarDto {
     private Boolean carInsurance;
     private LocalDate carInsuranceDate;
     private String carInsuranceType;
-    private Status carStatus;
+    private CarStatus carStatus;
     private Boolean pendingApproval;
     private String city;
     private String color;

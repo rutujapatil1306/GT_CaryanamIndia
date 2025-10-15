@@ -98,7 +98,7 @@ public class CarController {
     public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsWithPagination(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) Status status) {
+            @RequestParam(required = false) CarStatus status) {
 
         CarResponseDto<List<CarDto>> response =
                 carService.getCarsWithPaginationOnlyActivePending(page, size, status);
@@ -108,7 +108,7 @@ public class CarController {
 
     @GetMapping("/filter/all")
     public ResponseEntity<CarResponseDto<List<CarDto>>> getCarsWithoutPagination(
-            @RequestParam(required = false) Status status) {
+            @RequestParam(required = false) CarStatus status) {
 
         CarResponseDto<List<CarDto>> response =
                 carService.getCarsWithoutPaginationOnlyActivePending(status);
@@ -117,7 +117,7 @@ public class CarController {
     }
     @GetMapping("/filters")
     public CarResponseDto<List<CarDto>> filterCars(
-            @RequestParam(required = false) Status status,
+            @RequestParam(required = false) CarStatus status,
             @RequestParam(required = false) String brand,
             @RequestParam(required = false) String model,
             @RequestParam(required = false) String city,

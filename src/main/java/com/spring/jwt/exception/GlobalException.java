@@ -4,42 +4,31 @@ import com.spring.jwt.BrandData.Exception.BrandNotFoundException;
 import com.spring.jwt.BrandData.Exception.SubVariantNotFoundException;
 import com.spring.jwt.BrandData.Exception.VariantNotFoundException;
 import com.spring.jwt.Car.Exception.InvalidStatusException;
+import com.spring.jwt.CarConfirmBooking.ConfirmBookingNotFoundException;
 import com.spring.jwt.CarPhoto.Exception.DuplicatePhotoException;
 import com.spring.jwt.CarPhoto.Exception.InvalidFileException;
 import com.spring.jwt.CarPhoto.Exception.PhotoNotFoundException;
+import com.spring.jwt.CarPhoto.Exception.TypeMisMatchException;
 import com.spring.jwt.dealer.DTO.DealerResponseDto;
 import com.spring.jwt.dealer.exception.DealerNotFoundException;
 import com.spring.jwt.dealer.exception.InvalidDealerDataException;
 import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
 import com.spring.jwt.Car.Exception.CarNotFoundException;
 import com.spring.jwt.Car.Exception.StatusNotFoundException;
+import com.spring.jwt.pendingbooking.Exception.PendingBookingNotFoundException;
 import com.spring.jwt.premiumcar.exceptions.CarsNotFoundException;
 import com.spring.jwt.premiumcar.exceptions.DuplicatePhotosException;
 import com.spring.jwt.premiumcar.exceptions.InvalidCarFileExceptions;
 import com.spring.jwt.premiumcar.exceptions.PhotosNotFoundException;
-import com.spring.jwt.PremiumCarBrandData.PremiumBrandNotFoundException;
-import com.spring.jwt.PremiumCarBrandData.SubVariantNotFoundExceptions;
-import com.spring.jwt.PremiumCarBrandData.VariantNotFoundExceptions;
 import com.spring.jwt.PremiumCarData.PremiumCarNotFoundException;
-import com.spring.jwt.dealer.DTO.DealerResponseDto;
-import com.spring.jwt.dealer.exception.DealerNotFoundException;
 import com.spring.jwt.dto.ResponseDto;
-import com.spring.jwt.Car.Exception.*;
-import com.spring.jwt.CarPhoto.Exception.DuplicatePhotoException;
-import com.spring.jwt.CarPhoto.Exception.InvalidFileException;
-import com.spring.jwt.CarPhoto.Exception.PhotoNotFoundException;
-import com.spring.jwt.dealer.DTO.DealerResponseDto;
-import com.spring.jwt.dealer.exception.DealerNotFoundException;
-import com.spring.jwt.dealer.exception.InvalidDealerDataException;
-import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
-import com.spring.jwt.Car.Exception.CarNotFoundException;
-import com.spring.jwt.Car.Exception.StatusNotFoundException;
 import com.spring.jwt.premiumcarpendingbooking.InvalidIdException;
 import com.spring.jwt.premiumcarpendingbooking.UnauthorizedAccessException;
 import com.spring.jwt.utils.BaseResponseDTO;
 import com.spring.jwt.utils.ErrorResponseDto;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.TypeMismatchException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -58,7 +47,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import java.io.IOException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -231,6 +219,17 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         );
         return new ResponseEntity<>(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @ExceptionHandler(TypeMisMatchException.class)
+    public ResponseEntity<ErrorResponseDto> handleTypeMismatchException(TypeMisMatchException exception, WebRequest webRequest){
+        log.error("Type mismatch error: {}", exception.getMessage());
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Type Mismatch Error Occurred",
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     // KEEP ONLY ONE handler for MethodArgumentTypeMismatchException!
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -343,6 +342,17 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ConfirmBookingNotFoundException.class)
+    public ResponseEntity<Object> handleConfirmBookingNotFound(ConfirmBookingNotFoundException ex){
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("error", "Confirm Booking Not Found");
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
 
     @ExceptionHandler(StatusNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleStatusNotFound(StatusNotFoundException ex) {
@@ -362,6 +372,15 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         error.put("message", ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(PendingBookingNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handlePendingBookingNotFound(PendingBookingNotFoundException ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("timestamp", LocalDateTime.now());
+        error.put("status", HttpStatus.BAD_REQUEST.value());
+        error.put("error", "Pending Booking Not Found");
+        error.put("message", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleAllUncaughtException(Exception exception, WebRequest webRequest) {
         log.error("Uncaught error occurred: ", exception);
@@ -373,6 +392,7 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         );
         return new ResponseEntity<>(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 
     @ExceptionHandler(ExamTimeWindowException.class)
     public ResponseEntity<ErrorResponseDto> handleExamTimeWindowException(ExamTimeWindowException exception, WebRequest webRequest){
