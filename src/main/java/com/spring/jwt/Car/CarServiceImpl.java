@@ -2,10 +2,7 @@ package com.spring.jwt.Car;
 
 import com.spring.jwt.Car.DTO.CarDto;
 import com.spring.jwt.Car.DTO.CarResponseDto;
-import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
-import com.spring.jwt.Car.Exception.CarNotFoundException;
-import com.spring.jwt.Car.Exception.InvalidStatusException;
-import com.spring.jwt.Car.Exception.StatusNotFoundException;
+import com.spring.jwt.Car.Exception.*;
 //import com.spring.jwt.dealer.DealerNotFoundException;
 import com.spring.jwt.CarView.CarViewRepository;
 import com.spring.jwt.dealer.exception.DealerNotFoundException;
@@ -23,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -58,6 +56,12 @@ public class CarServiceImpl implements CarService {
             throw new IllegalArgumentException("Car status is required");
         }
 
+        int currentYear = LocalDate.now().getYear();
+        if(cardto.getYear() != null && cardto.getYear() > currentYear){
+            throw new IllegalArgumentException("Year cannot be in future");
+
+        }
+
         CarStatus status;
         try {
             status = CarStatus.valueOf(cardto.getCarStatus().toString().toUpperCase());
@@ -67,6 +71,13 @@ public class CarServiceImpl implements CarService {
         Car car = carMapper.toEntity(cardto);
         car.setDealer(dealer);
 
+        System.out.println("Duplicate Check");
+        System.out.println("model" + car.getModel());
+        System.out.println("year" + car.getYear());
+        System.out.println("DealerId" + car.getDealer() != null ? car.getDealer().getId() : "null");
+        if(carRepository.existsByModelAndYearAndDealer_Id(car.getModel(), car.getYear(), car.getDealer().getId())){
+            throw new DuplicateCarEntryException("Duplicate Car Entry Found for same dealerId and year");
+        }
 
         Car savedCar = carRepository.save(car);
         String mainCarId = generateMainCarId(savedCar);
@@ -79,7 +90,6 @@ public class CarServiceImpl implements CarService {
         if (cardto.getCarStatus() == null) {
             throw new StatusNotFoundException("Car status cannot be null");
         }
-
         Car addedCar = carRepository.save(savedCar);
         CarDto responseDto = carMapper.toDto(addedCar);
 
@@ -334,6 +344,38 @@ public class CarServiceImpl implements CarService {
                 null,
                 totalCars
         );
+    }
+
+    @Override
+    public List<CarDto> getAllPendingCars( int page, int size) {
+            CarStatus carStatus = CarStatus.PENDING;
+            Pageable pageable =  PageRequest.of(page, size);
+            long totalNoOfCars = carRepository.countByCarStatus(carStatus);
+            int totalPages = (int) Math.ceil((double) totalNoOfCars / size);
+
+            if (page >= totalPages && totalNoOfCars > 0) {
+                throw new PageNotFoundException(
+                        "Page " + page + " not found. Total available pages: " + totalPages
+                );
+            }
+            List<Car> pendingCars = carRepository.findByCarStatus(carStatus, pageable);
+
+            if(pendingCars.isEmpty()){
+                throw new PendingCarNotFoundException("No Pending Cars found");
+            }
+            return pendingCars.stream().map(c -> carMapper.toDto(c)).toList();
+
+
+    }
+
+    @Override
+    public CarDto getPendingCarByCarId(Integer carId) {
+        Car car = carRepository.findById(carId).orElseThrow(()-> new CarNotFoundException("Car not found at id: " + carId));
+        if(car.getCarStatus() != CarStatus.PENDING){
+            throw new PendingCarNotFoundException("Pending Car not found");
+        }
+        return carMapper.toDto(car);
+
     }
 
     public CarResponseDto<List<CarDto>> filterCars(CarStatus status, String brand, String model, String city, String fuelType, String transmission, Integer minPrice, Integer maxPrice) {

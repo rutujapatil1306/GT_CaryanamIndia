@@ -89,9 +89,6 @@ public class AppConfig {
         return new UserDetailsServiceCustom(userRepository);
     }
 
-
-
-
     @Bean
     public JwtRefreshTokenFilter jwtRefreshTokenFilter(
             AuthenticationManager authenticationManager,
@@ -170,14 +167,16 @@ public class AppConfig {
                 .requestMatchers("/api/v1/users/password/**").permitAll()
                 .requestMatchers("/api/v1/exam/**").permitAll()
                 .requestMatchers("/api/v1/**").permitAll()
+               //.requestMatchers("/api/carConfirmBooking/**").authenticated()
                 .requestMatchers("/api/brands/**").permitAll()
                 .requestMatchers("/api/cars/**").permitAll()
                 .requestMatchers("/api/carPhotos/**").permitAll()
                 .requestMatchers("/cars/filter/**").permitAll()//add
                 .requestMatchers("/premiumcars/photos/**").permitAll()
                 .requestMatchers("/api/pending-bookings/**").permitAll()
+                //.requestMatchers(HttpMethod.PATCH,"/api/pending-bookings/updatePendingBookingStatusByPendingId").hasRole("DEALER")
                 .requestMatchers("/api/premiumcar/pending-booking/**").permitAll()
-                .requestMatchers("/api/carConfirmBooking/**").permitAll()
+                //.requestMatchers("/api/carConfirmBooking/**").permitAll()
 
                 .requestMatchers(jwtConfig.getUrl()).permitAll()
                 .requestMatchers(jwtConfig.getRefreshUrl()).permitAll()
@@ -234,7 +233,7 @@ public class AppConfig {
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/premiums/**"),
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/pending-bookings/**"),
                     new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/premiumcar/pending-booking/**"),
-                    new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/carConfirmBooking/**"),
+                   // new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/api/carConfirmBooking/**"),
 
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(jwtConfig.getUrl()),
                 new org.springframework.security.web.util.matcher.AntPathRequestMatcher(jwtConfig.getRefreshUrl())

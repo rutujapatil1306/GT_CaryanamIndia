@@ -10,6 +10,7 @@ import com.spring.jwt.CarPhoto.Exception.PhotoNotFoundException;
 import com.spring.jwt.CarPhoto.Exception.TypeMisMatchException;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.CarPhoto;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,13 +19,12 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class CarPhotoServiceImpl implements CarPhotoService {
+public class
+CarPhotoServiceImpl implements CarPhotoService {
 
     @Autowired
     CarRepository carRepository;
@@ -38,6 +38,8 @@ public class CarPhotoServiceImpl implements CarPhotoService {
 
     @Autowired
     CarPhotoMapper carPhotoMapper;
+
+    private static final Set<String> allowedParams = Set.of("carId", "files", "type" );
 
     private void validateFileFormat (List<MultipartFile> files) {
 //        if (files == null || files.isEmpty()) {
@@ -68,7 +70,15 @@ public class CarPhotoServiceImpl implements CarPhotoService {
     }
 
     @Override
-    public List<CarPhotoDto> uploadCarPhotos(Integer carId, List<MultipartFile> files, DocType type) {
+    public List<CarPhotoDto> uploadCarPhotos(Integer carId, List<MultipartFile> files, DocType type, HttpServletRequest request) {
+
+        Enumeration<String> parameterNames = request.getParameterNames();
+        while(parameterNames.hasMoreElements()){
+            String param = parameterNames.nextElement();
+            if(!allowedParams.contains(param)){
+                throw new IllegalArgumentException("Extra Parameters not allowed" );
+            }
+        }
         Car car = carRepository.findById(carId).orElseThrow(() -> new CarNotFoundException("Car not Found at given Id : " + carId));
         validateFileFormat(files);
 
@@ -239,8 +249,6 @@ public class CarPhotoServiceImpl implements CarPhotoService {
         CarPhoto updatedPhoto = carPhotoRepository.save(photo);
         return carPhotoMapper.toDto(updatedPhoto);
     }
-
-
     @Override
     public List<CarPhotoDto> getCarPhotosByCarId(Integer carId){
         List<CarPhoto> photos = carPhotoRepository.findByCarId(carId);

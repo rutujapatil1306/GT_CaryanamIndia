@@ -1,5 +1,6 @@
 package com.spring.jwt.CarPhoto;
 import com.spring.jwt.CarPhoto.DTO.CarPhotoDto;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 public interface CarPhotoService {
 
 
-    List<CarPhotoDto> uploadCarPhotos(Integer carId, List<MultipartFile> files, DocType type);
+    List<CarPhotoDto> uploadCarPhotos(Integer carId, List<MultipartFile> files, DocType type, HttpServletRequest request);
 
 
         CarPhotoDto getCarPhotoById(Integer id);

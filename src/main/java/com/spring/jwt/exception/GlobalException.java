@@ -3,7 +3,7 @@ import com.spring.jwt.BrandData.Exception.BrandAlreadyExistsException;
 import com.spring.jwt.BrandData.Exception.BrandNotFoundException;
 import com.spring.jwt.BrandData.Exception.SubVariantNotFoundException;
 import com.spring.jwt.BrandData.Exception.VariantNotFoundException;
-import com.spring.jwt.Car.Exception.InvalidStatusException;
+import com.spring.jwt.Car.Exception.*;
 import com.spring.jwt.CarConfirmBooking.ConfirmBookingNotFoundException;
 import com.spring.jwt.CarPhoto.Exception.DuplicatePhotoException;
 import com.spring.jwt.CarPhoto.Exception.InvalidFileException;
@@ -12,9 +12,6 @@ import com.spring.jwt.CarPhoto.Exception.TypeMisMatchException;
 import com.spring.jwt.dealer.DTO.DealerResponseDto;
 import com.spring.jwt.dealer.exception.DealerNotFoundException;
 import com.spring.jwt.dealer.exception.InvalidDealerDataException;
-import com.spring.jwt.Car.Exception.CarAlreadyExistsException;
-import com.spring.jwt.Car.Exception.CarNotFoundException;
-import com.spring.jwt.Car.Exception.StatusNotFoundException;
 import com.spring.jwt.pendingbooking.Exception.PendingBookingNotFoundException;
 import com.spring.jwt.premiumcar.exceptions.CarsNotFoundException;
 import com.spring.jwt.premiumcar.exceptions.DuplicatePhotosException;
@@ -28,7 +25,6 @@ import com.spring.jwt.utils.BaseResponseDTO;
 import com.spring.jwt.utils.ErrorResponseDto;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.TypeMismatchException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -378,6 +374,24 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         error.put("timestamp", LocalDateTime.now());
         error.put("status", HttpStatus.BAD_REQUEST.value());
         error.put("error", "Pending Booking Not Found");
+        error.put("message", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(PendingCarNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handlePendingCarNotFound(PendingCarNotFoundException ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("timestamp", LocalDateTime.now());
+        error.put("status", HttpStatus.BAD_REQUEST.value());
+        error.put("error", "Pending Car Not Found");
+        error.put("message", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(DuplicateCarEntryException.class)
+    public ResponseEntity<Map<String, Object>> handlePendingBookingNotFound(DuplicateCarEntryException ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("timestamp", LocalDateTime.now());
+        error.put("status", HttpStatus.BAD_REQUEST.value());
+        error.put("error", "Duplicate Car Entry Found");
         error.put("message", ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }

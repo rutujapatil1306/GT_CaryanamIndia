@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -78,6 +79,7 @@ public class PendingBookingController {
         return ResponseEntity.ok(new PendingBookingResponseDto2("Pending Booking for Pending id : " + id, pendingbookingservice.getPendingBookingById(id), "Success", HttpStatus.OK, null));
     }
 
+    //@PreAuthorize("hasRole('DEALER')")
     @PatchMapping("/updatePendingBookingStatusByPendingId")
     public ResponseEntity<PendingBookingResponseDto2> updateBookingStatusByPendingId(@RequestParam Integer id,
                                                                       @RequestParam Status status){

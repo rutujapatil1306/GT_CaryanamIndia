@@ -31,4 +31,7 @@ public interface CarRepository extends JpaRepository<Car, Integer>, JpaSpecifica
     Page<Car> findByCarStatusIn(List<CarStatus> statuses, Pageable pageable); // For pagination
     long countByCarStatusIn(List<CarStatus> statuses); // For counting
 
+    Car findByCarStatusAndId(CarStatus carStatus, Integer id);
+
+    boolean existsByModelAndYearAndDealer_Id(String model, Integer year, Integer dealerId);
 }

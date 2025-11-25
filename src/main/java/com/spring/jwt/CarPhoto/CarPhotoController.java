@@ -1,6 +1,7 @@
 package com.spring.jwt.CarPhoto;
 import com.spring.jwt.CarPhoto.DTO.CarPhotoResponseDto2;
 import com.spring.jwt.dto.ResponseDto;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.spring.jwt.CarPhoto.DTO.CarPhotoDto;
 import com.spring.jwt.CarPhoto.DTO.CarPhotoResponseDto;
@@ -21,9 +22,9 @@ public class CarPhotoController {
 
     @PostMapping("/addCarPhoto")
     public ResponseEntity<CarPhotoResponseDto2> uploadCarPhotos(@Valid @RequestParam Integer carId,
-                                                               @RequestParam List<MultipartFile> files,
-                                                               @RequestParam DocType type){
-        List<CarPhotoDto> uploadImages = carPhotoService.uploadCarPhotos(carId, files, type);
+                                                                @RequestParam List<MultipartFile> files,
+                                                                @RequestParam DocType type, HttpServletRequest request){
+        List<CarPhotoDto> uploadImages = carPhotoService.uploadCarPhotos(carId, files, type, request);
         if(type == DocType.COVER) {
             CarPhotoResponseDto2 response = new CarPhotoResponseDto2("Cover Photo for Car with id " + carId + " Added Successfully", uploadImages, "Success", HttpStatus.CREATED, null);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -18,6 +19,13 @@ public interface PendingBookingRepository extends JpaRepository<PendingBooking, 
     long countByDealerId(Integer dealerId);
 
     long countByUserId(Integer userId);
+
+    boolean existsByUserIdAndCarIdAndDealerIdAndDate(
+            Integer userId,
+            Integer carId,
+            Integer dealerId,
+            LocalDate date
+    );
 
 }
 

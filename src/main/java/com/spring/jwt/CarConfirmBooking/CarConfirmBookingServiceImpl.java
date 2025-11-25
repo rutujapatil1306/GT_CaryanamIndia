@@ -49,15 +49,7 @@ public class CarConfirmBookingServiceImpl implements CarConfirmBookingService{
 
 
     @Override
-    public CarConfirmBookingDto confirmBooking(Integer pendingBookingId){ // UserServiceImpl userDetails) {
-//        UserProfileDTO currentUser = userDetails.getCurrentUserProfile();
-//        UserDTO user = currentUser.getUser();
-//        Integer userId = Integer.valueOf(user.getUserId());
-//        Dealer dealer = dealerRepository.findByUserId(userId);
-//        if(dealer == null)
-//        {
-//            throw new DealerNotFoundException("Dealer not found for user id: " + userId);
-//        }
+    public CarConfirmBookingDto confirmBooking(Integer pendingBookingId){
         PendingBooking pendingBooking = pendingBookingRepository.findById(pendingBookingId).orElseThrow(()-> new PendingBookingNotFoundException("Pending Booking not Found At pendingId: " + pendingBookingId));
 
         Car car = pendingBooking.getCar();

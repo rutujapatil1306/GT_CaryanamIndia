@@ -1,9 +1,7 @@
 package com.spring.jwt.Car;
 
-import com.spring.jwt.Car.DTO.CarCountResponseDto;
-import com.spring.jwt.Car.DTO.CarDto;
-import com.spring.jwt.Car.DTO.CarResponseDto;
-import com.spring.jwt.Car.DTO.CarResponseDto2;
+import com.spring.jwt.Car.DTO.*;
+import com.spring.jwt.entity.Car;
 import com.spring.jwt.utils.ResponseDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,4 +127,17 @@ public class CarController {
     {
         return carService.filterCars(status, brand, model, city, fuelType, transmission, minPrice, maxPrice);
     }
+
+    @GetMapping("/getAllPendingCars")
+    public ResponseEntity<CarResponse> getAllPendingCars(@RequestParam int page,
+                                                         @RequestParam int size){
+        List<CarDto> pendingCars = carService.getAllPendingCars(page, size);
+        return ResponseEntity.ok(new CarResponse("List Of All Pending Cars ", pendingCars,"Success",HttpStatus.OK,null));
+    }
+    @GetMapping("/getPendingCarByCarId")
+    public ResponseEntity<CarResponseDto2> getPendingCarByCarId(@RequestParam Integer carId){
+        CarDto pendingCar = carService.getPendingCarByCarId(carId);
+        return ResponseEntity.ok(new CarResponseDto2("Pending Car For CarId: " + carId, pendingCar, null));
+    }
+
 }

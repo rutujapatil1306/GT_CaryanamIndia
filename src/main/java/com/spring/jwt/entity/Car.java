@@ -17,7 +17,8 @@ import java.util.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "car")
+@Table(name = "car",
+uniqueConstraints = @UniqueConstraint(columnNames = {"model", "year", "dealer_id"}))
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +49,7 @@ public class Car {
 
     @NotBlank(message = "Area is Required")
     @Size(max = 45, message = "Area cannot exceed 45 characters")
+    @Pattern(regexp = "^([a-zA-Z])[A-Za-z0-9\s.,()/-]{2,100}$", message = "Area must contain only letters, numbers , spaces")
     @Column(name = "area", length = 45)
     private String area;
 
@@ -86,6 +88,7 @@ public class Car {
 
     @NotBlank(message = "City is Mandatory")
     @Size(max = 50, message = "City cannot exceed 50 characters")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "City must contain only letters")
     @Column(name = "city", length = 50)
     private String city;
 
@@ -98,12 +101,14 @@ public class Car {
     @NotBlank(message = "Description is Required")
     @Size(max = 5000, message = "Description cannot exceed 5000 characters")
     @Column(name = "description", length = 5000)
-    @Size(max = 5000, message = "Description cannot exceed 5000 characters")
+    @Pattern(regexp = "^([A-Za-z])[A-Za-z0-9\s.,!?()/-]{2,5000}$", message = "Description must not accept only numbers , negative values")
     private String description;
 
 
     @NotBlank(message = "Fuel Type is Mandatory")
     @Size(max = 45, message = "Fuel type cannot exceed 45 characters")
+    @Pattern(regexp = "^(?i)(PETROL|DIESEL|CNG|ELECTRIC|HYBRID)$",
+            message = "FuelType must be one of : PETROL, DIESEL, CNG, ELECTRIC, HYBRID ")
     @Column(name = "fuel_type", length = 45)
     private String fuelType;
 
@@ -114,6 +119,7 @@ public class Car {
 
     @Size(max = 45, message = "Model cannot exceed 45 characters")
     @Column(name = "model", length = 45)
+    @Pattern(regexp = "^[A-Za-z0-9\s()/-]{1,50}$", message = "Model must contain only letters, numbers , spaces")
     private String model;
 
     @Min(value = 1, message = "Owner serial must be at least 1")
@@ -137,16 +143,19 @@ public class Car {
             regexp = "^[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{1,4}$",
             message = "Invalid registration number format"
     )
-    @Column(name = "registration", length = 45)
+    @Column(name = "registration", unique = true, length = 45)
     private String registration;
 
     @Size(max = 250, message = "Title cannot exceed 250 characters")
     @NotBlank(message = "Title is mandatory")
     @Column(name = "title", length = 250)
+    @Pattern(regexp = "^([a-zA-Z])[A-Za-z0-9\s.,()/-]{2,100}$", message = "Title cannot be negative or cannot accept only numbers")
     private String title;
 
     @NotBlank(message = "Transmission is required")
     @Size(max = 45, message = "Transmission cannot exceed 45 characters")
+    @Pattern(regexp = "^(?i)(MANUAL|AUTOMATIC|SEMI_AUTOMATIC|CVT|AMT|DCT)$",
+             message = "Transmission must be one of: Manual, Automatic, Semi-Automatic, CVT, AMT, DCT")
     @Column(name = "transmission", length = 45)
     private String transmission;
 
@@ -168,10 +177,12 @@ public class Car {
 
     @NotBlank(message = "Main Car ID is mandatory")
     @Column(name = "main_car_id", nullable = false)
+    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9-]{1,20}$", message = "MainCarId must contain only letters, numbers , spaces")
     private String mainCarId;
 
     @NotBlank(message = "Car type is mandatory")
     @Column(name = "carType", nullable = false)
+    @Pattern(regexp = "^[A-Za-z][A-Za-z\s-]{2,30}$", message = "CarType must contain only letters")
     private String carType;
 
     @OneToMany(mappedBy = "car")
@@ -179,7 +190,7 @@ public class Car {
 
     @NotNull(message = "Dealer is required")
     @ManyToOne
-    @JoinColumn(name = "Dealer_id", nullable = false)
+    @JoinColumn(name = "dealer_id", nullable = false)
     private Dealer dealer;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)

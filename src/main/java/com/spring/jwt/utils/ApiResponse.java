@@ -52,7 +52,8 @@ public class ApiResponse<T> {
         this.errorDetails = errorDetails;
         this.timestamp = LocalDateTime.now();
     }
-    
+
+
     /**
      * Constructor for ApiResponse with status code as integer 
      */

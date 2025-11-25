@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class JwtServiceImpl implements JwtService {
+
     private static final String CLAIM_KEY_DEVICE_FINGERPRINT = "dfp";
     private static final String CLAIM_KEY_TOKEN_TYPE = "token_type";
     private static final String TOKEN_TYPE_ACCESS = "access";

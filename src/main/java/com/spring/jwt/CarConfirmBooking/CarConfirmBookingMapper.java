@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class CarConfirmBookingMapper {
 
     public CarConfirmBookingDto toDto(CarConfirmBooking carConfirmBooking){
+
         if(carConfirmBooking == null){
             return null;
         }

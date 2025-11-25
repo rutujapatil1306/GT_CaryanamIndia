@@ -27,15 +27,16 @@ public class CarConfirmBookingController {
 //    }
 
     @PostMapping("/createConfirmBooking")
+    @PreAuthorize("hasAuthority('DEALER')")
     public ResponseEntity<com.spring.jwt.utils.ResponseDto> confirmBooking(@RequestParam Integer pendingBookingId)
     {
-
         carConfirmBookingService.confirmBooking(pendingBookingId);
         return ResponseEntity.status(HttpStatus.CREATED).body(new com.spring.jwt.utils.ResponseDto("success", "Booking confirmed Successfully"));
 
     }
 
     @DeleteMapping("/deleteConfirmBooking")
+    @PreAuthorize("hasAuthority('DEALER')")
     public ResponseEntity<?> deleteConfirmBooking(@RequestParam Integer carConfirmBookingId){
     carConfirmBookingService.deleteConfirmBooking(carConfirmBookingId);
     return  ResponseEntity.ok("Confirm Booking Deleted Successfully");
